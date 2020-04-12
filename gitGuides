@@ -1,0 +1,21 @@
+The guides I used to figure out git
+
+I used this for the installation of git but everything else on the page I felt was useless
+1) https://ourcodingclub.github.io/tutorials/git/
+
+This is the video that allowed me to actually understand how the version control works in action:
+2) https://www.youtube.com/watch?v=0fKg7e37bQE
+(unfortunately its in mac commands but its still useful to know the idea)
+The way i initialized my local git repository was to navagate to my MATLAB folder in the terminal using the 'cd' command. 
+THEN, INTEAD OF USING "git init" I DID "git clone <this repository clone url>". This is because Internally, git clone 
+first calls git init to create a new repository.
+
+The first 5 minuets of this video helped me out too
+3) https://www.youtube.com/watch?v=PWqS4NBhEY8
+
+Once things get going this video shows how it works on matlab (although its not really necessary at the moment, as long as you
+right click on the file in the matlab library the commands are pretty self-explanatory (essentailly you will never have to do
+the commands the in the 2nd video again since you can do them all in matlab)
+4) https://www.mathworks.com/videos/source-control-integration-95324.html
+
+let me know if you have any qeustions and i'll let you know what i did by step
