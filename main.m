@@ -21,4 +21,14 @@ PHI = 1/pi .* cos(pi*t/T).*sin(pi.*X).^2 .* sin(pi.*Y).^2;
 % are our color function? or at least used instead of a
 % color funtion?
 
+u = -2.*cos(pi.*t./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
+v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
+
+quiver(X,Y,u,v)
+
+
+
+
+
+
 
