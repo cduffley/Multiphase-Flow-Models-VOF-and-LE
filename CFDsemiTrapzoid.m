@@ -5,6 +5,9 @@ function C = CFDsemiTrapzoid(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
 
 C=zeros(length(x),length(y));
 %first area, bottom (x) semi trapizoid
+% xvalues, from y, from the bottom of the circle
+
+
 istrap = true;
 for i_xx=1:length(cir_xloc_y1) -1
     
