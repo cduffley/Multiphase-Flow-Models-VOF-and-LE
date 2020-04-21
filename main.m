@@ -42,15 +42,19 @@ cir_xloc_y1 = -(-((cir_xloc_x-x_pos).^2 - r^2)).^(1/2) + y_pos;
 cir_xloc_y2 = (-((cir_xloc_x-x_pos).^2 - r^2)).^(1/2) + y_pos;
 cir_xloc_y = [cir_xloc_y1,cir_xloc_y2];
 cir_xloc_x = [cir_xloc_x,cir_xloc_x];
-xnode = [xnode,xnode];
+% xnode = [xnode];
 
 for i=1:length(xnode)
     for j=1:length(x)-1
-    if y(j) < cir_xloc_y(i) && y(j+1) > cir_xloc_y(i)
-    ynodefromx(i) = j;
+    if y(j) < cir_xloc_y1(i) && y(j+1) > cir_xloc_y1(i)
+    ynodefromx1(i) = j;
+    end
+    if y(j) < cir_xloc_y2(i) && y(j+1) > cir_xloc_y2(i)
+    ynodefromx2(i) = j;
     end
     end
 end
+
 
 
 j=1;
@@ -66,43 +70,151 @@ cir_yloc_x2 = (-((cir_yloc_y-y_pos).^2 - r^2)).^(1/2) + x_pos;
 cir_yloc_x1 = -(-((cir_yloc_y-y_pos).^2 - r^2)).^(1/2) + x_pos;
 cir_yloc_x = [cir_yloc_x1,cir_yloc_x2];
 cir_yloc_y = [cir_yloc_y,cir_yloc_y];
-ynode = [ynode,ynode];
+% ynode = [ynode,ynode];
+
+for i=1:length(ynode)
+    for j=1:length(y)-1
+    if x(j) < cir_yloc_x1(i) && x(j+1) > cir_yloc_x1(i)
+    xnodefromy1(i) = j;
+    end
+    if x(j) < cir_yloc_x2(i) && x(j+1) > cir_yloc_x2(i)
+    xnodefromy2(i) = j;
+    end
+    end
+end
 
 plot(cir_xloc_x,cir_xloc_y,'o')
 plot(cir_yloc_x,cir_yloc_y,'o')
 
-%first area, semi trapizoid
-istrap = true;
-i_nt = 1;
-for i_xx=1:length(cir_xloc_x) -1
-     
-    for i_yx=1:length(cir_yloc_x)-1
-    
-        if cir_yloc_x(i_yx) > cir_xloc_x(i_xx) && ...
-                cir_yloc_x(i_yx) < cir_xloc_x(i_xx+1)
-            
-             istrap = false;
-        end
-        
-    end
-    
-    if istrap == true
-    linear_distance = ((cir_xloc_x(i_xx+1)- cir_xloc_x(i_xx))^2 +...
-        (cir_xloc_y(i_xx+1)- cir_xloc_y(i_xx))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_trap = (abs( y(ynodefromx(i_xx)+1) - cir_xloc_y(i_xx)) +abs( y(ynodefromx(i_xx)+1)...
-                - cir_xloc_y(i_xx+1)))/2 * h;
-    area = area_trap + area_sliver;
-    C(xnode(i_xx),ynode(i_xx)) = area/h^2;
-    else
-       istrap = true; 
-        
-    end
-     
-end
+C = CFDsemiTrapzoids(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
+    cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
+    ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
+    h,r,x,y);
+% %first area, bottom (x) semi trapizoid
+% istrap = true;
+% i_nt = 1;
+% for i_xx=1:length(cir_xloc_y1) -1
+%     
+%     for i_yx=1:length(cir_yloc_x)
+%     
+%         if cir_yloc_x(i_yx) > cir_xloc_x(i_xx) && ...
+%                 cir_yloc_x(i_yx) < cir_xloc_x(i_xx+1)
+%             
+%              istrap = false;
+%         end 
+%     end
+%     if istrap == true
+%     linear_distance = ((cir_xloc_x(i_xx+1)- cir_xloc_x(i_xx))^2 +...
+%         (cir_xloc_y1(i_xx+1)- cir_xloc_y1(i_xx))^2)^(1/2);
+%     angle = 2 * asin(linear_distance/2 / r);
+%     area_sector = angle/(2*pi) * pi*r^2;
+%     area_triangle = linear_distance/2 * r*cos(angle);
+%     area_sliver = area_sector-area_triangle;
+%     area_trap = (abs( y(ynodefromx1(i_xx)+1) - cir_xloc_y1(i_xx)) +abs( y(ynodefromx1(i_xx)+1)...
+%                 - cir_xloc_y1(i_xx+1)))/2 * h;
+%     area = area_trap + area_sliver;
+%     C(xnode(i_xx),ynodefromx1(i_xx)) = area/h^2;
+%     else
+%        istrap = true;   
+%     end   
+% end
+% 
+% % top (x) semi trapizoid
+% istrap = true;
+% i_nt = 1;
+% for i_xx=1:length(cir_xloc_y2) -1
+%     
+%     for i_yx=1:length(cir_yloc_x)
+%     
+%         if cir_yloc_x(i_yx) > cir_xloc_x(i_xx) && ...
+%                 cir_yloc_x(i_yx) < cir_xloc_x(i_xx+1)
+%             
+%              istrap = false;
+%         end 
+%     end
+%     if istrap == true
+%     linear_distance = ((cir_xloc_x(i_xx+1)- cir_xloc_x(i_xx))^2 +...
+%         (cir_xloc_y2(i_xx+1)- cir_xloc_y2(i_xx))^2)^(1/2);
+%    
+%     angle = 2 * asin(linear_distance/2 / r);
+%     area_sector = angle/(2*pi) * pi*r^2;
+%     area_triangle = linear_distance/2 * r*cos(angle);
+%     
+%     area_sliver = area_sector-area_triangle;
+%     area_trap = (abs( y(ynodefromx2(i_xx)) - cir_xloc_y2(i_xx)) +abs( y(ynodefromx2(i_xx))...
+%                 - cir_xloc_y2(i_xx+1)))/2 * h;
+%     area = area_trap + area_sliver;
+%     C(xnode(i_xx),ynodefromx2(i_xx)) = area/h^2;
+%     else
+%        istrap = true;   
+%     end   
+% end
+% 
+% istrap = true;
+% i_nt = 1;
+% % left (y) semi trapizoid
+% % gonna try to just switch every x/y
+% for i_yy=1:length(cir_yloc_x1) -1
+%     
+%     for i_xy=1:length(cir_xloc_y)
+%     
+%         if cir_xloc_y(i_xy) > cir_yloc_y(i_yy) && ...
+%                 cir_xloc_y(i_xy) < cir_yloc_y(i_yy+1)
+%             
+%              istrap = false;
+%         end 
+%     end
+%     if istrap == true
+%     linear_distance = ((cir_yloc_y(i_yy+1)- cir_yloc_y(i_yy))^2 +...
+%         (cir_yloc_x1(i_yy+1)- cir_yloc_x1(i_yy))^2)^(1/2);
+%    
+%     angle = 2 * asin(linear_distance/2 / r);
+%     area_sector = angle/(2*pi) * pi*r^2;
+%     area_triangle = linear_distance/2 * r*cos(angle);
+%     
+%     area_sliver = area_sector-area_triangle;
+%     area_trap = (abs( x(xnodefromy1(i_yy)+1) - cir_yloc_x1(i_yy)) +abs( x(xnodefromy1(i_yy)+1)...
+%                 - cir_yloc_x1(i_yy+1)))/2 * h;
+%     area = area_trap + area_sliver;
+%     C(xnodefromy1(i_yy),ynode(i_yy)) = area/h^2;
+%     else
+%        istrap = true;   
+%     end   
+% end
+% 
+% istrap = true;
+% i_nt = 1;
+% % right (y) semi trapizoid
+% % gonna try to just switch every x/y
+% for i_yy=1:length(cir_yloc_x2) -1
+%     
+%     for i_xy=1:length(cir_xloc_y)
+%     
+%         if cir_xloc_y(i_xy) > cir_yloc_y(i_yy) && ...
+%                 cir_xloc_y(i_xy) < cir_yloc_y(i_yy+1)
+%             
+%              istrap = false;
+%         end 
+%     end
+%     if istrap == true
+%     linear_distance = ((cir_yloc_y(i_yy+1)- cir_yloc_y(i_yy))^2 +...
+%         (cir_yloc_x2(i_yy+1)- cir_yloc_x2(i_yy))^2)^(1/2);
+%    
+%     angle = 2 * asin(linear_distance/2 / r);
+%     area_sector = angle/(2*pi) * pi*r^2;
+%     area_triangle = linear_distance/2 * r*cos(angle);
+%     
+%     area_sliver = area_sector-area_triangle;
+%     area_trap = (abs( x(xnodefromy2(i_yy)) - cir_yloc_x2(i_yy)) +abs( x(xnodefromy2(i_yy))...
+%                 - cir_yloc_x2(i_yy+1)))/2 * h;
+%     area = area_trap + area_sliver;
+%     C(xnodefromy2(i_yy),ynode(i_yy)) = area/h^2;
+%     else
+%        istrap = true;   
+%     end   
+% end
+
+
 
 
 
