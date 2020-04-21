@@ -1,16 +1,17 @@
-function C = CFDsemiTrapzoids(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
+function C = CFDsemiTrapzoid(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y)
- 
+
+C=zeros(length(x),length(y));
 %first area, bottom (x) semi trapizoid
 istrap = true;
 for i_xx=1:length(cir_xloc_y1) -1
     
     for i_yx=1:length(cir_yloc_x)
     
-        if cir_yloc_x(i_yx) > cir_xloc_x(i_xx) && ...
-                cir_yloc_x(i_yx) < cir_xloc_x(i_xx+1)
+        if cir_yloc_x(i_yx) >= cir_xloc_x(i_xx) && ...
+                cir_yloc_x(i_yx) <= cir_xloc_x(i_xx+1)
             
              istrap = false;
         end 
