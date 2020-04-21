@@ -1,72 +1,122 @@
-%git test
-%i definitely dont understand the project yet so 
-%im gonna play around and see if i can get something going
-
-% interface tracking test for deliverable number 2
 clear 
 clc
+
+% -------------------------------------------------------------------------
+% Interface tracking test
+% -------------------------------------------------------------------------
+
+
+
 Nx =33;
 Ny = 33;
-
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
 [X,Y] = meshgrid(x,y);
 
+%% circle stuff
+cir_dis = 0:pi/50:2*pi; %decrease step size for more exact circle
+xcir = 0.15 * cos(cir_dis) + 0.5;
+ycir = 0.15 * sin(cir_dis) + 0.75;
+plot(xcir,ycir)
+hold on
+for i = 1:Nx
+    plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
+    plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
+end
+
+x_pos = 0.5;
+y_pos = 0.75;
+r = 0.15;
+
+j=1;
+for i = 1:length(x)
+    if x(i) > 0.5-0.15 && x(i) < 0.5+0.15
+        cir_xloc_x(j) = x(i);
+        xnode(j) = i;
+        j=j+1;
+    end
+end
+
+cir_xloc_y1 = -(-((cir_xloc_x-x_pos).^2 - r^2)).^(1/2) + y_pos;
+cir_xloc_y2 = (-((cir_xloc_x-x_pos).^2 - r^2)).^(1/2) + y_pos;
+cir_xloc_y = [cir_xloc_y1,cir_xloc_y2];
+cir_xloc_x = [cir_xloc_x,cir_xloc_x];
+xnode = [xnode,xnode];
+
+for i=1:length(xnode)
+    for j=1:length(x)-1
+    if y(j) < cir_xloc_y(i) && y(j+1) > cir_xloc_y(i)
+    ynodefromx(i) = j;
+    end
+    end
+end
+
+
+j=1;
+for i = 1:length(y)
+    if y(i) > y_pos-r && y(i) < y_pos+r
+        cir_yloc_y(j) = y(i);
+        ynode(j) = i;
+        j=j+1;
+    end
+end
+
+cir_yloc_x2 = (-((cir_yloc_y-y_pos).^2 - r^2)).^(1/2) + x_pos;
+cir_yloc_x1 = -(-((cir_yloc_y-y_pos).^2 - r^2)).^(1/2) + x_pos;
+cir_yloc_x = [cir_yloc_x1,cir_yloc_x2];
+cir_yloc_y = [cir_yloc_y,cir_yloc_y];
+ynode = [ynode,ynode];
+
+plot(cir_xloc_x,cir_xloc_y,'o')
+plot(cir_yloc_x,cir_yloc_y,'o')
+
+%first area, semi trapizoid
+istrap = true;
+i_nt = 1;
+for i_xx=1:length(cir_xloc_x) -1
+     
+    for i_yx=1:length(cir_yloc_x)-1
+    
+        if cir_yloc_x(i_yx) > cir_xloc_x(i_xx) && ...
+                cir_yloc_x(i_yx) < cir_xloc_x(i_xx+1)
+            
+             istrap = false;
+        end
+        
+    end
+    
+    if istrap == true
+    linear_distance = ((cir_xloc_x(i_xx+1)- cir_xloc_x(i_xx))^2 +...
+        (cir_xloc_y(i_xx+1)- cir_xloc_y(i_xx))^2)^(1/2);
+    angle = 2 * asin(linear_distance/2 / r);
+    area_sector = angle/(2*pi) * pi*r^2;
+    area_triangle = linear_distance/2 * r*cos(angle);
+    area_sliver = area_sector-area_triangle;
+    area_trap = (abs( y(ynodefromx(i_xx)+1) - cir_xloc_y(i_xx)) +abs( y(ynodefromx(i_xx)+1)...
+                - cir_xloc_y(i_xx+1)))/2 * h;
+    area = area_trap + area_sliver;
+    C(xnode(i_xx),ynode(i_xx)) = area/h^2;
+    else
+       istrap = true; 
+        
+    end
+     
+end
+
+
+
+
 T = 2;
 t = T/2; %this is for book example, deliverable 2 has t = T/pi
 PHI = 1/pi .* cos(pi*t/T).*sin(pi.*X).^2 .* sin(pi.*Y).^2;
-% okay so intgertaing this funtion will give us our
-% x and y velocities (he wants this done analytically)
-% so does this mean that the resulting velocities 
-% are our color function? or at least used instead of a
-% color funtion?
 
 u = -2.*cos(pi.*t./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
 v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
+figure
 quiver(X,Y,u,v)
-C = (u.^2 + v.^2).^(1/2);
-
-%were gonna skip corners, just a test
-% commented out is using velocity magnitude
-% non commented out is using u and v values
-% neither make sense based on definition of youngs fd
-for i = 2:length(x)-1
-    for j = 2:length(x)-1
-        
-%     mx1 = -1/(2*h) .*( C(i+1,j+1) + C(i+1,j) - C(i,j+1) - C(i,j) );
-%     my1 = -1/(2*h) .*( C(i+1,j+1) - C(i+1,j) + C(i,j+1) - C(i,j) );
-%     
-%     mx2 = -1/(2*h) .*( C(i,j+1) + C(i,j) - C(i-1,j+1) - C(i-1,j) );
-%     my2 = -1/(2*h) .*( C(i,j+1) - C(i,j) + C(i-1,j+1) - C(i-1,j) );
-%     
-%     mx3 = -1/(2*h) .*( C(i+1,j) + C(i+1,j-1) - C(i,j) - C(i,j-1) );
-%     my3 = -1/(2*h) .*( C(i+1,j) - C(i+1,j-1) + C(i,j) - C(i,j-1) );
-%     
-%     mx4 = -1/(2*h) .*( C(i,j) + C(i,j-1) - C(i-1,j) - C(i-1,j-1) );
-%     my4 = -1/(2*h) .*( C(i,j) - C(i,j-1) + C(i-1,j) - C(i-1,j-1) );
-    
-    mx1 = -1/(2*h) .*( u(i+1,j+1) + u(i+1,j) - u(i,j+1) - u(i,j) );
-    my1 = -1/(2*h) .*( v(i+1,j+1) - v(i+1,j) + v(i,j+1) - v(i,j) );
-    
-    mx2 = -1/(2*h) .*( u(i,j+1) + u(i,j) - u(i-1,j+1) - u(i-1,j) );
-    my2 = -1/(2*h) .*( v(i,j+1) - v(i,j) + v(i-1,j+1) - v(i-1,j) );
-    
-    mx3 = -1/(2*h) .*( u(i+1,j) + u(i+1,j-1) - u(i,j) - u(i,j-1) );
-    my3 = -1/(2*h) .*( v(i+1,j) - v(i+1,j-1) + v(i,j) - v(i,j-1) );
-    
-    mx4 = -1/(2*h) .*( u(i,j) + u(i,j-1) - u(i-1,j) - u(i-1,j-1) );
-    my4 = -1/(2*h) .*( v(i,j) - v(i,j-1) + v(i-1,j) - v(i-1,j-1) );
-
-    m1 = (mx1^2 + my1^2)^(1/2);
-    m2 = (mx2^2 + my2^2)^(1/2);
-    m3 = (mx3^2 + my3^2)^(1/2);
-    m4 = (mx4^2 + my4^2)^(1/2);
-    m(i,j) = (m1+m2+m3+m4)/4;
-    
-    end
-end
+% C = (u.^2 + v.^2).^(1/2);
 
 
 
