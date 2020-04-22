@@ -8,8 +8,8 @@ clc
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =35;
-Ny =35;
+Nx =11;
+Ny =11;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
@@ -46,7 +46,7 @@ cir_xloc_y = [cir_xloc_y1,cir_xloc_y2];
 % xnode = [xnode];
 
 for i=1:length(xnode)
-    for j=1:length(x)-1
+    for j=1:length(x)-1 %changed from x to y
     if y(j) < cir_xloc_y1(i) && y(j+1) > cir_xloc_y1(i)
     ynodefromx1(i) = j;
     end
@@ -71,8 +71,7 @@ end
 cir_yloc_x2 = (-((cir_yloc_y-y_pos).^2 - r^2)).^(1/2) + x_pos;
 cir_yloc_x1 = -(-((cir_yloc_y-y_pos).^2 - r^2)).^(1/2) + x_pos;
 cir_yloc_x = [cir_yloc_x1,cir_yloc_x2];
-% cir_yloc_y = [cir_yloc_y,cir_yloc_y];
-% ynode = [ynode,ynode];
+
 
 for i=1:length(ynode)
     for j=1:length(y)-1
@@ -87,289 +86,30 @@ end
 xnodefromy1(xnodefromy1<1) = 1;
 xnodefromy2(xnodefromy2<1) = 1;
 
-%i_xy - xvalues from y
-%cir_yloc_x1 is the left side
-% bottom left
+%[m,leftcir_min] = min(cir_xloc_y1); %yvalues on bottom 
+%[m,rightcir_max] = max(cir_xloc_y2); %yvalues on top
+[m,leftcir_min] = min(cir_yloc_x1); %xvales on left
+[m,rightcir_max] = max(cir_yloc_x2); %xvalues on right
 
-[m,leftcir_min] = min(cir_xloc_y1);
-[m,rightcir_max] = max(cir_xloc_y2);
-[m,botcir_min] = min(cir_yloc_x1);
-[m,topcir_max] = max(cir_yloc_x2);
-
-bot_ycir_x = [cir_yloc_x1(1:botcir_min),cir_yloc_x2(1:topcir_max)];
-top_ycir_x = [cir_yloc_x1(botcir_min:end),cir_yloc_x2(topcir_max:end)];
+% bot_ycir_x = [cir_yloc_x1(1:botcir_min),cir_yloc_x2(1:topcir_max)];
+% top_ycir_x = [cir_yloc_x1(botcir_min:end),cir_yloc_x2(topcir_max:end)];
 
 C =CFDsemiTrapzoid(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y);
 
-botleft_ycir_x = cir_yloc_x1(1:botcir_min);
-topleft_ycir_x = cir_yloc_x1(botcir_min:end);
-botright_ycir_x = cir_yloc_x2(1:topcir_max);
-topright_ycir_x = cir_yloc_x2(topcir_max:end);
+C = CFDtri1(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
+    cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
+    ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
+    h,r,x,y,C,leftcir_min,rightcir_max);
 
-%% bottom left
-isdoubletri = false;
-trap = false;
-for i_xy=1:leftcir_min %check  k
-    
-    for i_xx=1:length(cir_xloc_y2)-1 %was cir_xloc_x,too long
-        trap = false;
-        if cir_yloc_x1(i_xy) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x1(i_xy) <= cir_xloc_x(i_xx+1) && trap ==false
-            t=1;
-           if (cir_yloc_x1(i_xy+1) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x1(i_xy+1) <= cir_xloc_x(i_xx+1))
-             trap = true;
-           end
-           
-           if i_xy ~= 1 && (cir_yloc_x1(i_xy-1) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x1(i_xy-1) <= cir_xloc_x(i_xx+1))
-            trap = true;
-           end
-           
-          if trap == false
-          isdoubletri = true;
-          i_xxhold = i_xx;
-          end
+% botleft_ycir_x = cir_yloc_x1(1:botcir_min);
+% topleft_ycir_x = cir_yloc_x1(botcir_min:end);
+% botright_ycir_x = cir_yloc_x2(1:topcir_max);
+% topright_ycir_x = cir_yloc_x2(topcir_max:end);
+%keep these cause trap may use them
 
-        end 
-    end
-    if isdoubletri == true
-        % small tri, on 'right'
-    linear_distance = ((cir_yloc_x1(i_xy)- cir_xloc_x(i_xxhold+1))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold+1))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy1(i_xy)+1) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx1(i_xxhold))...
-                - cir_xloc_y1(i_xxhold+1));
-    area = area_tri + area_sliver;
-    C(xnodefromy1(i_xy),ynode(i_xy)-1) = area/h^2;
-    
-    
-        % cut rect, one the 'left'
-    linear_distance = ((cir_yloc_x1(i_xy)- cir_xloc_x(i_xxhold))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy1(i_xy)) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx1(i_xxhold))...
-                - cir_xloc_y1(i_xxhold));
-    area = h^2 - area_tri + area_sliver;
-    C(xnodefromy1(i_xy),ynode(i_xy)) = area/h^2;
-    isdoubletri = false;
-    
-    else
-        % last triangle 'way left'
-%     diff = cir_xloc_x(1) - cir_yloc_x1;
-%     diff(leftcir_min:end) = 10;
-%     diff(diff<0) = 10;
-%     [m,i_min] = min(diff);
-%     
-%     linear_distance = ((cir_yloc_x1(i_min)- cir_xloc_x(1))^2 +...
-%         (cir_yloc_y(i_min)- cir_xloc_y1(1))^2)^(1/2);
-%     angle = 2 * asin(linear_distance/2 / r);
-%     area_sector = angle/(2*pi) * pi*r^2;
-%     area_triangle = linear_distance/2 * r*cos(angle);
-%     area_sliver = area_sector-area_triangle;
-%     area_tri = abs( x(xnodefromy1(i_min)+1) - cir_yloc_x1(i_min))/2 * abs( y(ynodefromx1(1)+1)...
-%                 - cir_xloc_y1(1));
-%     area = area_tri + area_sliver;
-%     C(xnodefromy1(i_min),ynode(i_min)-1) = area/h^2;
-%        isdoubletri = false;   
-    end   
-end
-
-%% top left, change node values, y1 to y2 to get tops
-isdoubletri = false;
-for i_xy=leftcir_min:length(cir_yloc_x1)
-    
-    for i_xx=1:length(cir_xloc_y2)-1 %was cir_xloc_x,too long
-    
-        if cir_yloc_x1(i_xy) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x1(i_xy) <= cir_xloc_x(i_xx+1)
-            
-             isdoubletri = true;
-             i_xxhold = i_xx;
-        end 
-    end
-    if isdoubletri == true
-        % small tri, on 'right'
-    linear_distance = ((cir_yloc_x1(i_xy)- cir_xloc_x(i_xxhold+1))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold+1))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy1(i_xy)+1) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx2(i_xxhold)+1)...
-                - cir_xloc_y2(i_xxhold+1));
-    area = area_tri + area_sliver;
-    C(xnodefromy1(i_xy),ynode(i_xy)) = area/h^2;
-    
-    
-        % cut rect, on the 'left'
-    linear_distance = ((cir_yloc_x1(i_xy)- cir_xloc_x(i_xxhold))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy1(i_xy)) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx2(i_xxhold)+1)...
-                - cir_xloc_y2(i_xxhold));
-    area = h^2 - area_tri + area_sliver;
-    C(xnodefromy1(i_xy),ynode(i_xy)-1) = area/h^2;
-    isdoubletri = false;
-    
-    else
-        % last triangle 'way left'
-%     diff = cir_xloc_x(1) - cir_yloc_x1;
-%     diff(diff<0) = 10;
-%     diff(1:leftcir_min) = 10;
-%     [m,i_min] = min(diff);
-%     
-%     linear_distance = ((cir_yloc_x1(i_min)- cir_xloc_x(1))^2 +...
-%         (cir_yloc_y(i_min)- cir_xloc_y2(1))^2)^(1/2);
-%     angle = 2 * asin(linear_distance/2 / r);
-%     area_sector = angle/(2*pi) * pi*r^2;
-%     area_triangle = linear_distance/2 * r*cos(angle);
-%     area_sliver = area_sector-area_triangle;
-%     area_tri = abs( x(xnodefromy1(i_min)+1) - cir_yloc_x1(i_min))/2 * abs( y(ynodefromx2(1))...
-%                 - cir_xloc_y2(1));
-%     area = area_tri + area_sliver;
-%     C(xnodefromy1(i_min),ynode(i_min)) = area/h^2;
-%        isdoubletri = false;   
-    end   
-end
-
-%% 3rd one, bottom right
-% x will be at second half of 1, y will be on 2 
-isdoubletri = false;
-for i_xy=1:rightcir_max
-    
-%     for i_xx=rightcir_max:length(cir_xloc_x)-1
-    for   i_xx=1:length(cir_xloc_y2)-1
-    
-        if cir_yloc_x2(i_xy) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x2(i_xy) <= cir_xloc_x(i_xx+1) &&...
-                cir_xloc_x(i_xx+1) <= cir_yloc_x2(i_xy+1)
-            
-             isdoubletri = true;
-             i_xxhold = i_xx;
-        end 
-    end
-    if isdoubletri == true
-        % small tri, on 'left'
-    linear_distance = ((cir_yloc_x2(i_xy)- cir_xloc_x(i_xxhold))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy2(i_xy)) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx1(i_xxhold)+1)...
-                - cir_xloc_y1(i_xxhold));
-    area = area_tri + area_sliver;
-    C(xnodefromy2(i_xy),ynode(i_xy)-1) = area/h^2;
-    
-    
-        % cut rect, one the 'right'
-    linear_distance = ((cir_yloc_x2(i_xy)- cir_xloc_x(i_xxhold+1))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold+1))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy2(i_xy) +1) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx1(i_xxhold)+1)...
-                - cir_xloc_y1(i_xxhold +1));
-    area = h^2 - area_tri + area_sliver;
-    C(xnodefromy2(i_xy),ynode(i_xy)) = area/h^2;
-    isdoubletri = false;
-    
-    else
-%         % last triangle 'way right'
-%     diff = cir_yloc_x2 - cir_xloc_x(end);
-%     diff(rightcir_max:end) = 10;
-%     diff(diff<0) = 10;
-%     [m,i_min] = min(diff);
-%     
-%     linear_distance = ((cir_yloc_x2(i_min)- cir_xloc_x(end))^2 +...
-%         (cir_yloc_y(i_min)- cir_xloc_y1(end))^2)^(1/2);
-%     angle = 2 * asin(linear_distance/2 / r);
-%     area_sector = angle/(2*pi) * pi*r^2;
-%     area_triangle = linear_distance/2 * r*cos(angle);
-%     area_sliver = area_sector-area_triangle;
-%     area_tri = abs( x(xnodefromy2(i_min)) - cir_yloc_x2(i_min))/2 * abs( y(ynodefromx1(1)+1)...
-%                 - cir_xloc_y1(1));
-%     area = area_tri + area_sliver;
-%     C(xnodefromy2(i_min),ynode(i_min)-1) = area/h^2;
-%        isdoubletri = false;   
-    end   
-end
-
-%% 4th one, top right
-isdoubletri = false;
-for i_xy=rightcir_max:length(cir_yloc_x2)
-    
-     for i_xx=rightcir_max:length(cir_xloc_x)-1 
-%         for   i_xx=1:length(cir_xloc_y2)-1
-    
-        if cir_yloc_x2(i_xy) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x2(i_xy) <= cir_xloc_x(i_xx+1)
-            
-             isdoubletri = true;
-             i_xxhold = i_xx;
-        end 
-    end
-    if isdoubletri == true
-        % small tri, on 'left'
-    linear_distance = ((cir_yloc_x2(i_xy)- cir_xloc_x(i_xxhold))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy2(i_xy)) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx2(i_xxhold))...
-                - cir_xloc_y2(i_xxhold));
-    area = area_tri + area_sliver;
-    C(xnodefromy2(i_xy),ynode(i_xy)) = area/h^2;
-    
-    
-        % cut rect, one the 'right'
-    linear_distance = ((cir_yloc_x2(i_xy)- cir_xloc_x(i_xxhold+1))^2 +...
-        (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold+1))^2)^(1/2);
-    angle = 2 * asin(linear_distance/2 / r);
-    area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
-    area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(xnodefromy2(i_xy) +1) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx2(i_xxhold))...
-                - cir_xloc_y2(i_xxhold +1));
-    area = h^2 - area_tri + area_sliver;
-    C(xnodefromy2(i_xy),ynode(i_xy)-1) = area/h^2;
-    isdoubletri = false;
-    
-    else
-        % last triangle 'way right'
-%     diff = cir_yloc_x2 - cir_xloc_x(end);
-%     diff(1:rightcir_max) = 10;
-%     diff(diff<0) = 10;
-%     [m,i_min] = min(diff);
-%     
-%     linear_distance = ((cir_yloc_x2(i_min)- cir_xloc_x(end))^2 +...
-%         (cir_yloc_y(i_min)- cir_xloc_y2(end))^2)^(1/2);
-%     angle = 2 * asin(linear_distance/2 / r);
-%     area_sector = angle/(2*pi) * pi*r^2;
-%     area_triangle = linear_distance/2 * r*cos(angle);
-%     area_sliver = area_sector-area_triangle;
-%     area_tri = abs( x(xnodefromy2(i_min)) - cir_yloc_x2(i_min))/2 * abs( y(ynodefromx2(1))...
-%                 - cir_xloc_y2(1));
-%     area = area_tri + area_sliver;
-%     C(xnodefromy2(i_min),ynode(i_min)) = area/h^2;
-%        isdoubletri = false;   
-    end   
-end
 
 cir_xloc_x = [cir_xloc_x,cir_xloc_x];
 cir_yloc_y = [cir_yloc_y,cir_yloc_y];
