@@ -112,7 +112,7 @@ topright_ycir_x = cir_yloc_x2(topcir_max:end);
 %% bottom left
 isdoubletri = false;
 trap = false;
-for i_xy=1:leftcir_min %check 
+for i_xy=1:leftcir_min %check  k
     
     for i_xx=1:length(cir_xloc_y2)-1 %was cir_xloc_x,too long
         trap = false;
