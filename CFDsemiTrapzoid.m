@@ -35,7 +35,7 @@ for i_xx=1:length(cir_xloc_y1) -1
         (cir_xloc_y1(i_xx+1)- cir_xloc_y1(i_xx))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_trap = (abs( y(ynodefromx1(i_xx)+1) - cir_xloc_y1(i_xx)) +abs( y(ynodefromx1(i_xx)+1)...
                 - cir_xloc_y1(i_xx+1)))/2 * h;
@@ -64,7 +64,7 @@ for i_xx=1:length(cir_xloc_y2) -1
    
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     
     area_sliver = area_sector-area_triangle;
     area_trap = (abs( y(ynodefromx2(i_xx)) - cir_xloc_y2(i_xx)) +abs( y(ynodefromx2(i_xx))...
@@ -95,7 +95,7 @@ for i_yy=1:length(cir_yloc_x1) -1
    
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     
     area_sliver = area_sector-area_triangle;
     area_trap = (abs( x(xnodefromy1(i_yy)+1) - cir_yloc_x1(i_yy)) +abs( x(xnodefromy1(i_yy)+1)...
@@ -126,7 +126,7 @@ for i_yy=1:length(cir_yloc_x2) -1
    
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     
     area_sliver = area_sector-area_triangle;
     area_trap = (abs( x(xnodefromy2(i_yy)) - cir_yloc_x2(i_yy)) +abs( x(xnodefromy2(i_yy))...

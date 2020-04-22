@@ -36,7 +36,7 @@ for i_xy=1:leftcir_min %through the left x values, first half is the bottom
         (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold+1))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy1(i_xy)+1) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx1(i_xxhold))...
                 - cir_xloc_y1(i_xxhold+1));
@@ -48,7 +48,7 @@ for i_xy=1:leftcir_min %through the left x values, first half is the bottom
         (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy1(i_xy)) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx1(i_xxhold))...
                 - cir_xloc_y1(i_xxhold));
@@ -92,7 +92,7 @@ for i_xy=leftcir_min:length(cir_yloc_x1) %values on left, second half is top
         (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold+1))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy1(i_xy)+1) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx2(i_xxhold)+1)...
                 - cir_xloc_y2(i_xxhold+1));
@@ -105,7 +105,7 @@ for i_xy=leftcir_min:length(cir_yloc_x1) %values on left, second half is top
         (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy1(i_xy)) - cir_yloc_x1(i_xy))/2 * abs( y(ynodefromx2(i_xxhold)+1)...
                 - cir_xloc_y2(i_xxhold));
@@ -149,7 +149,7 @@ for i_xy=1:rightcir_max %values on right, first half is bottom
         (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy2(i_xy)) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx1(i_xxhold)+1)...
                 - cir_xloc_y1(i_xxhold));
@@ -162,7 +162,7 @@ for i_xy=1:rightcir_max %values on right, first half is bottom
         (cir_yloc_y(i_xy)- cir_xloc_y1(i_xxhold+1))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy2(i_xy) +1) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx1(i_xxhold)+1)...
                 - cir_xloc_y1(i_xxhold +1));
@@ -175,15 +175,16 @@ end
 %% 4th one, top right
 isdoubletri = false;
 
+% for i_xy=rightcir_max:length(cir_yloc_x2)
 for i_xy=rightcir_max:length(cir_yloc_x2)
     
      for i_xx=rightcir_max:length(cir_xloc_x)-1
-%         for   i_xx=1:length(cir_xloc_y2)-1
+
        trap = false;
         if cir_yloc_x2(i_xy) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x2(i_xy) <= cir_xloc_x(i_xx+1) && trap ==false
-            
-            if i_xy ~=length(cir_xloc_y2) && (cir_yloc_x2(i_xy+1) >= cir_xloc_x(i_xx) && ...
+            %changed cir_xloc_y2 to cir_yloc_x2
+            if i_xy ~=length(cir_yloc_x2) && (cir_yloc_x2(i_xy+1) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x2(i_xy+1) <= cir_xloc_x(i_xx+1))
              trap = true;
            end
@@ -205,7 +206,7 @@ for i_xy=rightcir_max:length(cir_yloc_x2)
         (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy2(i_xy)) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx2(i_xxhold))...
                 - cir_xloc_y2(i_xxhold));
@@ -218,7 +219,7 @@ for i_xy=rightcir_max:length(cir_yloc_x2)
         (cir_yloc_y(i_xy)- cir_xloc_y2(i_xxhold+1))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
-    area_triangle = linear_distance/2 * r*cos(angle);
+    area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
     area_tri = abs( x(xnodefromy2(i_xy) +1) - cir_yloc_x2(i_xy))/2 * abs( y(ynodefromx2(i_xxhold))...
                 - cir_xloc_y2(i_xxhold +1));

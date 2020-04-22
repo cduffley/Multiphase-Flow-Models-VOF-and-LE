@@ -8,8 +8,8 @@ clc
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =11;
-Ny =11;
+Nx =16;
+Ny =16;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
