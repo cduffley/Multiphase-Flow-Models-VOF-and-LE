@@ -3,18 +3,29 @@ function C = CFDsemiTrapzoid(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y)
 
+[m,leftcir_min] = min(cir_xloc_y1);
+[m,rightcir_max] = max(cir_xloc_y2);
+[m,botcir_min] = min(cir_yloc_x1);
+[m,topcir_max] = max(cir_yloc_x2);
+
+bot_ycir_x = [cir_yloc_x1(1:botcir_min),cir_yloc_x2(1:topcir_max)];
+top_ycir_x = [cir_yloc_x1(botcir_min:end),cir_yloc_x2(topcir_max:end)];
+left_xcir_y = [cir_xloc_y1(1:leftcir_min),cir_xloc_y2(1:rightcir_max)];
+right_xcir_y = [cir_xloc_y1(leftcir_min:end),cir_xloc_y2(rightcir_max:end)];
+
+
+
 C=zeros(length(x),length(y));
 %first area, bottom (x) semi trapizoid
 % xvalues, from y, from the bottom of the circle
-
-
 istrap = true;
 for i_xx=1:length(cir_xloc_y1) -1
     
-    for i_yx=1:length(cir_yloc_x)
+%     for i_yx=1:length(cir_yloc_x)
+    for i_yx=1:length(bot_ycir_x)
     
-        if cir_yloc_x(i_yx) >= cir_xloc_x(i_xx) && ...
-                cir_yloc_x(i_yx) <= cir_xloc_x(i_xx+1)
+        if bot_ycir_x(i_yx) >= cir_xloc_x(i_xx) && ... %was cir_yloc_x
+                bot_ycir_x(i_yx) <= cir_xloc_x(i_xx+1)
             
              istrap = false;
         end 
@@ -39,10 +50,10 @@ end
 istrap = true;
 for i_xx=1:length(cir_xloc_y2) -1
     
-    for i_yx=1:length(cir_yloc_x)
+    for i_yx=1:length(top_ycir_x)
     
-        if cir_yloc_x(i_yx) > cir_xloc_x(i_xx) && ...
-                cir_yloc_x(i_yx) < cir_xloc_x(i_xx+1)
+        if top_ycir_x(i_yx) > cir_xloc_x(i_xx) && ... %was cir_yloc_x
+                top_ycir_x(i_yx) < cir_xloc_x(i_xx+1)
             
              istrap = false;
         end 
@@ -70,10 +81,10 @@ istrap = true;
 % gonna try to just switch every x/y
 for i_yy=1:length(cir_yloc_x1) -1
     
-    for i_xy=1:length(cir_xloc_y)
+    for i_xy=1:length(left_xcir_y)
     
-        if cir_xloc_y(i_xy) > cir_yloc_y(i_yy) && ...
-                cir_xloc_y(i_xy) < cir_yloc_y(i_yy+1)
+        if left_xcir_y(i_xy) > cir_yloc_y(i_yy) && ...
+                left_xcir_y(i_xy) < cir_yloc_y(i_yy+1)
             
              istrap = false;
         end 
@@ -101,10 +112,10 @@ istrap = true;
 % gonna try to just switch every x/y
 for i_yy=1:length(cir_yloc_x2) -1
     
-    for i_xy=1:length(cir_xloc_y)
+    for i_xy=1:length(right_xcir_y)
     
-        if cir_xloc_y(i_xy) > cir_yloc_y(i_yy) && ...
-                cir_xloc_y(i_xy) < cir_yloc_y(i_yy+1)
+        if right_xcir_y(i_xy) > cir_yloc_y(i_yy) && ...
+                right_xcir_y(i_xy) < cir_yloc_y(i_yy+1)
             
              istrap = false;
         end 
