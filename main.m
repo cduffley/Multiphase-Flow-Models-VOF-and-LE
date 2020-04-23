@@ -21,10 +21,10 @@ xcir = 0.15 * cos(cir_dis) + 0.5;
 ycir = 0.15 * sin(cir_dis) + 0.75;
 plot(xcir,ycir)
 hold on
-for i = 1:Nx
-    plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
-    plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
-end
+% for i = 1:Nx
+%     plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
+%     plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
+% end
 
 x_pos = 0.5;
 y_pos = 0.75;
@@ -46,7 +46,7 @@ cir_xloc_y = [cir_xloc_y1,cir_xloc_y2];
 % xnode = [xnode];
 
 for i=1:length(xnode)
-    for j=1:length(x)-1 %changed from x to y
+    for j=1:length(y)-1 %changed from x to y
     if y(j) < cir_xloc_y1(i) && y(j+1) > cir_xloc_y1(i)
     ynodefromx1(i) = j; %from the given xs, determine nodes of y, 1 for bottom
     end
@@ -74,7 +74,7 @@ cir_yloc_x = [cir_yloc_x1,cir_yloc_x2];
 
 
 for i=1:length(ynode)
-    for j=1:length(y)-1
+    for j=1:length(x)-1 %changed y to x
     if x(j) < cir_yloc_x1(i) && x(j+1) > cir_yloc_x1(i)
     xnodefromy1(i) = j; %not from y1, from y, 1
     end
@@ -99,10 +99,10 @@ C =CFDsemiTrapzoid(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y);
 
-% C = CFDtri1(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
-%     cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
-%     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
-%     h,r,x,y,C,leftcir_min,rightcir_max);
+C = CFDtri1(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
+    cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
+    ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
+    h,r,x,y,C,leftcir_min,rightcir_max);
 
 % botleft_ycir_x = cir_yloc_x1(1:botcir_min);
 % topleft_ycir_x = cir_yloc_x1(botcir_min:end);
@@ -146,7 +146,7 @@ topright_xcir_x = cir_xloc_x(rightcir_max:end); %right
 topright_ycir_y = cir_yloc_y(topcir_max:end); %end for top
 topright_xcir_y = cir_xloc_y2(rightcir_max:end); %2 for top
 topright_xnodefromy = xnodefromy2(topcir_max:end); %1 for left, end for top
-topright_ynodefromx = ynodefromx2(topcir_max:end); %2 for top,
+topright_ynodefromx = ynodefromx2(rightcir_max:end); %2 for top,
 
 % bottom left
 isdoubletri = false;
@@ -268,6 +268,7 @@ for i_xy=1:length(topleft_ycir_x)-1 %half of the grid xvales, determined by min 
    
     for i_xx=1:length(topleft_xcir_x) %cycling through x_x values to see if inbeteen y_x ones
       trap = false;
+
         if  topleft_xcir_x(i_xx) > topleft_ycir_x(i_xy) &&... %topleft_ycir_x steps from small to small
               topleft_xcir_x(i_xx) < topleft_ycir_x(i_xy+1) && trap ==false%topleft_xcir_x steps from small to large
         
@@ -290,19 +291,19 @@ for i_xy=1:length(topleft_ycir_x)-1 %half of the grid xvales, determined by min 
          
     end    
     if isdoubletri == true
-        % small tri, on 'right'
-    linear_distance = ((topleft_ycir_x(i_xy+1)- topleft_xcir_x(i_xxhold+1))^2 +...
-        (topleft_ycir_y(i_xy+1)- topleft_xcir_y(i_xxhold+1))^2)^(1/2);
+        % small tri, on 'left'
+    linear_distance = ((topleft_ycir_x(i_xy)- topleft_xcir_x(i_xxhold))^2 +...
+        (topleft_ycir_y(i_xy)- topleft_xcir_y(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
     area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(topleft_xnodefromy(i_xy+1)+1) - topleft_ycir_x(i_xy+1))/2 * abs( y(topleft_ynodefromx(i_xxhold)+1)...
-                - topleft_xcir_y(i_xxhold+1));
+    area_tri = abs( x(topleft_xnodefromy(i_xy)+1) - topleft_ycir_x(i_xy))/2 * abs( y(topleft_ynodefromx(i_xxhold))...
+                - topleft_xcir_y(i_xxhold));
     area = area_tri + area_sliver;
-    C(topleft_xnodefromy(i_xy+1),ynode(topcir_max+i_xy)) = area/h^2;
+    C(topleft_xnodefromy(i_xy),ynode(topcir_max+i_xy-1)) = area/h^2;
 
-        % cut rect, one the 'left'
+        % cut rect, one the 'right'
     linear_distance = ((topleft_ycir_x(i_xy+1)- topleft_xcir_x(i_xxhold))^2 +...
         (topleft_ycir_y(i_xy+1)- topleft_xcir_y(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
@@ -346,21 +347,22 @@ for i_xy=1:length(topright_ycir_x)-1 %half of the grid xvales, determined by min
           
         end
          
-    end    
+    end   
+   
     if isdoubletri == true
-        % small tri, on 'left'
-    linear_distance = ((topright_ycir_x(i_xy+1)- topright_xcir_x(i_xxhold-1))^2 +...
-        (topright_ycir_y(i_xy+1)- topright_xcir_y(i_xxhold-1))^2)^(1/2);
+        % small tri, on 'right'
+    linear_distance = ((topright_ycir_x(i_xy)- topright_xcir_x(i_xxhold))^2 +...
+        (topright_ycir_y(i_xy)- topright_xcir_y(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
     area_sector = angle/(2*pi) * pi*r^2;
     area_triangle = linear_distance/2 * r*cos(angle/2);
     area_sliver = area_sector-area_triangle;
-    area_tri = abs( x(topright_xnodefromy(i_xy+1)) - topright_ycir_x(i_xy+1))/2 * abs( y(topright_ynodefromx(i_xxhold-1))...
-                - topright_xcir_y(i_xxhold-1));
+    area_tri = abs( x(topright_xnodefromy(i_xy)) - topright_ycir_x(i_xy))/2 * abs( y(topright_ynodefromx(i_xxhold))...
+                - topright_xcir_y(i_xxhold));
     area = area_tri + area_sliver;
-    C(topright_xnodefromy(i_xy+1),ynode(topcir_max+i_xy)) = area/h^2;
+    C(topright_xnodefromy(i_xy),ynode(topcir_max+i_xy-1)) = area/h^2;
 
-        % cut rect, one the 'right'
+        % cut rect, one the 'left'
     linear_distance = ((topright_ycir_x(i_xy+1)- topright_xcir_x(i_xxhold))^2 +...
         (topright_ycir_y(i_xy+1)- topright_xcir_y(i_xxhold))^2)^(1/2);
     angle = 2 * asin(linear_distance/2 / r);
@@ -370,7 +372,7 @@ for i_xy=1:length(topright_ycir_x)-1 %half of the grid xvales, determined by min
     area_tri = abs( x(topright_xnodefromy(i_xy+1)+1) - topright_ycir_x(i_xy+1))/2 * abs( y(topright_ynodefromx(i_xxhold)+1)...
                 - topright_xcir_y(i_xxhold));
     area = h^2 - area_tri + area_sliver;
-    C(topright_xnodefromy(i_xy+1),ynode(topcir_max+i_xy-1)) = area/h^2;
+    C(topright_xnodefromy(i_xy)-1,ynode(topcir_max+i_xy-1)) = area/h^2;
     isdoubletri = false;
      
     end   
