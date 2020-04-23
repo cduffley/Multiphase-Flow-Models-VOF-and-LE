@@ -1,7 +1,9 @@
 function C = CFDtri1(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
-    h,r,x,y,C,leftcir_min,rightcir_max)
+    h,r,x,y,C)
+[m,leftcir_min] = min(cir_yloc_x1); %xvales on left
+[m,rightcir_max] = max(cir_yloc_x2); %xvalues on right
 
 %%bottom left
 isdoubletri = false;
