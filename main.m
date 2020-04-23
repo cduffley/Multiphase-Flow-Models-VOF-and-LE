@@ -8,8 +8,8 @@ clc
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =333;
-Ny = 333;
+Nx =33;
+Ny = 33;
 x_pos = 0.5;
 y_pos = 0.75;
 r = 0.15;
