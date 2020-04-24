@@ -31,7 +31,7 @@ end
 
 [C,cir_xloc_x,cir_yloc_y,cir_xloc_y,cir_yloc_x] = ...
         circle_init(x,y,h,x_pos,y_pos,r);
-
+[mx,my] = youngsFD(h,x,y,C);
 %% for the reconstruct function
 
 % test C values (page 96)
@@ -86,18 +86,23 @@ for i = 1:length(x)
 end
 
 
-slope = -1/(mx^2 + my^2)^(1/2);
-others = ((-1/mx)^2 + (-1/my)^2)^(1/2)
+Ax = mx/(2*my);
+alp = sqrt(2*mx*my*Area);
+
+slope = 1/(mx/my);
+
+
+mbold = (mx^2 + my^2)^(1/2);
+% slope = 1/(mx^2 + my^2)^(1/2);
 delx = alpha/mx;
 dely = alpha/my;
 % dely = 0.5;
 
-slpch = dely/delx;
-b = (0.5+dely)-(0.5+delx)*slope;  %from both x and y
+b = (dely)-(delx)*slope;  %from both x and y
 linex = linspace(x(2), x(3),10);
 liney = slope*linex + b;
 plot(linex,liney)
-cch = ((0.827 - 0.5)/2 * (0.82-0.5))/(0.5^2);
+cch = ((0.75 - 0.5)/2 * (0.858-0.5))/(0.5^2);
 
 
 %% current graph stuff
