@@ -35,7 +35,14 @@ end
 %% for the reconstruct function
 
 % test C values (page 96)
-C = [0,0.02,0.1;0.2,0.8,1;0.7,1,1];
+C = [0,0.02,.1;...
+   0.2, 0.8,1;...
+   0.7, 1,1];
+
+% C = [.1,0.02,0;...
+%    1, 0.8,0.2;...
+%    1, 1,0.7];
+
 % corresponding test x , y and h values
 x = linspace(0,1,3);
 y = x;
@@ -89,21 +96,67 @@ end
 Ax = mx/(2*my);
 alp = sqrt(2*mx*my*Area);
 
-slope = 1/(mx/my);
+delx = alpha/mx;
+dely = alpha/my;
+% slope= -1/(delx/dely);
+slope = -1/(my/mx);
 
 
 mbold = (mx^2 + my^2)^(1/2);
-% slope = 1/(mx^2 + my^2)^(1/2);
+%slope = -1/(mx^2 + my^2)^(1/2);
 delx = alpha/mx;
 dely = alpha/my;
+% delx = mx;
+% dely = my;
 % dely = 0.5;
 
 b = (dely)-(delx)*slope;  %from both x and y
+b = (delx+0.5)*slope + 0.5; %at (delx,0);
+
 linex = linspace(x(2), x(3),10);
 liney = slope*linex + b;
 plot(linex,liney)
-cch = ((0.75 - 0.5)/2 * (0.858-0.5))/(0.5^2);
+cch = ((0.802 - 0.5)/2 * (0.852-0.5))/(0.5^2);
 
+for i = 1:length(x)
+    for j = 1:length(y)
+        
+        % Listing necessary parameters for area finding method
+        xval = X(i,j);      yval = Y(i,j);
+        mxval = mx(i,j);    myval = my(i,j);
+        
+        % Parameters to perform iterative method, including first iteration
+        % and tolerance of error for root finding
+        tol = 1e-8; 
+        err = 1e10;   Count = 1;   MaxCount = 25; alpha(Count) = 1; 
+        
+        % While loop to perform iteration calculation
+        while abs(err(Count)) > tol  &&  Count <= MaxCount
+            
+            % Calculation of area using areafinder function
+            Area(Count) = areafinder(xval,yval,mxval,myval,alpha(Count));
+            
+            % Evaluate error in area by comparing result to color function C
+            e1 =  Area(Count) - h^2*C(i,j);  
+            err(Count) = e1;
+            % Use perturbation for alpha if error is too large
+            if abs(e1) > tol
+                alphapert = 1.0001*alpha(Count);
+                Areapert = areafinder(xval,yval,mxval,myval,alphapert);
+                e2 =  Areapert - h^2*C(i,j);
+                alphanew = alpha(Count)-e1*(0.0001*alpha(Count))/(e2-e1);
+                Count = Count+1;   
+                alpha(Count) = alphanew;
+                err(Count) = err(Count-1);
+            end   % End of iteration loop for perturbation
+            if Count >= MaxCount
+                fprintf(1,'Iteration Failed -- Hit maximum iteration limit \n');
+            end   % End of overall iteration process
+        end
+        AlphaActual(i,j) = alpha(end)
+        AreaActual(i,j) = Area(end)
+    end
+end
 
 %% current graph stuff
 cir_xloc_x = [cir_xloc_x,cir_xloc_x];

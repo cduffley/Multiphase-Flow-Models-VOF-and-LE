@@ -6,7 +6,7 @@ magnitude = zeros(length(y));
 
 for i = 1:length(x)
     for j = 1:length(y)
-        if i==1 & j==1
+        if i==1 && j==1
             % Top left corner of boundaries
             mx1 = -1/(2*h) .*( 0 + C(i,j+1) - 0 - C(i,j) );
             my1 = -1/(2*h) .*( 0 - C(i,j+1) + 0 - C(i,j) );
@@ -16,7 +16,7 @@ for i = 1:length(x)
             my3 = -1/(2*h) .*( C(i,j+1) - C(i+1,j+1) + C(i,j) - C(i+1,j) );
             mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - 0 - 0 );
             my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + 0 - 0 );
-        elseif i==1 & j==length(y)
+        elseif i==1 && j==length(y)
             % Top right corner of boundaries
             mx1 = -1/(2*h) .*( 0 + 0 - 0 - C(i,j) );
             my1 = -1/(2*h) .*( 0 - 0 + 0 - C(i,j) );
@@ -26,7 +26,7 @@ for i = 1:length(x)
             my3 = -1/(2*h) .*( 0 - 0 + C(i,j) - C(i+1,j) );
             mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - C(i,j-1) - C(i+1,j-1) );
             my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + C(i,j-1) - C(i+1,j-1) );
-        elseif i==length(x) & j==1
+        elseif i==length(x) && j==1
             % Bottom left corner of boundaries
             mx1 = -1/(2*h) .*( C(i-1,j+1) + C(i,j+1) - C(i-1,j) - C(i,j) );
             my1 = -1/(2*h) .*( C(i-1,j+1) - C(i,j+1) + C(i-1,j) - C(i,j) );
@@ -36,7 +36,7 @@ for i = 1:length(x)
             my3 = -1/(2*h) .*( C(i,j+1) - 0 + C(i,j) - 0 );
             mx4 = -1/(2*h) .*( C(i,j) + 0 - 0 - 0 );
             my4 = -1/(2*h) .*( C(i,j) - 0 + 0 - 0 );
-        elseif i==length(x) & j==length(y)
+        elseif i==length(x) && j==length(y)
             % Bottom right corner of boundaries
             mx1 = -1/(2*h) .*( 0 + 0 - C(i-1,j) - C(i,j) );
             my1 = -1/(2*h) .*( 0 - 0 + C(i-1,j) - C(i,j) );
