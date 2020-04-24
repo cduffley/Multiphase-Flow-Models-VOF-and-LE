@@ -77,5 +77,43 @@ C = CFDtri2(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y,C);
 
+%%
+
+jhit = 0;
+jend = 0;
+for i=1:length(x)
+hit = false;
+ended = false;
+    for j=1:length(y)-1
+        jb = length(y) - j;
+        if C(i,jb) > 0 && C(i,j+1) == 0
+
+           jhit = jb+1;
+           hit = true;
+
+        elseif C(i,j) ==0 && C(i,j+1) > 0
+
+           jend = j;
+            ended = true;
+        end
+        
+    end
+    if hit && ended 
+    C(i,jhit:jend) = 1;
+    end
+ 
+end
 
 
+
+
+
+
+
+
+
+
+
+
+
+end
