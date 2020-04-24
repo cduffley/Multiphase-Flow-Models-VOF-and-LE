@@ -32,10 +32,56 @@ end
 [C,cir_xloc_x,cir_yloc_y,cir_xloc_y,cir_yloc_x] = ...
         circle_init(x,y,h,x_pos,y_pos,r);
 
+%% for the reconstruct function
 
+% test C values (page 96)
+C = [0,0.02,0.1;0.2,0.8,1;0.7,1,1];
+% corresponding test x , y and h values
+x = linspace(0,1,3);
+y = x;
+h = x(2)-x(1);
 % Calculation of x and y components of normal vector
 [mx,my] = youngsFD(h,x,y,C);
 
+tol = 1e-5;
+max_it = 1000; 
+err = 1;
+num_it=0;
+alpha_guess=1;
+mx = mx(2,2);
+my=my(2,2);
+C = C(2,2);
+while abs(err) > tol && num_it <= max_it
+
+alpha = Alpha(mx,my,h,alpha_guess,C);
+
+err1 = abs(alpha - alpha_guess);
+% alpha_guess1 = alpha_guess;
+alpha1 = alpha;
+alpha_guess = alpha_guess *1.01;
+
+alpha = Alpha(mx,my,h,alpha_guess,C);
+
+err2 = abs(alpha - alpha_guess);
+alpha2 = alpha;
+% alpha_guess2 = alpha_guess;
+
+alpha_new = alpha1 - err1/((err1-err2)/(alpha1-alpha2));
+alpha_guess = alpha_new;
+num_it = num_it+1;
+end
+
+
+
+slope = -1/(mx^2 + my^2)^(1/2);
+
+
+
+
+
+
+
+%% current graph stuff
 cir_xloc_x = [cir_xloc_x,cir_xloc_x];
 cir_yloc_y = [cir_yloc_y,cir_yloc_y];
 plot(cir_xloc_x,cir_xloc_y,'o')
