@@ -85,10 +85,10 @@ for i=1:length(x)
 hit = false;
 ended = false;
     for j=1:length(y)-1
-        jb = length(y) - j;
-        if C(i,jb) > 0 && C(i,j+1) == 0
+        jb = length(y) - j+1;
+        if C(i,jb) == 0 && C(i,jb-1) > 0 %counting backwards, last hit inside left
 
-           jhit = jb+1;
+           jhit = jb;
            hit = true;
 
         elseif C(i,j) ==0 && C(i,j+1) > 0
