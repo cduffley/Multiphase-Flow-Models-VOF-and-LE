@@ -8,10 +8,8 @@ clc
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =33;
-Ny = Nx;
-x_pos = 0.5;
-y_pos = 0.75;
+Nx = 33;    Ny = 33; 
+x_pos = 0.5;    y_pos = 0.75;
 r = 0.15;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
@@ -37,6 +35,8 @@ cir_yloc_y = [cir_yloc_y,cir_yloc_y];
 plot(cir_xloc_x,cir_xloc_y,'o')
 plot(cir_yloc_x,cir_yloc_y,'o')
 
+% Calculation of x and y components of normal vector
+[mx,my] = youngsFD(h,x,y,C);
 
 T = 2;
 t = T/2; %this is for book example, deliverable 2 has t = T/pi
