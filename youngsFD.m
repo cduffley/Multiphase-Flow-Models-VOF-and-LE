@@ -1,7 +1,8 @@
 function [mx,my] = youngsFD(h,x,y,C)
 
-mx = zeros(length(x));
-my = zeros(length(y));
+mxsum = zeros(length(x));
+mysum = zeros(length(y));
+magnitude = zeros(length(y));
 
 for i = 1:length(x)
     for j = 1:length(y)
@@ -98,8 +99,15 @@ for i = 1:length(x)
             mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - C(i,j-1) - C(i+1,j-1) );
             my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + C(i,j-1) - C(i+1,j-1) );
         end
-    mx(i,j) = (mx1+mx2+mx3+mx4)/4;
-    my(i,j) = (my1+my2+my3+my4)/4;
+        
+        % Summing of mx and my components for normal vector
+        mxsum(i,j) = (mx1+mx2+mx3+mx4)/4;
+        mysum(i,j) = (my1+my2+my3+my4)/4;
+        
+        % Normalizing the normal vector into unit vectors
+        magnitude(i,j) = sqrt(mxsum(i,j)^2+mysum(i,j)^2); 
+        mx(i,j) = mxsum(i,j)/ magnitude(i,j);
+        my(i,j) = mysum(i,j)/ magnitude(i,j);
     end
 end
 
