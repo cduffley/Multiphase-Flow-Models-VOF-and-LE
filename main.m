@@ -44,7 +44,7 @@ h = x(2)-x(1);
 [mx,my] = youngsFD(h,x,y,C);
 
 tol = 1e-5;
-max_it = 1000; 
+max_it = 100000; 
 err = 1;
 num_it=0;
 alpha_guess=1;
@@ -53,28 +53,38 @@ my=my(2,2);
 C = C(2,2);
 while abs(err) > tol && num_it <= max_it
 
-alpha = Alpha(mx,my,h,alpha_guess,C);
+Area = Alpha(mx,my,h,alpha_guess,C);
 
-err1 = abs(alpha - alpha_guess);
-% alpha_guess1 = alpha_guess;
-alpha1 = alpha;
+err1 = abs(Area - C*h^2);
+alpha_guess1 = alpha_guess;
+area1 = Area;
 alpha_guess = alpha_guess *1.01;
 
-alpha = Alpha(mx,my,h,alpha_guess,C);
+Area = Alpha(mx,my,h,alpha_guess,C);
 
-err2 = abs(alpha - alpha_guess);
-alpha2 = alpha;
-% alpha_guess2 = alpha_guess;
+err2 = abs(Area - C*h^2);
+area2 = Area;
+alpha_guess2 = alpha_guess;
 
-alpha_new = alpha1 - err1/((err1-err2)/(alpha1-alpha2));
+alpha_new = alpha_guess1 - err1/((err1-err2)/(alpha_guess1-alpha_guess2));
 alpha_guess = alpha_new;
 num_it = num_it+1;
+err = err1;
+alpha = alpha_new;
+end
+figure
+hold on
+for i = 1:length(x)
+    plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
+    plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
 end
 
 
-
 slope = -1/(mx^2 + my^2)^(1/2);
+delx = alpha/mx;
+dely = alpha/my;
 
+slpch = dely/delx;
 
 
 
@@ -84,8 +94,8 @@ slope = -1/(mx^2 + my^2)^(1/2);
 %% current graph stuff
 cir_xloc_x = [cir_xloc_x,cir_xloc_x];
 cir_yloc_y = [cir_yloc_y,cir_yloc_y];
-plot(cir_xloc_x,cir_xloc_y,'o')
-plot(cir_yloc_x,cir_yloc_y,'o')
+% plot(cir_xloc_x,cir_xloc_y,'o')
+% plot(cir_yloc_x,cir_yloc_y,'o')
 
 
 T = 2;

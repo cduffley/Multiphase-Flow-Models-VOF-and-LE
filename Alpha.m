@@ -1,4 +1,4 @@
-function alpha = Alpha(mx,my,h,alpha_guess,C) 
+function A = Alpha(mx,my,h,alpha_guess,C) 
     %Determine f2x for area calc
 delX = h;
 delY = h;
@@ -20,6 +20,8 @@ delY = h;
     A = (1/(2*mx*my))*((alpha_guess^2)-f2x-f2y);
     
     %Calculate alpha using root finding
-    g = @(a) A-delX*delY*C;
-    alpha = fzero(g,0.5);
+%     g = @(a) A-delX*delY*C;
+%     alpha = fzero(g,0.5);
+
+
 end
