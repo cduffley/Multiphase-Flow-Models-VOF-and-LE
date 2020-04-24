@@ -59,6 +59,10 @@ err1 = abs(Area - C*h^2);
 alpha_guess1 = alpha_guess;
 area1 = Area;
 alpha_guess = alpha_guess *1.01;
+if abs(err1) < tol
+alpha_guess = alpha_guess/1.0100000001; %lmao
+
+end
 
 Area = Alpha(mx,my,h,alpha_guess,C);
 
@@ -71,7 +75,9 @@ alpha_guess = alpha_new;
 num_it = num_it+1;
 err = err1;
 alpha = alpha_new;
+
 end
+areaC = C*h^2;
 figure
 hold on
 for i = 1:length(x)
@@ -81,14 +87,17 @@ end
 
 
 slope = -1/(mx^2 + my^2)^(1/2);
+others = ((-1/mx)^2 + (-1/my)^2)^(1/2)
 delx = alpha/mx;
 dely = alpha/my;
+% dely = 0.5;
 
 slpch = dely/delx;
-
-
-
-
+b = (0.5+dely)-(0.5+delx)*slope;  %from both x and y
+linex = linspace(x(2), x(3),10);
+liney = slope*linex + b;
+plot(linex,liney)
+cch = ((0.827 - 0.5)/2 * (0.82-0.5))/(0.5^2);
 
 
 %% current graph stuff
