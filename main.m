@@ -35,7 +35,14 @@ end
 %% for the reconstruct function
 
 % test C values (page 96)
-C = [0,0.02,0.1;0.2,0.8,1;0.7,1,1];
+C = [0,0.02,.1;...
+   0.2, 0.8,1;...
+   0.7, 1,1];
+
+% C = [.1,0.02,0;...
+%    1, 0.8,0.2;...
+%    1, 1,0.7];
+
 % corresponding test x , y and h values
 x = linspace(0,1,3);
 y = x;
@@ -89,20 +96,27 @@ end
 Ax = mx/(2*my);
 alp = sqrt(2*mx*my*Area);
 
-slope = 1/(mx/my);
+delx = alpha/mx;
+dely = alpha/my;
+% slope= -1/(delx/dely);
+slope = -1/(my/mx);
 
 
 mbold = (mx^2 + my^2)^(1/2);
-% slope = 1/(mx^2 + my^2)^(1/2);
+%slope = -1/(mx^2 + my^2)^(1/2);
 delx = alpha/mx;
 dely = alpha/my;
+% delx = mx;
+% dely = my;
 % dely = 0.5;
 
 b = (dely)-(delx)*slope;  %from both x and y
+b = (delx+0.5)*slope + 0.5; %at (delx,0);
+
 linex = linspace(x(2), x(3),10);
 liney = slope*linex + b;
 plot(linex,liney)
-cch = ((0.75 - 0.5)/2 * (0.858-0.5))/(0.5^2);
+cch = ((0.802 - 0.5)/2 * (0.852-0.5))/(0.5^2);
 
 
 %% current graph stuff
