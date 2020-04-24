@@ -32,6 +32,10 @@ end
 [C,cir_xloc_x,cir_yloc_y,cir_xloc_y,cir_yloc_x] = ...
         circle_init(x,y,h,x_pos,y_pos,r);
 
+
+% Calculation of x and y components of normal vector
+[mx,my] = youngsFD(h,x,y,C);
+
 cir_xloc_x = [cir_xloc_x,cir_xloc_x];
 cir_yloc_y = [cir_yloc_y,cir_yloc_y];
 plot(cir_xloc_x,cir_xloc_y,'o')
