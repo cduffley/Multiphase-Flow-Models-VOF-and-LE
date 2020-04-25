@@ -1,6 +1,6 @@
 clear 
 clc
-
+close all
 % -------------------------------------------------------------------------
 % Interface tracking test
 % -------------------------------------------------------------------------
@@ -44,7 +44,7 @@ C = [0,0.02,.1;...
 %    1, 1,0.7];
 
 % corresponding test x , y and h values
-x = linspace(0,1,3);
+x = linspace(0,3,3);
 y = x;
 h = x(2)-x(1);
 % Calculation of x and y components of normal vector
@@ -85,12 +85,6 @@ alpha = alpha_new;
 
 end
 areaC = C*h^2;
-figure
-hold on
-for i = 1:length(x)
-    plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
-    plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
-end
 
 
 Ax = mx/(2*my);
@@ -112,10 +106,17 @@ dely = alpha/my;
 
 b = (dely)-(delx)*slope;  %from both x and y
 b = (delx+0.5)*slope + 0.5; %at (delx,0);
-
-linex = linspace(x(2), x(3),10);
+xgrid = linspace(0,3,4);
+ygrid = xgrid;
+figure
+hold on
+for i = 1:length(xgrid)
+    plot(ones(1,length(xgrid))*xgrid(i),ygrid,'k','Linewidth',0.25)
+    plot(xgrid,ones(1,length(ygrid))*ygrid(i),'k','Linewidth',0.25)
+end
+linex = linspace(xgrid(2), xgrid(3),10);
 liney = slope*linex + b;
-plot(linex,liney)
+% plot(linex,liney)
 cch = ((0.802 - 0.5)/2 * (0.852-0.5))/(0.5^2);
 
 
@@ -138,5 +139,27 @@ v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 % C = (u.^2 + v.^2).^(1/2);
 
 
+%% trying areafinder 
+
+slope = 0.5618;
+mx = 0.4898;
+my = -0.8718;
+x = 1;
+y = 1;
+h=1;
+alpha = linspace(-1,-0.2,10000);
+
+for i=1:length(alpha)
+area(i) = areafinder(x,y,mx,my,h,alpha(i));
+end
+%for this example (havent done yet)
+area = h^2 - area;
+error = abs(0.8*h^2 - area);
+[m,i] = min(error);
+alpha = alpha(i);
+dx = alpha/mx;
+b = y - (x+alpha/mx)*slope;
+liney = slope*linex+b;
+plot(linex,liney)
 
 
