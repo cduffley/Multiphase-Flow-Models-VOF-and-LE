@@ -162,4 +162,44 @@ b = y - (x+alpha/mx)*slope;
 liney = slope*linex+b;
 plot(linex,liney)
 
-
+%% Iterative solver for area finding method for whole mesh when ready for use
+% for i = 1:length(x)
+%     for j = 1:length(y)
+%         
+%         % Listing necessary parameters for area finding method
+%         xval = X(i,j);      yval = Y(i,j);
+%         mxval = mx(i,j);    myval = my(i,j);
+%         
+%         % Parameters to perform iterative method, including first iteration
+%         % and tolerance of error for root finding
+%         tol = 1e-8; 
+%         err = 1e10;   Count = 1;   MaxCount = 25; alpha(Count) = 1; 
+%         
+%         % While loop to perform iteration calculation
+%         while abs(err(Count)) > tol  &&  Count <= MaxCount
+%             
+%             % Calculation of area using areafinder function
+%             Area(Count) = areafinder(xval,yval,mxval,myval,alpha(Count));
+%             
+%             % Evaluate error in area by comparing result to color function C
+%             e1 =  Area(Count) - h^2*C(i,j);  
+%             err(Count) = e1;
+%             % Use perturbation for alpha if error is too large
+%             if abs(e1) > tol
+%                 alphapert = 1.0001*alpha(Count);
+%                 Areapert = areafinder(xval,yval,mxval,myval,alphapert);
+%                 e2 =  Areapert - h^2*C(i,j);
+%                 alphanew = alpha(Count)-e1*(0.0001*alpha(Count))/(e2-e1);
+%                 Count = Count+1;   
+%                 alpha(Count) = alphanew;
+%                 err(Count) = err(Count-1);
+%             end   % End of iteration loop for perturbation
+%             if Count >= MaxCount
+%                 fprintf(1,'Iteration Failed -- Hit maximum iteration limit \n');
+%             end   % End of overall iteration process
+%         end
+%         AlphaActual(i,j) = alpha(end)
+%         AreaActual(i,j) = Area(end)
+%     end
+% end
+% 
