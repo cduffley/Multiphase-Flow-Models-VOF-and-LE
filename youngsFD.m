@@ -105,9 +105,14 @@ for i = 1:length(x)
         mysum(i,j) = (my1+my2+my3+my4)/4;
         
         % Normalizing the normal vector into unit vectors
-        magnitude(i,j) = sqrt(mxsum(i,j)^2+mysum(i,j)^2); 
-        mx(i,j) = mxsum(i,j)/ magnitude(i,j);
-        my(i,j) = mysum(i,j)/ magnitude(i,j);
+        if mxsum(i,j)==0 && mysum(i,j)==0 
+            mx(i,j) = mxsum(i,j);
+            my(i,j) = mysum(i,j));
+        else
+            magnitude(i,j) = sqrt(mxsum(i,j)^2+mysum(i,j)^2); 
+            mx(i,j) = mxsum(i,j)/ magnitude(i,j);
+            my(i,j) = mysum(i,j)/ magnitude(i,j);
+        end
     end
 end
 
