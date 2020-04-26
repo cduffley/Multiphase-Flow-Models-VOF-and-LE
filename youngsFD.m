@@ -107,7 +107,7 @@ for i = 1:length(x)
         % Normalizing the normal vector into unit vectors
         if mxsum(i,j)==0 && mysum(i,j)==0 
             mx(i,j) = mxsum(i,j);
-            my(i,j) = mysum(i,j));
+            my(i,j) = mysum(i,j);
         else
             magnitude(i,j) = sqrt(mxsum(i,j)^2+mysum(i,j)^2); 
             mx(i,j) = mxsum(i,j)/ magnitude(i,j);

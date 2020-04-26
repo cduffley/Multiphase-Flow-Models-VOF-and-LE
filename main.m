@@ -143,12 +143,15 @@ v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
 mx = 0.5;
 my = 0.5;
+h=1;
 slope = -1/(my/mx);
+alplim = (h*-slope + h)*my;
+alplim = (h*(-1/slope)+h)*mx;
+alplimc = (0.5/mx - h) * -slope;
 x = 1;
 y = 1;
-h=1;
-alpha = linspace(0.1,1.6,1000);
-alpha = 1.3162;
+alpha = linspace(0.1,1,1000);
+% alpha =  1.3163;
 for i=1:length(alpha)
 area(i) = areafinder(x,y,mx,my,h,alpha(i));
 end

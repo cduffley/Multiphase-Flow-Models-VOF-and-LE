@@ -2,7 +2,7 @@ function area = areafinder(x,y,mx,my,h,alpha)
 % if cells counted clockwise sides (starting on left) 1, 2, 3, 4
 slope = -1/(my/mx);
 % area = 1*h^2;
-
+area = 1.1;
 if slope < 0
 
 if alpha/mx > h && alpha/my > h
