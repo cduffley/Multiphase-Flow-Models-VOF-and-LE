@@ -141,24 +141,24 @@ v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
 %% trying areafinder 
 
-slope = 0.5618;
-mx = 0.4898;
-my = -0.8718;
+mx = 0.5;
+my = 0.5;
+slope = -1/(my/mx);
 x = 1;
 y = 1;
 h=1;
-alpha = linspace(-1,-0.2,10000);
-
+alpha = linspace(0.1,1.6,1000);
+alpha = 1.3162;
 for i=1:length(alpha)
 area(i) = areafinder(x,y,mx,my,h,alpha(i));
 end
 %for this example (havent done yet)
-area = h^2 - area;
+% area = h^2 - area;
 error = abs(0.8*h^2 - area);
 [m,i] = min(error);
 alpha = alpha(i);
 dx = alpha/mx;
-b = y - (x+alpha/mx)*slope;
+b = y - (x+abs(alpha/mx))*slope;
 liney = slope*linex+b;
 plot(linex,liney)
 

@@ -49,7 +49,7 @@ end
 if slope > 0
 
 
-if alpha/mx > 0 && alpha/my > h
+if alpha/mx > 0 && -1/slope*(-h) + abs(alpha/mx) > h
 % line passes through 2,3
 %counter clockwise
 %origin, right, right up, top right corner, left corner
