@@ -168,43 +168,84 @@ liney(liney>y+h) = y+h;
 plot(linex,liney)
 
 %% Iterative solver for area finding method for whole mesh when ready for use
-% for i = 1:length(x)
-%     for j = 1:length(y)
-%         
-%         % Listing necessary parameters for area finding method
-%         xval = X(i,j);      yval = Y(i,j);
-%         mxval = mx(i,j);    myval = my(i,j);
-%         
-%         % Parameters to perform iterative method, including first iteration
-%         % and tolerance of error for root finding
-%         tol = 1e-8; 
-%         err = 1e10;   Count = 1;   MaxCount = 25; alpha(Count) = 1; 
-%         
-%         % While loop to perform iteration calculation
-%         while abs(err(Count)) > tol  &&  Count <= MaxCount
-%             
-%             % Calculation of area using areafinder function
-%             Area(Count) = areafinder(xval,yval,mxval,myval,alpha(Count));
-%             
-%             % Evaluate error in area by comparing result to color function C
-%             e1 =  Area(Count) - h^2*C(i,j);  
-%             err(Count) = e1;
-%             % Use perturbation for alpha if error is too large
-%             if abs(e1) > tol
-%                 alphapert = 1.0001*alpha(Count);
-%                 Areapert = areafinder(xval,yval,mxval,myval,alphapert);
-%                 e2 =  Areapert - h^2*C(i,j);
-%                 alphanew = alpha(Count)-e1*(0.0001*alpha(Count))/(e2-e1);
-%                 Count = Count+1;   
-%                 alpha(Count) = alphanew;
-%                 err(Count) = err(Count-1);
-%             end   % End of iteration loop for perturbation
-%             if Count >= MaxCount
-%                 fprintf(1,'Iteration Failed -- Hit maximum iteration limit \n');
-%             end   % End of overall iteration process
-%         end
-%         AlphaActual(i,j) = alpha(end)
-%         AreaActual(i,j) = Area(end)
-%     end
-% end
-% 
+AlphaActual = zeros(length(x),length(y));
+AreaActual = zeros(length(x),length(y));
+for i = 1:length(x)
+    for j = 1:length(y)
+        
+        % Listing necessary parameters for area finding method
+        xval = X(i,j);      yval = Y(i,j);
+        mxval = mx(i,j);    myval = my(i,j);
+        if  mx == 0 && myval == 0 && C(i,j) == 0
+            % Check if mx and my are both 0 for C of 0 (not filled), 
+            % which yields area of 0
+            AlphaActual(i,j) = 0;
+            AreaActual(i,j) = 0;
+            break
+        elseif  mx == 0 && myval == 0 && C(i,j) == 1
+            % Check if mx and my are both 0 for C of 1 (filled), 
+            % which yields area of 1
+            AlphaActual(i,j) = 1;
+            AreaActual(i,j) = 1;
+            break
+        else
+        % Parameters to perform iterative method, including first iteration
+        % and tolerance of error for root finding
+        tol = 1e-8; 
+        err = 1e10;   Count = 1;   MaxCount = 25; 
+        
+        % Ensuring that intial guess for alpha is within constraints of geometric cell
+        if mx > 0 && my > 0
+            % mx and my are positive
+            alpha(Count) = (-h/slope(i,j)+h)*mxval*0.1
+        end
+        
+        if mx < 0 && my < 0
+            % mx and my are negative
+            alpha(Count) = (-h/slope(i,j)+h)*mxval*1.1
+        end
+        
+        if mx < 0 && my > 0
+            % mx is negative and my is positive
+            % hmx < alpha < hmy
+            alpha(Count) = h*myval*0.1
+        end
+        
+        if mx > 0 && my < 0
+            % hmy < alpha < hmx
+            % mx is positive and my is negative
+            alpha(Count) = h*mxval*0.1
+        end
+        
+        % While loop to perform iteration calculation
+        while abs(err(Count)) > tol  &&  Count <= MaxCount
+            
+            % Calculation of area using areafinder function
+            Area(Count) = areafinder(xval,yval,mxval,myval,alpha(Count));
+            
+            % Evaluate error in area by comparing result to color function C
+            e1 =  Area(Count) - C(i,j);  
+            err(Count) = e1;
+            % Use perturbation for alpha if error is too large
+            if abs(e1) > tol
+                alphapert = 1.0001*alpha(Count);
+                Areapert = areafinder(xval,yval,mxval,myval,alphapert);
+                e2 =  Areapert - C(i,j);
+                % Calculate a new alpha guess based on error analysis
+                alphanew = alpha(Count)-e1*(0.0001*alpha(Count))/(e2-e1);
+                Count = Count+1;   
+                alpha(Count) = alphanew;
+                err(Count) = err(Count-1);
+            end   % End of iteration loop for perturbation
+            if Count >= MaxCount
+                fprintf(1,'Iteration Failed -- Hit maximum iteration limit \n');
+            end   % End of overall iteration process
+        end % End of while loop
+        AlphaActual(i,j) = alpha(end);
+        AreaActual(i,j) = Area(end);
+        
+        end % End of overall if statement
+
+    end
+end
+
