@@ -39,9 +39,9 @@ C = [0,0,0;...
    0.5, 0.5,0.5;...
    1, 1,1]';
 
-% C = [.1,0.02,0;...
-%    1, 0.8,0.2;...
-%    1, 1,0.7];
+C = [0,0.02,.1;...
+   0.2, 0.8,1;...
+   0.7, 1,1];
 
 % corresponding test x , y and h values
 x = linspace(0,3,3);
@@ -141,8 +141,8 @@ v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
 %% trying areafinder 
 
-mx = -0.8;
-my = 0.6;
+mx = -0.4898;
+my = 0.8718;
 h=1;
 slope = -1/(my/mx);
 alplim1 = (h*-slope + h)*my;
@@ -150,19 +150,17 @@ alplim = (h*(-1/slope)+h)*mx;
 alplimc = (0.5/mx - h) * -slope;
 x = 1;
 y = 1;
-alpha = linspace(0.1,1,1000);
 alpha = linspace(mx,my,1000);
-% alpha =  1.3163;
+alpha = 0.3811;
 for i=1:length(alpha)
 area(i) = areafinder(x,y,mx,my,h,alpha(i));
 end
 %for this example (havent done yet)
-area = h^2 - area;
 error = abs(0.8*h^2 - area);
 [m,i] = min(error);
 alpha = alpha(i);
 dx = alpha/mx;
-b = y - (x+abs(alpha/mx))*slope;
+b = y - (x+alpha/mx)*slope;
 liney = slope*linex+b;
 plot(linex,liney)
 

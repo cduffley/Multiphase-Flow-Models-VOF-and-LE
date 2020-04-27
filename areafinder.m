@@ -6,10 +6,10 @@ area = 1.1;
 
 %fudge factors for exactly horizontal and vertical lines
 if mx == 0
-    mx = 0.00001;
+    mx = 0.001;
 end
 if my == 0
-    my = 0.00001;
+    my = 0.001;
 end
 
 if slope < 0
@@ -58,13 +58,12 @@ end
 if slope > 0
 
 
-if alpha/mx > 0 && -1/slope*(-h) + abs(alpha/mx) > h
-% line passes through 2,3
+if alpha/mx > 0 && (h-abs(alpha/mx))*slope > h
+% line passes through 4,2
 %counter clockwise
 %origin, right, right up, top right corner, left corner
-    xindicies = [x,x+abs(alpha/my)/slope, x+h,x+h, x];
-    yindicies = [y,y,y+h-(abs(alpha/mx)-h)*slope,y+h,y+h];
-
+    xindicies = [x,x+abs(alpha/mx),x+(h/slope)+abs(alpha/mx), x];
+    yindicies = [y,y,y+h,y+h];
 area = polyarea(xindicies,yindicies);
 end
 
@@ -88,12 +87,13 @@ if alpha/mx < 0 && slope*(h) + alpha/my > h  %slope*(x+h)? no cause alpha/my isn
 area = polyarea(xindicies,yindicies);
 end
 
-if alpha/mx > 0 && -1/slope*(-h) + abs(alpha/mx) < h %this gets a x value
+if alpha/mx > 0 &&  (h-abs(alpha/mx))*slope < h %this gets a x value
 % line passes through 4,3
 %counter clockwise
 %origin, right, right up, top right corner, left corner
-    xindicies = [x,x+abs(alpha/mx),x+h ,x+h, x];
-    yindicies = [y,y,y+h-(-1/slope*(-h) + abs(alpha/mx) - h)/slope,y+h,y+h];
+    xindicies = [x,x+abs(alpha/mx), x+h,x+h, x];
+    yindicies = [y,y,y+(h-alpha/mx)*slope,y+h,y+h];
+
 area = polyarea(xindicies,yindicies);
 end
 
@@ -102,7 +102,7 @@ end
 %%% all the values for the negative slope also calculate the area to the
  % left of the line.
 %flips the area if need be
-if (mx > 0 && my > 0) || (mx > 0 && my < 0)  
+if (mx < 0 && my > 0) || (mx < 0 && my < 0)  
 area = h^2 - area;
 end
  
