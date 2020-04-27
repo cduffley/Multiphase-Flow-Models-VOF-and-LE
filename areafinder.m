@@ -3,6 +3,15 @@ function area = areafinder(x,y,mx,my,h,alpha)
 slope = -1/(my/mx);
 % area = 1*h^2;
 area = 1.1;
+
+%fudge factors for exactly horizontal and vertical lines
+if mx == 0
+    mx = 0.00001;
+end
+if my == 0
+    my = 0.00001;
+end
+
 if slope < 0
 
 if alpha/mx > h && alpha/my > h
@@ -92,10 +101,11 @@ end
 % of the intercepting line. 
 %%% all the values for the negative slope also calculate the area to the
  % left of the line.
-
-
-if mx > 0 &&
-
+%flips the area if need be
+if (mx > 0 && my > 0) || (mx > 0 && my < 0)  
+area = h^2 - area;
+end
+ 
 
 
 
