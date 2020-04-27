@@ -141,8 +141,8 @@ v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
 %% trying areafinder 
 
-mx = -0.4898;
-my = 0.8718;
+mx = -1;
+my = 0;
 h=1;
 slope = -1/(my/mx);
 alplim1 = (h*-slope + h)*my;
@@ -150,18 +150,21 @@ alplim = (h*(-1/slope)+h)*mx;
 alplimc = (0.5/mx - h) * -slope;
 x = 1;
 y = 1;
-alpha = linspace(mx,my,1000);
-alpha = 0.3811;
+alpha = linspace(mx+0.001,my-0.001,1000);
 for i=1:length(alpha)
-area(i) = areafinder(x,y,mx,my,h,alpha(i));
+[area(i),xleft(i),xright(i),yleft(i),yright(i)]...
+    = areafinder(x,y,mx,my,h,alpha(i));
 end
 %for this example (havent done yet)
 error = abs(0.8*h^2 - area);
 [m,i] = min(error);
 alpha = alpha(i);
 dx = alpha/mx;
+slope = 1e10;
 b = y - (x+alpha/mx)*slope;
 liney = slope*linex+b;
+liney(liney<y+h) = y;
+liney(liney>y+h) = y+h;
 plot(linex,liney)
 
 %% Iterative solver for area finding method for whole mesh when ready for use
