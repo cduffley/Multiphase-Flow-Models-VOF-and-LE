@@ -90,7 +90,42 @@ end
 %% 2 dan -----------------------------------------------------------------
 
 %% 3 joel -----------------------------------------------------------------
-
+ % (-,-) u is positive
+if mx < 0 && my < 0
+    %(1,4)
+    if new_x_l >= new_x %same thing
+       xverticies = [new_x_l, new_x_r, new_x_l+dx, new_x_l+dx,new_x_l];
+       yverticies = [y,y,yright,y+h,y+h];
+       xverticies = [xleft,xright,x+h,x+h,
+    end
+    
+    if new_x_l < new_x
+       xverticies = [new_x, new_x_r, new_x_r, new_x];
+       yverticies = [y,y,yright,yright]; 
+    end
+    
+    %(2,4)
+    if new_x_l > new_x 
+       xverticies = [new_x_l, new_x_r, new_x_l+dx, new_x_l+dx];
+       yverticies = [y,y,y+h,y+h];
+    end
+    
+    if new_x_l < new_x
+       xverticies = [new_x, new_x_r, new_x_r, new_x];
+       yverticies = [(new_x_l-new_x)*-slope + y,y,y,y+h,y+h]; 
+    end
+    
+    %(1,3)
+    if new_x_l > new_x 
+       xverticies = [new_x_l, new_x_r, new_x_r, new_x_l];
+       yverticies = [yleft,yright,y+h,y+h];
+    end
+    
+    if new_x_l < new_x
+       xverticies = [new_x, new_x_r, new_x_r, new_x];
+       yverticies = [(new_x_l-new_x)*-slope + y,y,y+h,y+h]; 
+    end
+end
 
 %% 4 -----------------------------------------------------------------
 % (+,-) pos u, pos slope 
