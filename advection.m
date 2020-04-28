@@ -93,26 +93,30 @@ end
  % (-,-) u is positive
 if mx < 0 && my < 0
     %(1,4)
-    if new_x_l >= new_x %same thing
-       xverticies = [new_x_l, new_x_r, new_x_l+dx, new_x_l+dx,new_x_l];
-       yverticies = [y,y,yright,y+h,y+h];
-       xverticies = [xleft,xright,x+h,x+h,
+    if new_x_l <= new_x && new_x_r > new_x
+       xverticies = [new_x, new_x_r, x+h+dx, x+h+dx,new_x];
+       yverticies = [y+(new_x_r-new_x)*-slope,y,y,y+h,y+h];
     end
     
-    if new_x_l < new_x
-       xverticies = [new_x, new_x_r, new_x_r, new_x];
-       yverticies = [y,y,yright,yright]; 
+    if new_x_r < new_x
+       xverticies = [new_x,x+h+dx, x+h+dx, new_x];
+       yverticies = [y,y,y+h,y+h]; 
     end
     
     %(2,4)
-    if new_x_l > new_x 
-       xverticies = [new_x_l, new_x_r, new_x_l+dx, new_x_l+dx];
+    if new_x_l > new_x && new_x_r > new_x %%same thing
+       xverticies = [xright, x+h, x+h, xleft];
        yverticies = [y,y,y+h,y+h];
     end
     
-    if new_x_l < new_x
-       xverticies = [new_x, new_x_r, new_x_r, new_x];
+    if new_x_l < new_x && new_x_r  > new_x
+       xverticies = [new_x, new_x_r, x+h+dx, x+h+dx,new_x];
        yverticies = [(new_x_l-new_x)*-slope + y,y,y,y+h,y+h]; 
+    end
+    
+    if new_x_l < new_x && new_x_r < new_x
+       xverticies = [new_x, x+h+dx, x+h+dx, new_x];
+       yverticies = [y,y,y+h,y+h];
     end
     
     %(1,3)
@@ -123,7 +127,18 @@ if mx < 0 && my < 0
     
     if new_x_l < new_x
        xverticies = [new_x, new_x_r, new_x_r, new_x];
-       yverticies = [(new_x_l-new_x)*-slope + y,y,y+h,y+h]; 
+       yverticies = [(new_x_l-new_x)*-slope + yright,yright,y+h,y+h]; 
+    end
+    
+    %(2,3)
+    if new_x_l > new_x 
+       xverticies = [new_x_l, new_x_r, new_x_r];
+       yverticies = [yleft,yright,y+h];
+    end
+    
+    if new_x_l < new_x
+       xverticies = [new_x, new_x_r, new_x_r, new_x];
+       yverticies = [(new_x_l-new_x)*-slope + yright,yright,y+h,y+h]; 
     end
 end
 
