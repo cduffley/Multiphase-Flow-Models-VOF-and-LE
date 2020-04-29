@@ -1,6 +1,8 @@
-function Cnew = advectionTot(x,y,h,i,j,mx,my,...
-    xleft,xright,yleft,yright,alpha,u,v,dt,C,Cnew)
+function [Cr,xleft,xright,yleft,yright,mx,my] = advectionTot(x,y,h,i,j,mx,my,...
+    xleft,xright,yleft,yright,alpha,u,v,dt,C)
 %Cnew is initialized as zeros, then added to 
+%initial mx,my,xr,xl,yr,yl
+%C is inital CF
 Cnew = zeros(size(C));
 
 for m=1:length(x)
@@ -28,8 +30,9 @@ for m=1:length(x)
 end
 
     
-% some reconstruction funtion    
-[C,alpha,yleft,ect] = reconstruct(x,y,ect,Cnew)
+% some reconstruction funtion  
+[mx,my] = youngsFD;
+[Cr,xleft,xright,yleft,yright] = reconstruct(x,y,mx,my,Cnew);
 Cnew = zeros(size(C));
 
 for m=1:length(x)
@@ -39,10 +42,10 @@ for m=1:length(x)
         
         if v > 0
             [CnewY,shift_y] = advectionYpos(x,y,h,i,j,mx,my,...
-    xleft,xright,yleft,yright,alpha,u,v,dt,C);
+    xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
         elseif v < 0
             [CnewY,shift_y] = advectionYneg(x,y,h,i,j,mx,my,...
-    xleft,xright,yleft,yright,alpha,u,v,dt,C);
+    xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
         elseif v==0
             CnewY = zeros(size(C));
             shift_y = 0;
@@ -53,11 +56,12 @@ for m=1:length(x)
     end
 end
 
-% some reconstruction funtion again    
-[C,alpha,yleft,ect] = reconstruct(x,y,ect,Cnew)
+% some reconstruction funtion again
+[mx,my] = youngsFD;
+[Cr,xleft,xright,yleft,yright] = reconstruct(x,y,mx,my,Cnew);
 
-%final C is set as Cnew
-Cnew = C;
+%final C is set as Cr
+
 end
 
 

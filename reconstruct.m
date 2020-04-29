@@ -1,4 +1,4 @@
-function [Cr,xleft,xright,yleft,yright] = reconstruct(x,y,C)
+function [Cr,xleft,xright,yleft,yright,AlphaActual] = reconstruct(x,y,mx,my,C)
 %Cr - C reconstructed (actual Colorfuntion area based on new lines,
 % should this be the case, or should we use original Colorfuction when 
 % advecting in the next step? If we use original, it could lead to some

@@ -1,5 +1,5 @@
 function [Cx,num_shift] =advectionXpos(x,y,h,i,j,mx,my,...
-    xleft,xright,yleft,yright,alpha,u,v,dt,C,Cold)
+    xleft,xright,yleft,yright,alpha,u,v,dt,C)
 
 % 
 dx = dt*u;
