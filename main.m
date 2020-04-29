@@ -106,15 +106,15 @@ end
 % 
 % b = (dely)-(delx)*slope;  %from both x and y
 % b = (delx+0.5)*slope + 0.5; %at (delx,0);
-% xgrid = linspace(0,3,4);
-% ygrid = xgrid;
-% figure
-% hold on
-% for i = 1:length(xgrid)
-%     plot(ones(1,length(xgrid))*xgrid(i),ygrid,'k','Linewidth',0.25)
-%     plot(xgrid,ones(1,length(ygrid))*ygrid(i),'k','Linewidth',0.25)
-% end
-% linex = linspace(xgrid(2), xgrid(3),10);
+xgrid = linspace(0,3,4);
+ygrid = xgrid;
+figure
+hold on
+for i = 1:length(xgrid)
+    plot(ones(1,length(xgrid))*xgrid(i),ygrid,'k','Linewidth',0.25)
+    plot(xgrid,ones(1,length(ygrid))*ygrid(i),'k','Linewidth',0.25)
+end
+linex = linspace(xgrid(2), xgrid(3),10);
 % liney = slope*linex + b;
 % % plot(linex,liney)
 % cch = ((0.802 - 0.5)/2 * (0.852-0.5))/(0.5^2);
@@ -141,31 +141,30 @@ v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
 %% trying areafinder 
 
-% mx = -1;
-% my = 0;
-% h=1;
-% slope = -1/(my/mx);
-% alplim1 = (h*-slope + h)*my;
-% alplim = (h*(-1/slope)+h)*mx;
-% alplimc = (0.5/mx - h) * -slope;
-% x = 1;
-% y = 1;
-% alpha = linspace(mx+0.001,my-0.001,1000);
-% for i=1:length(alpha)
-% [area(i),xleft(i),xright(i),yleft(i),yright(i)]...
-%     = areafinder(x,y,mx,my,h,alpha(i));
-% end
-% %for this example (havent done yet)
-% error = abs(0.8*h^2 - area);
-% [m,i] = min(error);
-% alpha = alpha(i);
-% dx = alpha/mx;
-% slope = 1e10;
-% b = y - (x+alpha/mx)*slope;
-% liney = slope*linex+b;
+mx = -.2;
+my = .1;
+h=1;
+slope = -1/(my/mx);
+alplim1 = (h*-slope + h)*my;
+alplim = (h*(-1/slope)+h)*mx;
+alplimc = (0.5/mx - h) * -slope;
+x = 1;
+y = 1;
+alpha = linspace(mx+0.001,my-0.001,1000);
+for i=1:length(alpha)
+[area(i),xleft(i),xright(i),yleft(i),yright(i)]...
+    = areafinder(x,y,mx,my,h,alpha(i));
+end
+%for this example (havent done yet)
+error = abs(0.5*h^2 - area);
+[m,i] = min(error);
+alpha = alpha(i);
+dx = alpha/mx;
+b = y - (x+alpha/mx)*slope;
+liney = slope*linex+b;
 % liney(liney<y+h) = y;
 % liney(liney>y+h) = y+h;
-% plot(linex,liney)
+plot(linex,liney)
 
 %% Iterative solver for area finding method for whole mesh when ready for use
 AlphaActual = zeros(length(x),length(y));
