@@ -8,7 +8,8 @@
 %         CFDtri1
 %         CFDtri2
 %     returns inital circle color function
-     
+      
+%      youngsFD
 %%     reconstruct
 %         areafinder
 %     returns inital reconstruction of color fucntion
@@ -18,13 +19,15 @@
 %         advectionXpos or advectionXneg
 %         returns new color function based on X movement
 %         
+%         youngsFD
 %         reconstruct
 %             areafinder
 %         returns reconstruction based on X movement
 %         
 %         advectionXpos or advectionXneg
 %         returns new color function based on Y movement (uses X's new ClrFun)
-%         
+%
+%         youngsFD        
 %         reconstruct
 %             areafinder
 %         returns reconstruction based on Y movement (uses X's new ClrFun)
