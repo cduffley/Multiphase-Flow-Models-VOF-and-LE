@@ -88,15 +88,18 @@ for i = 1:length(x)
         AlphaActual(i,j) = alpha(end);
         AreaActual(i,j) = Area(end);
         % want to pull out xright,xleft,yright,yleft for (i,j) as well
-        xright(i,j) = ?
-        xleft(i,j) = ?
-        yright(i,j) = ?
-        yleft(i,j) = ?
+        [area,xl,xr,yl,yr] = ...
+            areafinder(xval,yval,mxval,myval,h,AlphaActual);
+        xright(i,j) = xr;
+        xleft(i,j) = xl;
+        yright(i,j) = yl;
+        yleft(i,j) = yr;
+        AreaActual(i,j) =area;
+        
         end % End of overall if statement
 
     end
 end
-% should include?? or is area already fraction
 Cr = AreaActual/h^2; 
 
 
