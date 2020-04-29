@@ -125,8 +125,8 @@ if alpha/mx > 0 && slope*(h-alpha/mx) > h
         yverticies = [y, y, yright, yright, yright - (new_x_r - (new_x))*slope];
     end
     
-    if new_x_l >= new_x && new_x_r < new_x
-        xverticies = [new_x_l, new_x+h, new_x+h, new_x_r];
+    if new_x_l >= new_x && new_x_r > new_x
+        xverticies = [new_x_l, x+h+dx, x+h+dx, new_x_r];
         yverticies = [y, y, yright, yright];
     end
 end

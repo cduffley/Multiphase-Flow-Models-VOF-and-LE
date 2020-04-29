@@ -156,7 +156,7 @@ for i=1:length(alpha)
     = areafinder(x,y,mx,my,h,alpha(i));
 end
 %for this example (havent done yet)
-error = abs(0.5*h^2 - area);
+error = abs(0.9*h^2 - area);
 [m,i] = min(error);
 alpha = alpha(i);
 dx = alpha/mx;

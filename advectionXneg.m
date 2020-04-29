@@ -1,6 +1,11 @@
 function [Cx,num_shift] =advectionXneg(x,y,h,i,j,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,C,Cold)
 
+% done #2, copied from #1, and implemented #2 conditions
+% done #1, copied from #2, and implemented #1 conditions
+% done #3, copied from #4, and implemented #3 conditions
+% done #4, copied from #3, and implemented #4 conditions
+
 
 
 %% ====================================================================%
@@ -21,13 +26,16 @@ new_x = x + floor((dt*-u)/h) * h;
 slope = my/mx; %switching to opposite
 
 
-
+% ====================================================================%
+% ====================================================================%
+% ====================================================================%
 %% 1 -----------------------------------------------------------------
+%need to update line naming like done in the ones below (3 and 4)
 %copied from +2
 % (+,+), (2,3)
 % copied from (-,+) u is positive (1,2)
 if mx > 0 && my > 0
-if alpha/mx < 0 && slope*h + alpha/my > h
+if mx/alpha > h && my/alpha > h
     if new_x_l < new_x && new_x_r < new_x
        xverticies = [new_x, x+h+dx, x+h+dx, new_x];
        yverticies = [y, y, yright, yright]; 
@@ -39,14 +47,14 @@ if alpha/mx < 0 && slope*h + alpha/my > h
     end
 end
 % (-,+) u is positive (1,3)
-if alpha/mx < 0 && slope*h + alpha/my < h 
+if mx/alpha >= h && my/alpha <= h 
     if new_x_l <= new_x && new_x_r > new_x
        xverticies = [new_x, new_x_r, new_x_r, new_x];
        yverticies = [y, y, yright, yright - (new_x_r - new_x)*slope]; 
     end
 end   
 % (-,+) u is positive (3,4)
-if alpha/mx > 0 && slope*(h-alpha/mx) < h
+if mx/alpha <= h && my/alpha <= h
     if new_x_l < new_x && new_x_r > new_x
         xverticies = [new_x, new_x_r, new_x_r, new_x];
         yverticies = [y, y, yright, yright - (new_x_r - (new_x+h))*slope];
@@ -58,7 +66,7 @@ if alpha/mx > 0 && slope*(h-alpha/mx) < h
     end
 end
 
-if alpha/mx > 0 && slope*(h-alpha/mx) > h
+if mx/alpha <= h && my/alpha >= h
 % (-,+) u is positive (4,2)
     if new_x_l < new_x && new_x_r < new_x
         xverticies = [new_x, x+h+dx, x+h+dx, new_x];
@@ -70,18 +78,24 @@ if alpha/mx > 0 && slope*(h-alpha/mx) > h
         yverticies = [y, y, yright, yright, yright - (new_x_r - (new_x))*slope];
     end
     
-    if new_x_l >= new_x && new_x_r < new_x
-        xverticies = [new_x_l, new_x+h, new_x+h, new_x_r];
+    if new_x_l >= new_x && new_x_r > new_x
+        xverticies = [new_x_l, x+h+dx, x+h+dx, new_x_r];
         yverticies = [y, y, yright, yright];
     end
 end
 end
 
-%% 2
+%% 3
+% ====================================================================%
+% ====================================================================%
+% ====================================================================%
+
 % copied from pos u 4
 %(1,2)
-if mx < 0 && my > 0
-    
+% (+,-) pos u, pos slope 
+if mx < 0 && my < 0
+  if alpha/mx > h && alpha/my > h
+      %(1,2) now (2,3)
     if new_x_l >= new_x %same thing
         xverticies = [x_new_l, new_x_r, new_x_l];
         yverticies = [yleft,yright,yright];
@@ -91,10 +105,11 @@ if mx < 0 && my > 0
        xverticies = [new_x,new_x_r,new_x];
        yverticies = [yright - (new_x_r - new_x)*slope,yright,yright];
     end
-end
+  end
 
-%(1,3)
-if mx < 0 && my > 0
+
+%(1,3) now (1,3)
+if alpha/mx > h && alpha/my < h
     
     if new_x_l >= new_x %same thing, again
         xverticies = [x_new_l, new_x_r, new_x_r,x_new_l];
@@ -107,8 +122,9 @@ if mx < 0 && my > 0
     end
 end
 
-%(4,3)
-if mx < 0 && my > 0
+
+%(4,3) now (1,4) condish
+if alpha/mx < h && alpha/my < h
     
     if new_x_l >= new_x %
         xverticies = [x_new, new_x_l, new_x_r,x_new_r,new_x];
@@ -121,8 +137,8 @@ if mx < 0 && my > 0
     end
 end
 
-%(4,2)
-if mx < 0 && my > 0
+%(4,2) now (2,4)
+if alpha/mx < h && alpha/my > h
     
     if new_x_l >= new_x && x+dx < new_x 
         xverticies = [x_new, new_x_l, new_x_r,new_x];
@@ -139,12 +155,18 @@ if mx < 0 && my > 0
        yverticies = [yright - (new_x_r - new_x)*slope,yright,yright];
     end
 end
+end
 
-%% 3 (-,-)
+%% 2 (-,+)
+% ====================================================================%
+% ====================================================================%
+% ====================================================================%
+%need to update line naming like done in the one below (4)
 % copied from (+,+) u is positive
-%(1,4) from 1(2,3)
-if mx < 0 && my < 0
-    
+%(+,+) u is positive (2,3)
+if mx < 0 && my > 0
+
+if alpha/mx < 0 && slope*h + alpha/my > h
     if new_x_l >= new_x 
         xverticies = [x_new, new_x_r, new_x_r, new_x_l,new_x];
         yverticies = [y,y,yright,y+h,y+h];
@@ -157,7 +179,7 @@ if mx < 0 && my < 0
 end
 
 % (2,4)
-if mx < 0 && my < 0
+if alpha/mx > 0 && slope*(h-alpha/mx) > h
     
     if new_x_l >= new_x && x+dx < new_x
         xverticies = [x+dx +(new_x-(x+dx)) new_x, new_x_r,new_x_l,new_x];
@@ -177,7 +199,7 @@ if mx < 0 && my < 0
 end
 
 % (1,4)
-if mx < 0 && my < 0
+if alpha/mx > 0 && slope*(h-alpha/mx) < h
     
     if new_x_l >= new_x 
         xverticies = [new_x_l,new_x_r,new_x_l];
@@ -191,8 +213,7 @@ if mx < 0 && my < 0
 end
 
 % (1,3)
-if mx < 0 && my < 0
-    
+if alpha/mx < 0 && slope*h + alpha/my < h
     if new_x_l >= new_x %same thing
         xverticies = [xleft,xright,xright,xleft];
         yverticies = [y,y,yright,yleft];
@@ -203,12 +224,16 @@ if mx < 0 && my < 0
        yverticies = [y,y,yright,yright+(new_x-new_x_l)*-slope]; 
     end
 end
+end
 
-%% 4 copied from +3   
- % (-,-) u is positive
+%% 4 copied from +3 
+% ====================================================================%
+% ====================================================================%
+% ====================================================================%
+ % (+,-) u is positive
 if mx < 0 && my < 0
- if alpha/mx < h && alpha/my < h
-    %(1,4)
+ if alpha/mx > 0 && (h - alpha/mx)*(slope) < h
+    %(1,4) now (4,3)
     if new_x_l <= new_x && new_x_r > new_x
        xverticies = [new_x, new_x_r, x+h+dx, x+h+dx,new_x];
        yverticies = [y+(new_x_r-new_x)*-slope,y,y,y+h,y+h];
@@ -220,8 +245,8 @@ if mx < 0 && my < 0
     end
  end   
  
- if alpha/mx < h && alpha/my > h
-     %(2,4)
+ if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
+     %(2,4) now (4,2)
     if new_x_l > new_x && new_x_r > new_x %%same thing
        xverticies = [xright, x+h, x+h, xleft];
        yverticies = [y,y,y+h,y+h];
@@ -238,8 +263,8 @@ if mx < 0 && my < 0
     end
  end  
  
- if alpha/mx > h && alpha/my < h
-    %(1,3)
+ if alpha/mx < 0 && (h - alpha/my)*(1/slope) > h
+    %(1,3) now (1,3)
     if new_x_l > new_x 
        xverticies = [new_x_l, new_x_r, new_x_r, new_x_l];
        yverticies = [yleft,yright,y+h,y+h];
@@ -251,8 +276,8 @@ if mx < 0 && my < 0
     end
  end   
  
- if alpha/mx > h && alpha/my > h
-    %(2,3)
+ if alpha/mx < 0 && (h - alpha/my)*(1/slope) < h
+    %(2,3) now (1,2)
     if new_x_l > new_x 
        xverticies = [new_x_l, new_x_r, new_x_r];
        yverticies = [yleft,yright,y+h];
@@ -264,7 +289,11 @@ if mx < 0 && my < 0
     end
  end
 end
-
+area = polyarea(xverticies,yverticies)/h^2; %fraction!!
+Cx = zeros(size(Cold));
+num_shift = floor((dt*u)/h); %this means h is in meters
+Cx(i+num_shift,j) = area;
+Cx(i+num_shift-1,j) = Cold(i,j) - area;
 
 
 end
