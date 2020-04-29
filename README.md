@@ -1,1 +1,33 @@
 # CFDproj3
+
+% file path
+% 
+%% main
+%%     circle_init
+%         CFDsemiTrapzoid
+%         CFDtri1
+%         CFDtri2
+%     returns inital circle color function
+     
+%%     reconstruct
+%         areafinder
+%     returns inital reconstruction of color fucntion
+     
+%%     For number of time steps:
+%%     advectionTot
+%         advectionXpos or advectionXneg
+%         returns new color function based on X movement
+%         
+%         reconstruct
+%             areafinder
+%         returns reconstruction based on X movement
+%         
+%         advectionXpos or advectionXneg
+%         returns new color function based on Y movement (uses X's new ClrFun)
+%         
+%         reconstruct
+%             areafinder
+%         returns reconstruction based on Y movement (uses X's new ClrFun)
+%     returns new CF and reconstuction at new time t
+ 
+%     graphs
