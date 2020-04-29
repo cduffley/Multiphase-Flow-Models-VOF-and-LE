@@ -1,4 +1,4 @@
-function [Cr,xleft,xright,yleft,yright,AlphaActual] = reconstruct(x,y,mx,my,C)
+function [Cr,xleft,xright,yleft,yright,AlphaActual] = reconstruct(x,y,h,mx,my,C)
 %Cr - C reconstructed (actual Colorfuntion area based on new lines,
 % should this be the case, or should we use original Colorfuction when 
 % advecting in the next step? If we use original, it could lead to some
@@ -18,26 +18,27 @@ for i = 1:length(x)
     for j = 1:length(y)
         
         % Listing necessary parameters for area finding method
-        xval = X(i,j);      yval = Y(i,j);
+%         xval = X(i,j);  yval = Y(i,j);
+        xval = x(i);    yval = y(j);
         mxval = mx(i,j);    myval = my(i,j);
         if  mxval == 0 && myval == 0 && C(i,j) == 0
             % Check if mx and my are both 0 for C of 0 (not filled), 
             % which yields area of 0
             AlphaActual(i,j) = 0;
             AreaActual(i,j) = 0;
-            break
+            continue
         elseif  mxval == 0 && myval == 0 && C(i,j) == 1
             % Check if mx and my are both 0 for C of 1 (filled), 
             % which yields area of 1
             AlphaActual(i,j) = 1;
             AreaActual(i,j) = 1;
-            break
+            continue
         else
         % Parameters to perform iterative method, including first iteration
         % and tolerance of error for root finding
         tol = 1e-8; 
         err = 1e10;   Count = 1;   MaxCount = 25; 
-        
+        slope = -1/(myval/mxval);
         % Ensuring that intial guess for alpha is within constraints of geometric cell
         if mxval > 0 && myval > 0
             % mx and my are positive
@@ -89,7 +90,7 @@ for i = 1:length(x)
         AreaActual(i,j) = Area(end);
         % want to pull out xright,xleft,yright,yleft for (i,j) as well
         [area,xl,xr,yl,yr] = ...
-            areafinder(xval,yval,mxval,myval,h,AlphaActual);
+            areafinder(xval,yval,mxval,myval,h,AlphaActual(i,j));
         xright(i,j) = xr;
         xleft(i,j) = xl;
         yright(i,j) = yl;
