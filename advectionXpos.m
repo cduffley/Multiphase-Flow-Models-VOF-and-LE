@@ -262,10 +262,10 @@ end
 
 
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
-Cx = zeros(size(Cold));
+Cx = zeros(size(C));
 num_shift = floor((dt*u)/h); %this means h is in meters
 Cx(i+num_shift,j) = area;
-Cx(i+num_shift-1,j) = Cold(i,j) - area;
+Cx(i+num_shift-1,j) = C(i,j) - area;
 
 
 
