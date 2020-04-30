@@ -34,7 +34,7 @@ ycir = 0.15 * sin(cir_dis) + 0.75;
 [C,cir_xloc_x,cir_yloc_y,cir_xloc_y,cir_yloc_x] = ...
         circle_init(x,y,h,x_pos,y_pos,r);
 [mx,my] = youngsFD(h,x,y,C);
-[Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
+% [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
 t = linspace(0,T/2,100);
