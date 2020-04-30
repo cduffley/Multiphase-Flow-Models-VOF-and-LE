@@ -30,6 +30,14 @@ for i = 1:length(x)
             alpha_actual(i,j) = 1;
             area_actual(i,j) = 1*h^2;
             continue
+        elseif C(i,j) == 0
+            alpha_actual(i,j) = 0;
+             area_actual(i,j) = 0;
+            continue
+        elseif C(i,j) == 1
+            alpha_actual(i,j) = 0;
+             area_actual(i,j) = 1*h^2;
+            continue
         else
         % Perform for loop with many alpha values and choosing the value
         % for alpha that produces the least error
@@ -61,10 +69,10 @@ for i = 1:length(x)
            highlim = h*mxval;
         end
         
-%         %testing specific values
-%         if i == 18 && j == 19;
-%             adfs = 1;
-%         end
+        %testing specific values
+        if i == 7 && j == 11;
+            adfs = 1;
+        end
         
         alpha_calc = linspace(lowlim, highlim, 1000);
         % While loop to perform iteration calculation

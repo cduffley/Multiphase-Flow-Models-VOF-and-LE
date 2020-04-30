@@ -15,8 +15,6 @@ yleft = zeros(length(x),length(y));
 
 for i = 1:length(x)
     for j = 1:length(y)
-% for i = 9
-%     for j = 25
         
         
         % Listing necessary parameters for area finding method
@@ -33,8 +31,12 @@ for i = 1:length(x)
             % Check if mx and my are both 0 for C of 1 (filled), 
             % which yields area of 1
             AlphaActual(i,j) = 1;
-            AreaActual(i,j) = 1;% *h^2;
+            AreaActual(i,j) = 1 *h^2;
             continue
+        elseif C(i,j) == 0
+            AlphaActual(i,j) = 0;
+            AreaActual(i,j) = 0;
+            continue   
         else
         % Parameters to perform iterative method, including first iteration
         % and tolerance of error for root finding
@@ -76,13 +78,13 @@ for i = 1:length(x)
             Area(Count) = areafinder(xval,yval,mxval,myval,h,alpha(Count));
             
             % Evaluate error in area by comparing result to color function C
-            e1 =  Area(Count) - C(i,j);  
+            e1 =  Area(Count) - C(i,j)*h^2;  
             err(Count) = e1;
             % Use perturbation for alpha if error is too large
             if abs(e1) > tol
                 alphapert = 1.0001*alpha(Count);
                 Areapert = areafinder(xval,yval,mxval,myval,h,alphapert);
-                e2 =  Areapert - C(i,j);
+                e2 =  Areapert - C(i,j)*h^2;
                 % Calculate a new alpha guess based on error analysis
                 alphanew = alpha(Count)-e1*(0.0001*alpha(Count))/(e2-e1);
                 Count = Count+1;   
