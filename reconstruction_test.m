@@ -1,0 +1,92 @@
+function [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C)
+%Cr - C reconstructed (actual Colorfuntion area based on new lines,
+% should this be the case, or should we use original Colorfuction when 
+% advecting in the next step? If we use original, it could lead to some
+% errors, possibly negative areas. If we use new, the actual mass
+% essentially disappears. Assume difference is negligable and use new,
+% since there will hopefully be less errors
+%% Iterative solver for area finding method for whole mesh when ready for use
+AlphaActual = zeros(length(x),length(y));
+AreaActual = zeros(length(x),length(y));
+xright = zeros(length(x),length(y));
+xleft = zeros(length(x),length(y));
+yright = zeros(length(x),length(y));
+yleft = zeros(length(x),length(y));
+
+for i = 1:length(x)
+    for j = 1:length(y)
+        % Listing necessary parameters for area finding method
+        xval = x(i);    yval = y(j);
+        mxval = mx(i,j);    myval = my(i,j);
+        if  mxval == 0 && myval == 0 && C(i,j) == 0
+            % Check if mx and my are both 0 for C of 0 (not filled), 
+            % which yields area of 0
+            AlphaActual(i,j) = 0;
+            AreaActual(i,j) = 0;
+            continue
+        elseif  mxval == 0 && myval == 0 && C(i,j) == 1
+            % Check if mx and my are both 0 for C of 1 (filled), 
+            % which yields area of 1
+            AlphaActual(i,j) = 1;
+            AreaActual(i,j) = 1;% *h^2;
+            continue
+        else
+        % Perform for loop with many alpha values and choosing the value
+        % for alpha that produces the least error
+        slope = -1/(myval/mxval);
+        % Producing alpha vector that is within constraints of geometric cell
+        if mxval > 0 && myval > 0
+            % mx and my are positive
+            lowlim = 0; 
+            highlim = (-h/slope+h)*mxval; 
+        end
+        
+        if mxval < 0 && myval < 0
+            % mx and my are negative
+            lowlim = (-h/slope+h)*mxval; 
+            highlim = 0; 
+        end
+        
+        if mxval < 0 && myval > 0
+            % mx is negative and my is positive
+            % hmx < alpha < hmy
+            lowlim = h*mxval;
+            highlim = h*myval;
+        end
+        
+        if mxval > 0 && myval < 0
+            % hmy < alpha < hmx
+            % mx is positive and my is negative
+           lowlim = h*myval;
+           highlim = h*mxval;
+        end
+
+        alpha_calc = linspace(lowlim, highlim, 1000);
+        % While loop to perform iteration calculation
+        for k = 1:length(alpha_calc)
+            % Calculation of area using areafinder function
+            Area(k) = ...
+                areafinder(xval,yval,mxval,myval,h,alpha_calc(k));
+            % Evaluate error in area by comparing result to color function C
+            error(k) =  Area(k) - C(i,j);  
+        end
+            [M,I] = min(abs(error)); 
+
+            alpha(i,j) = alpha_calc(I);
+        % want to pull out xright,xleft,yright,yleft for (i,j) as well
+        [area,xl,xr,yl,yr] = ...
+            areafinder(xval,yval,mxval,myval,h,alpha(i,j));
+        xright(i,j) = xr;
+        xleft(i,j) = xl;
+        yright(i,j) = yl;
+        yleft(i,j) = yr;
+        area_actual(i,j) = area;
+        
+        end % End of overall if statement
+
+    end
+end
+Cr = area_actual/h^2; 
+
+
+end
