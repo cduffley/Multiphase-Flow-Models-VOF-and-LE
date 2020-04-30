@@ -17,6 +17,8 @@ yleft = zeros(length(x),length(y));
 for i = 1:length(x)
     for j = 1:length(y)
         
+%          i = 10; j = 16;
+        
         % Listing necessary parameters for area finding method
 %         xval = X(i,j);  yval = Y(i,j);
         xval = x(i);    yval = y(j);
@@ -83,7 +85,7 @@ for i = 1:length(x)
                 err(Count) = err(Count-1);
             end   % End of iteration loop for perturbation
             if Count >= MaxCount
-                fprintf(1,'Iteration Failed -- Hit maximum iteration limit \n');
+                fprintf(1,'Iteration Failed -- Hit maximum iteration limit %1.0f , %1.0f\n',i,j);
             end   % End of overall iteration process
         end % End of while loop
         AlphaActual(i,j) = alpha(end);
