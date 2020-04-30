@@ -61,10 +61,10 @@ for i = 1:length(x)
            highlim = h*mxval;
         end
         
-        %testing specific values
-        if i == 18 && j == 19;
-            adfs = 1;
-        end
+%         %testing specific values
+%         if i == 18 && j == 19;
+%             adfs = 1;
+%         end
         
         alpha_calc = linspace(lowlim, highlim, 1000);
         % While loop to perform iteration calculation

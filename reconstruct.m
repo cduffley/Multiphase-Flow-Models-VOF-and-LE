@@ -64,10 +64,10 @@ for i = 1:length(x)
             alpha(Count) = h*mxval*0.1;
         end
         
-                %testing specific values
-        if i == 18 && j == 20;
-            adfs = 1;
-        end
+%                 %testing specific values
+%         if i == 18 && j == 20;
+%             adfs = 1;
+%         end
         
         % While loop to perform iteration calculation
         while abs(err(Count)) > tol  &&  Count <= MaxCount
