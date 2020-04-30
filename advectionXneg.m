@@ -292,11 +292,23 @@ if mx < 0 && my < 0
     end
  end
 end
-area = polyarea(xverticies,yverticies)/h^2; %fraction!!
+if i ==2 && j ==7
+    safd = 1;
+end
+
+num_shift = floor((dt*u)/h);
+area = polyarea(xverticies,yverticies)/h^2;%fraction!!
 Cx = zeros(size(C));
+if i+num_shift-1 >=1 
 num_shift = floor((dt*u)/h); %this means h is in meters
 Cx(i+num_shift-1,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
+else
+Cx(i+num_shift,j) = area;
+Cx(i+num_shift,j) = C(i,j) - area;
+end
 
-
+    
+    
+    
 end

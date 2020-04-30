@@ -1,6 +1,8 @@
 function [Cy,num_shift] =advectionYneg(x,y,h,i,j,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,C)
 
+xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+yverticies = [0,0,0];
 
 % function that determines what cell the new geometry is on
 % y + dt*v  <- floor to nearest y grid
@@ -283,10 +285,15 @@ if alpha/mx < 0 && (h - alpha/my)*(1/slopeold) > h
 end
 
 end
+if C(i,j) ~= 0
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cy = zeros(size(C));
 num_shift = floor((dt*v)/h); %this means h is in meters
-Cy(i+num_shift,j) = area;
-Cy(i+num_shift-1,j) = C(i,j) - area;
+Cy(i,j+num_shift) = area;
+Cy(i,j+num_shift-1) = C(i,j) - area;
+else
+    num_shift = 0;
+    Cy = zeros(size(C));
+end
 end
 

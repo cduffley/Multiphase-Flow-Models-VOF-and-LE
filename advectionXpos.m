@@ -36,8 +36,8 @@ end
 % (2,4)
 if mx/alpha <= h && my/alpha >= h
     
-    if new_x_l >= new_x && x+dx < new_x
-        xverticies = [x+dx +(new_x-(x+dx)) new_x, new_x_r,new_x_l,new_x];
+    if new_x_l >= new_x && x+dx <= new_x
+        xverticies = [new_x, new_x_r,new_x_l,new_x];
         yverticies = [y,y,yleft,yleft];
     end
     
@@ -263,13 +263,16 @@ if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
 end
 end
 
-
+if C(i,j) ==0
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cx = zeros(size(C));
 num_shift = floor((dt*u)/h); %this means h is in meters
 Cx(i+num_shift,j) = area;
 Cx(i+num_shift-1,j) = C(i,j) - area;
-
+else
+    num_shift = 0;
+    Cx = zeros(size(C));
+end
 
 
 end

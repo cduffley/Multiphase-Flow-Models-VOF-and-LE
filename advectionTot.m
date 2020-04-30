@@ -5,9 +5,9 @@ function [Cr,xleft,xright,yleft,yright,mx,my] = advectionTot(x,y,h,mx,my,...
 %C is inital CF
 Cnew = zeros(size(Cr));
 
-for i=1:length(x)
+for i=2:length(x)-1
     
-    for j=1:length(y)
+    for j=2:length(y)-1
         
         if mx(i,j) == 0 && my(i,j) ==0 && Cr(i,j) == 0
          continue
@@ -39,9 +39,9 @@ end
 [Cr,xleft,xright,yleft,yright] = reconstruction_test(x,y,h,mx,my,Cnew);
 Cnew = zeros(size(Cr));
 
-for i=1:length(x)
+for i=2:length(x)-1
     
-    for j=1:length(y)
+    for j=2:length(y)-1
         
         if mx(i,j) == 0 && my(i,j) ==0 && Cr(i,j) == 0
          continue

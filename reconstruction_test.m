@@ -43,26 +43,27 @@ for i = 1:length(x)
         % for alpha that produces the least error
         slope = -1/(myval/mxval);
         % Producing alpha vector that is within constraints of geometric cell
-        if mxval > 0 && myval > 0
+        %added >=
+        if mxval >= 0 && myval >= 0
             % mx and my are positive
             lowlim = 0; 
             highlim = (-h/slope+h)*mxval; 
         end
         
-        if mxval < 0 && myval < 0
+        if mxval <= 0 && myval <= 0
             % mx and my are negative
             lowlim = (-h/slope+h)*mxval; 
             highlim = 0; 
         end
         
-        if mxval < 0 && myval > 0
+        if mxval <= 0 && myval >= 0
             % mx is negative and my is positive
             % hmx < alpha < hmy
             lowlim = h*mxval;
             highlim = h*myval;
         end
         
-        if mxval > 0 && myval < 0
+        if mxval >= 0 && myval <= 0
             % hmy < alpha < hmx
             % mx is positive and my is negative
            lowlim = h*myval;

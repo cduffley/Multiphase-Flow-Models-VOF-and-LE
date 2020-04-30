@@ -2,7 +2,12 @@ function [area,xleft,xright,yleft,yright] = areafinder(x,y,mx,my,h,alpha)
 % if cells counted clockwise sides (starting on left) 1, 2, 3, 4
 slope = -1/(my/mx);
 % area = 1*h^2;
-area = 1.1;
+area = 0;
+xleft = x;
+yleft = y;
+xright = x;
+yright = y;
+
 
 %fudge factors for exactly horizontal and vertical lines
 if mx == 0 && my == 0
