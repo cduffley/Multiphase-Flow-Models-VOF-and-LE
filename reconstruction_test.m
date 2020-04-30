@@ -1,4 +1,4 @@
-function [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C)
+function [Cr,xleft,xright,yleft,yright,alpha_actual] = reconstruction_test(x,y,h,mx,my,C)
 %Cr - C reconstructed (actual Colorfuntion area based on new lines,
 % should this be the case, or should we use original Colorfuction when 
 % advecting in the next step? If we use original, it could lead to some
@@ -6,8 +6,8 @@ function [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,
 % essentially disappears. Assume difference is negligable and use new,
 % since there will hopefully be less errors
 %% Iterative solver for area finding method for whole mesh when ready for use
-AlphaActual = zeros(length(x),length(y));
-AreaActual = zeros(length(x),length(y));
+alpha_actual = zeros(length(x),length(y));
+area_actual = zeros(length(x),length(y));
 xright = zeros(length(x),length(y));
 xleft = zeros(length(x),length(y));
 yright = zeros(length(x),length(y));
@@ -21,14 +21,14 @@ for i = 1:length(x)
         if  mxval == 0 && myval == 0 && C(i,j) == 0
             % Check if mx and my are both 0 for C of 0 (not filled), 
             % which yields area of 0
-            AlphaActual(i,j) = 0;
-            AreaActual(i,j) = 0;
+            alpha_actual(i,j) = 0;
+            area_actual(i,j) = 0;
             continue
         elseif  mxval == 0 && myval == 0 && C(i,j) == 1
             % Check if mx and my are both 0 for C of 1 (filled), 
             % which yields area of 1
-            AlphaActual(i,j) = 1;
-            AreaActual(i,j) = 1;% *h^2;
+            alpha_actual(i,j) = 1;
+            area_actual(i,j) = 1*h^2;
             continue
         else
         % Perform for loop with many alpha values and choosing the value
@@ -68,14 +68,14 @@ for i = 1:length(x)
             Area(k) = ...
                 areafinder(xval,yval,mxval,myval,h,alpha_calc(k));
             % Evaluate error in area by comparing result to color function C
-            error(k) =  Area(k) - C(i,j);  
+            error(k) =  Area(k) - C(i,j)*h^2;  
         end
             [M,I] = min(abs(error)); 
 
-            alpha(i,j) = alpha_calc(I);
+            alpha_actual(i,j) = alpha_calc(I);
         % want to pull out xright,xleft,yright,yleft for (i,j) as well
         [area,xl,xr,yl,yr] = ...
-            areafinder(xval,yval,mxval,myval,h,alpha(i,j));
+            areafinder(xval,yval,mxval,myval,h,alpha_actual(i,j));
         xright(i,j) = xr;
         xleft(i,j) = xl;
         yright(i,j) = yl;
