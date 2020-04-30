@@ -1,8 +1,8 @@
 function [mx,my] = youngsFD(h,x,y,C)
 
-mxsum = zeros(length(x));
-mysum = zeros(length(y));
-magnitude = zeros(length(y));
+mxsum = zeros(1,length(x));
+mysum = zeros(1,length(y));
+magnitude = zeros(1,length(y));
 
 for i = 1:length(x)
     for j = 1:length(y)

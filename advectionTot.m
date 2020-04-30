@@ -35,7 +35,7 @@ end
 
     
 % some reconstruction funtion  
-[mx,my] = youngsFD;
+[mx,my] = youngsFD(h,x,y,Cnew);
 [Cr,xleft,xright,yleft,yright] = reconstruct(x,y,h,mx,my,Cnew);
 Cnew = zeros(size(Cr));
 
@@ -65,7 +65,7 @@ for i=1:length(x)
 end
 
 % some reconstruction funtion again
-[mx,my] = youngsFD;
+[mx,my] = youngsFD(h,x,y,Cnew);
 [Cr,xleft,xright,yleft,yright] = reconstruct(x,y,h,mx,my,Cnew);
 
 %final C is set as Cr

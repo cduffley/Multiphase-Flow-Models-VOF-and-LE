@@ -5,7 +5,6 @@ function [Cr,xleft,xright,yleft,yright,AlphaActual] = reconstruct(x,y,h,mx,my,C)
 % errors, possibly negative areas. If we use new, the actual mass
 % essentially disappears. Assume difference is negligable and use new,
 % since there will hopefully be less errors
-
 %% Iterative solver for area finding method for whole mesh when ready for use
 AlphaActual = zeros(length(x),length(y));
 AreaActual = zeros(length(x),length(y));
@@ -16,8 +15,9 @@ yleft = zeros(length(x),length(y));
 
 for i = 1:length(x)
     for j = 1:length(y)
+% for i = 9
+%     for j = 25
         
-%          i = 10; j = 16;
         
         % Listing necessary parameters for area finding method
 %         xval = X(i,j);  yval = Y(i,j);
@@ -38,8 +38,8 @@ for i = 1:length(x)
         else
         % Parameters to perform iterative method, including first iteration
         % and tolerance of error for root finding
-        tol = 1e-8; 
-        err = 1e10;   Count = 1;   MaxCount = 100; 
+        tol = 1e-5; 
+        err = 1e10;   Count = 1;   MaxCount = 1000; 
         slope = -1/(myval/mxval);
         % Ensuring that intial guess for alpha is within constraints of geometric cell
         if mxval > 0 && myval > 0
@@ -84,7 +84,7 @@ for i = 1:length(x)
                 alpha(Count) = alphanew;
                 err(Count) = err(Count-1);
             end   % End of iteration loop for perturbation
-            if Count >= MaxCount
+            if Count == MaxCount
                 fprintf(1,'Iteration Failed -- Hit maximum iteration limit %1.0f , %1.0f\n',i,j);
             end   % End of overall iteration process
         end % End of while loop
@@ -103,7 +103,7 @@ for i = 1:length(x)
 
     end
 end
-Cr = AreaActual;%/h^2; 
+Cr = AreaActual/h^2; 
 
 
 end
