@@ -117,7 +117,7 @@ yleft = y+alpha/my;
 yright = y+ h;
 end
 
-if alpha/mx > 0 &&  (h-abs(alpha/mx))*slope < h %this gets a x value
+if alpha/mx > 0 &&  (h-abs(alpha/mx))*slope < h  %this gets a x value
 % line passes through 4,3
 %counter clockwise
 %origin, right, right up, top right corner, left corner
