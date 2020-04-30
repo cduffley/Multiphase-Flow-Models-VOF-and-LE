@@ -1,6 +1,9 @@
 function [Cx,num_shift] =advectionXpos(x,y,h,i,j,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,C)
 
+xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+yverticies = [0,0,0];
+
 % 
 dx = dt*u;
 % function that determines what cell the new geometry is on
@@ -20,7 +23,7 @@ if mx > 0 && my > 0
 
 if mx/alpha > h && my/alpha > h
     if new_x_l >= new_x 
-        xverticies = [x_new, new_x_r, new_x_r, new_x_l,new_x];
+        xverticies = [new_x, new_x_r, new_x_r, new_x_l,new_x];
         yverticies = [y,y,yright,y+h,y+h];
     end
     
@@ -200,7 +203,7 @@ if mx > 0 && my < 0
   if alpha/mx < 0 && (h - alpha/my)*(1/slope) < h
       %(1,2)
     if new_x_l >= new_x %same thing
-        xverticies = [x_new_l, new_x_r, new_x_l];
+        xverticies = [new_x_l, new_x_r, new_x_l];
         yverticies = [yleft,yright,yright];
     end
     
@@ -215,7 +218,7 @@ if mx > 0 && my < 0
 if alpha/mx < 0 && (h - alpha/my)*(1/slope) > h
     
     if new_x_l >= new_x %same thing, again
-        xverticies = [x_new_l, new_x_r, new_x_r,x_new_l];
+        xverticies = [new_x_l, new_x_r, new_x_r,new_x_l];
         yverticies = [yleft,yright,yright,yleft];
     end
     
@@ -230,7 +233,7 @@ end
 if alpha/mx > 0 && (h - alpha/mx)*(slope) < h
     
     if new_x_l >= new_x %
-        xverticies = [x_new, new_x_l, new_x_r,x_new_r,new_x];
+        xverticies = [new_x, new_x_l, new_x_r,new_x_r,new_x];
         yverticies = [yleft,yleft,yright,y+h,y+h];
     end
     
@@ -244,7 +247,7 @@ end
 if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
     
     if new_x_l >= new_x && x+dx < new_x 
-        xverticies = [x_new, new_x_l, new_x_r,new_x];
+        xverticies = [new_x, new_x_l, new_x_r,new_x];
         yverticies = [yleft,yleft,yright,y+h,y+h];
     end
     

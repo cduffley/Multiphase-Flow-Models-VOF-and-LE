@@ -5,13 +5,14 @@ slope = -1/(my/mx);
 area = 1.1;
 
 %fudge factors for exactly horizontal and vertical lines
-if mx == 0
+if mx == 0 && my == 0
+    area = 0;
+    return
+elseif my == 0 && mx ~= 0 
+    my = 1e-10;
+elseif my ~= 0 && mx == 0
     mx = 1e-10;
 end
-if my == 0
-    my = 1e-10;
-end
-
 if slope < 0
 
 if alpha/mx > h && alpha/my > h

@@ -31,23 +31,23 @@ for i = 1:length(x)
             % Check if mx and my are both 0 for C of 1 (filled), 
             % which yields area of 1
             AlphaActual(i,j) = 1;
-            AreaActual(i,j) = 1;
+            AreaActual(i,j) = 1;% *h^2;
             continue
         else
         % Parameters to perform iterative method, including first iteration
         % and tolerance of error for root finding
         tol = 1e-8; 
-        err = 1e10;   Count = 1;   MaxCount = 25; 
+        err = 1e10;   Count = 1;   MaxCount = 100; 
         slope = -1/(myval/mxval);
         % Ensuring that intial guess for alpha is within constraints of geometric cell
         if mxval > 0 && myval > 0
             % mx and my are positive
-            alpha(Count) = (-h/slope(i,j)+h)*mxval*0.1;
+            alpha(Count) = (-h/slope+h)*mxval*0.1;
         end
         
         if mxval < 0 && myval < 0
             % mx and my are negative
-            alpha(Count) = (-h/slope(i,j)+h)*mxval*1.1;
+            alpha(Count) = (-h/slope+h)*mxval*1.1;
         end
         
         if mxval < 0 && myval > 0
@@ -101,7 +101,7 @@ for i = 1:length(x)
 
     end
 end
-Cr = AreaActual/h^2; 
+Cr = AreaActual;%/h^2; 
 
 
 end
