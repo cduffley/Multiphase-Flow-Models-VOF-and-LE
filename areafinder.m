@@ -19,14 +19,14 @@ if alpha/mx > h && alpha/my > h
 % line passes through 2,3
 %counter clockwise
 %origin, right corner, right triangle, left triangle, left corner
-    xindicies = [x,x+h, x+h,x+abs(alpha/my - h)/-slope, x]; %abs here
-    yindicies = [y,y,y+abs(alpha/mx - x) * -slope,y+h,y+h]; %abs here
+    xindicies = [x,x+h, x+h,x+(alpha/my - h)/-slope, x]; %abs here
+    yindicies = [y,y,y+(alpha/mx - x) * -slope,y+h,y+h]; %abs here
 
 area = polyarea(xindicies,yindicies);
 xright = x+h;
-xleft =x+abs(alpha/my - h)/-slope; %abs here
+xleft =x+(alpha/my - h)/-slope; %abs here
 yleft = y+h;
-yright = y+abs(alpha/mx - x) * -slope; %abs here
+yright = y+(alpha/mx - x) * -slope; %abs here
 
 end
 
@@ -40,8 +40,8 @@ if alpha/mx > h && alpha/my < h
 area = polyarea(xindicies,yindicies);
 xleft =x;
 xright = x+h;
-yleft = y + abs(alpha/my); %abs here
-yright = y+abs(alpha/mx - x) * -slope; %abs here
+yleft = y + (alpha/my); %abs here
+yright = y+(alpha/mx - x) * -slope; %abs here
 end
 
 if alpha/mx < h && alpha/my > h
