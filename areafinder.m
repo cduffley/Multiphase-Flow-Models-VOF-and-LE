@@ -19,14 +19,14 @@ if alpha/mx > h && alpha/my > h
 % line passes through 2,3
 %counter clockwise
 %origin, right corner, right triangle, left triangle, left corner
-    xindicies = [x,x+h, x+h,x+abs(alpha/abs(my) - h)/-slope, x];
-    yindicies = [y,y,y+abs(alpha/abs(mx) - x) * -slope,y+h,y+h];
+    xindicies = [x,x+h, x+h,x+abs(alpha/my - h)/-slope, x]; %abs here
+    yindicies = [y,y,y+abs(alpha/mx - x) * -slope,y+h,y+h]; %abs here
 
 area = polyarea(xindicies,yindicies);
 xright = x+h;
-xleft =x+abs(alpha/abs(my) - h)/-slope;
+xleft =x+abs(alpha/my - h)/-slope; %abs here
 yleft = y+h;
-yright = y+abs(alpha/abs(mx) - x) * -slope;
+yright = y+abs(alpha/mx - x) * -slope; %abs here
 
 end
 
@@ -35,25 +35,25 @@ if alpha/mx > h && alpha/my < h
 %counter clockwise
 %origin, right corner, right up, left up
     xindicies = [x,x+h,x+h,x];
-    yindicies = [y,y,y+abs(alpha/abs(mx) - x) * -slope, y + abs(alpha/abs(my))];
+    yindicies = [y,y,y+(alpha/mx - x) * -slope, y + alpha/my]; %abs here x4
 
 area = polyarea(xindicies,yindicies);
 xleft =x;
 xright = x+h;
-yleft = y + abs(alpha/abs(my));
-yright = y+abs(alpha/abs(mx) - x) * -slope;
+yleft = y + abs(alpha/my); %abs here
+yright = y+abs(alpha/mx - x) * -slope; %abs here
 end
 
 if alpha/mx < h && alpha/my > h
 %line passes through 2,4
 %counter clockwise
 %origin, right, left up, left corner
-    xindicies = [x,x+abs(alpha/mx),x+abs(alpha/abs(my) - h)/-slope ,x];
+    xindicies = [x,x+alpha/mx,x+(alpha/my - h)/-slope ,x]; %abs herex3
     yindicies = [y,y,y+h,y+h];
 
 area = polyarea(xindicies,yindicies);
-xleft =x+abs(alpha/abs(my) - h)/-slope;
-xright = x+abs(alpha/mx);
+xleft =x+(alpha/my - h)/-slope; %abs herex2
+xright = x+alpha/mx; %abs here
 yleft = y + h;
 yright = y;
 end
@@ -62,13 +62,13 @@ if alpha/mx < h && alpha/my < h
 %line passes through 1,4
 %counter clockwise
 %origin, right, left up
-    xindicies = [x,x+abs(alpha/mx),x];
-    yindicies = [y,y,y+abs(alpha/my)];
+    xindicies = [x,x+(alpha/mx),x]; %abs here
+    yindicies = [y,y,y+(alpha/my)]; %abs here
 
 area = polyarea(xindicies,yindicies);
 xleft =x;
-xright = x+abs(alpha/mx);
-yleft = y+abs(alpha/my);
+xright = x+(alpha/mx); %abs here
+yleft = y+(alpha/my); %abs here
 yright = y;
 end
 end
@@ -76,15 +76,15 @@ end
 if slope > 0
 
 
-if alpha/mx > 0 && (h-abs(alpha/mx))*slope > h
+if alpha/mx > 0 && (h-(alpha/mx))*slope > h  %abs here
 % line passes through 4,2
 %counter clockwise
 %origin, right, right up, top right corner, left corner
-    xindicies = [x,x+abs(alpha/mx),x+(h/slope)+abs(alpha/mx), x];
+    xindicies = [x,x+(alpha/mx),x+(h/slope)+(alpha/mx), x];%abs here x2
     yindicies = [y,y,y+h,y+h];
 area = polyarea(xindicies,yindicies);
-xleft =x+abs(alpha/mx);
-xright = x+(h/slope)+abs(alpha/mx);
+xleft =x+(alpha/mx); %abs here
+xright = x+(h/slope)+(alpha/mx); %abs here
 yleft = y;
 yright = y+h;
 end
@@ -107,25 +107,25 @@ if alpha/mx < 0 && slope*(h) + alpha/my > h  %slope*(x+h)? no cause alpha/my isn
 % line passes through 1,2
 %counter clockwise:
 %bottom, right, topleft corner
-    xindicies = [x,x+ h-abs(alpha/my)/slope,x];
+    xindicies = [x,x+ h-(alpha/my)/slope,x]; %abs here
     yindicies = [y+alpha/my,y+h,y+h];
 
 area = polyarea(xindicies,yindicies);
 xleft =x;
-xright = x+ h-abs(alpha/my)/slope;
+xright = x+ h-(alpha/my)/slope; %abs here
 yleft = y+alpha/my;
 yright = y+ h;
 end
 
-if alpha/mx > 0 &&  (h-abs(alpha/mx))*slope < h  %this gets a x value
+if alpha/mx > 0 &&  (h-(alpha/mx))*slope < h  %this gets a x value %abs here
 % line passes through 4,3
 %counter clockwise
 %origin, right, right up, top right corner, left corner
-    xindicies = [x,x+abs(alpha/mx), x+h,x+h, x];
+    xindicies = [x,x+(alpha/mx), x+h,x+h, x]; %abs here
     yindicies = [y,y,y+(h-alpha/mx)*slope,y+h,y+h];
 
 area = polyarea(xindicies,yindicies);
-xleft =x+abs(alpha/mx);
+xleft =x+(alpha/mx); %abs here
 xright = x+h;
 yleft = y;
 yright = y+(h-alpha/mx)*slope;
@@ -136,6 +136,8 @@ end
 %%% all the values for the negative slope also calculate the area to the
  % left of the line.
 %flips the area if need be
+end
+
 if (mx < 0 && my > 0) || (mx < 0 && my < 0)  
 area = h^2 - area;
 end
