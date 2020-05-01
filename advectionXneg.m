@@ -8,7 +8,9 @@ function [Cx,num_shift] =advectionXneg(x,y,h,i,j,mx,my,...
 
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
-
+if i == 15 && j ==20
+    g = 4;
+end
 
 %% ====================================================================%
 %% ====================================================================%
@@ -20,11 +22,15 @@ dx = dt*-u;
 % function that determines what cell the new geometry is on
 % x + dt*u  <- floor to nearest x grid (new x right)
 %the value will be called new_x
-xleft = x+h/2 - xleft + x+h/2;
-xright = x+h/2 - xright + x+h/2;
+xlefthold = xleft;
+xleft = x+h/2 - xright + x+h/2; %switches xleft and xright
+xright = x+h/2 - xlefthold + x+h/2;
+ylefthold = yleft; %also switching yleft and yright
+yleft = yright;
+yright = ylefthold;
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
-new_x = x + floor((dt*-u)/h) * h; %% i think this is wronhg
+new_x = x + ceil((dt*-u)/h) * h; %% i think this is wronhg
 slope = my/mx; %switching to opposite
 slopeold = -1/(my/mx); %for condition statements
 
@@ -185,7 +191,7 @@ end
 if alpha/mx > 0 && slopeold*(h-alpha/mx) > h
     
     if new_x_l >= new_x && x+dx < new_x
-        xverticies = [x+dx +(new_x-(x+dx)) new_x, new_x_r,new_x_l,new_x];
+        xverticies = [new_x, new_x_r,new_x_l,new_x];
         yverticies = [y,y,yleft,yleft];
     end
     
@@ -297,24 +303,23 @@ end
 %     safd = 1;
 % end
 
-if mx == 0 && my == 0
-    if C(i,j) == 0
-    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+
+if C(i,j) == 0
+    xverticies = [0,0,0]; 
     yverticies = [0,0,0];
-    end
+end
     
-    if C(i,j) ==1
-    xverticies = [x,x+h,x+h,x];
+if C(i,j) == 1
+    xverticies = [new_x,x+h+dx,x+h+dx,new_x];
     yverticies = [y,y,y+h,y+h];
-    end
 end
 
-if alpha == 0
-    xverticies = [0,0,0];
-    yverticies = [0,0,0];
-end
+
 
 num_shift = floor((dt*u)/h);
+% if yverticies(1) == [0.593750000000000]
+%     g=0;
+% end
 area = polyarea(xverticies,yverticies)/h^2;%fraction!!
 Cx = zeros(size(C));
 if i+num_shift-1 >=1 
@@ -326,7 +331,10 @@ Cx(i+num_shift,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
 end
 
-    
+if min(min(Cx)) < 0
+     g = 4;
+end
+   
     
     
 end

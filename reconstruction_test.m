@@ -71,7 +71,7 @@ for i = 1:length(x)
         end
         
         %testing specific values
-        if i == 7 && j == 11;
+        if i == 12 && j == 24;
             adfs = 1;
         end
         
@@ -92,8 +92,8 @@ for i = 1:length(x)
             areafinder(xval,yval,mxval,myval,h,alpha_actual(i,j));
         xright(i,j) = xr;
         xleft(i,j) = xl;
-        yright(i,j) = yl;
-        yleft(i,j) = yr;
+        yright(i,j) = yr;
+        yleft(i,j) = yl;
         area_actual(i,j) = area;
         
         end % End of overall if statement

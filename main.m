@@ -8,7 +8,7 @@ close all
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =10;
+Nx =33;
 Ny = Nx;
 x_pos = 0.5;
 y_pos = 0.75;
@@ -37,13 +37,13 @@ ycir = 0.15 * sin(cir_dis) + 0.75;
 % [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,T,100);
+t = linspace(0,T,1000);
 t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(3)-t(2);
 
 
 
-for i =1
+for i =1:100
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 [Cr,xleft,xright,yleft,yright,mx,my] = advectionTot(x,y,h,mx,my,...

@@ -31,7 +31,7 @@ area = polyarea(xindicies,yindicies);
 xright = x+h;
 xleft =x+(alpha/my - h)/-slope; %abs here
 yleft = y+h;
-yright = y+(alpha/mx - x) * -slope; %abs here
+yright = y+(alpha/mx - h) * -slope; %abs here
 
 end
 
@@ -40,13 +40,13 @@ if alpha/mx > h && alpha/my < h
 %counter clockwise
 %origin, right corner, right up, left up
     xindicies = [x,x+h,x+h,x];
-    yindicies = [y,y,y+(alpha/mx - x) * -slope, y + alpha/my]; %abs here x4
+    yindicies = [y,y,y+(alpha/mx - h) * -slope, y + alpha/my]; %abs here x4
 
 area = polyarea(xindicies,yindicies);
 xleft =x;
 xright = x+h;
 yleft = y + (alpha/my); %abs here
-yright = y+(alpha/mx - x) * -slope; %abs here
+yright = y+(alpha/mx - h) * -slope; %abs here
 end
 
 if alpha/mx < h && alpha/my > h
@@ -112,12 +112,12 @@ if alpha/mx < 0 && slope*(h) + alpha/my > h  %slope*(x+h)? no cause alpha/my isn
 % line passes through 1,2
 %counter clockwise:
 %bottom, right, topleft corner
-    xindicies = [x,x+ h-(alpha/my)/slope,x]; %abs here
+    xindicies = [x,x+ (h-(alpha/my))/slope,x]; %abs here
     yindicies = [y+alpha/my,y+h,y+h];
 
 area = polyarea(xindicies,yindicies);
 xleft =x;
-xright = x+ h-(alpha/my)/slope; %abs here
+xright = x+ (h-(alpha/my))/slope; %abs here
 yleft = y+alpha/my;
 yright = y+ h;
 end

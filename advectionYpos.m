@@ -262,32 +262,34 @@ if mx/alpha >= h && my/alpha <= h
 end
 
 end
-if mx == 0 && my == 0
-    if C(i,j) == 0
-    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+
+if C(i,j) == 0
+    xverticies = [0,0,0]; 
     yverticies = [0,0,0];
-    end
+end
     
-    if C(i,j) ==1
+if C(i,j) == 1
     xverticies = [x,x+h,x+h,x];
-    yverticies = [y,y,y+h,y+h];
-    end
-end
-
-if alpha == 0
-    xverticies = [0,0,0];
-    yverticies = [0,0,0];
+    yverticies = [new_y,y+h+dy,y+h+dy,new_y];
 end
 
 
-if C(i,j) ~=0
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cy = zeros(size(C));
-num_shift = floor((dt*v)/h); %this means h is in meters
+num_shift = floor((dt*v)/h);%this means h is in meters
+
+if j + num_shift-1 >= 1
 Cy(i,j+num_shift) = area;
 Cy(i,j+num_shift-1) = C(i,j) - area;
 else
-    num_shift = 0;
-    Cy = zeros(size(C));
+Cy(i,j+num_shift) = area;
 end
+
+if area < 0
+    g=4;
+end
+
+
+
+
 end

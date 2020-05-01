@@ -48,7 +48,7 @@ if mx/alpha <= h && my/alpha >= h
     
     if new_x_l < new_x
        xverticies = [new_x,new_x_r,new_x];
-       yverticies = [y,y,(new_x_right-new_x)*-slope + y]; 
+       yverticies = [y,y,(new_x_r-new_x)*-slope + y]; 
     end
     
 end
@@ -263,20 +263,14 @@ if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
 end
 end
 
-if mx == 0 && my == 0
-    if C(i,j) == 0
-    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+if C(i,j) == 0
+    xverticies = [0,0,0]; 
     yverticies = [0,0,0];
-    end
-end 
-    if C(i,j) ==1
-    xverticies = [x,x+h,x+h,x];
+end
+    
+if C(i,j) == 1
+    xverticies = [new_x,x+h+dx,x+h+dx,new_x];
     yverticies = [y,y,y+h,y+h];
-    end
-
-if alpha == 0
-    xverticies = [0,0,0];
-    yverticies = [0,0,0];
 end
 
 num_shift = floor((dt*u)/h);
@@ -290,7 +284,9 @@ else
 Cx(i+num_shift,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
 end
-
+if min(min(Cx)) < 0
+     g = 4;
+end
 
 
 end

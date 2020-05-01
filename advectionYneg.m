@@ -15,9 +15,14 @@ dy = dt*-v;
 % function that determines what cell the new geometry is on
 % x + dt*u  <- floor to nearest x grid (new x right)
 %the value will be called new_x
-yleft = y+h/2 - yleft + y+h/2;
-yright = y+h/2 - yright + y+h/2;
-new_y = y + floor((dt*-v)/h) * h;
+ylefthold= yleft;
+yleft = y+h/2 - yright + y+h/2; %switch l and r %hold
+yright = y+h/2 - ylefthold + y+h/2;
+xlefthold = xleft;
+xleft = xright;
+xright = xlefthold;
+
+new_y = y + ceil((dt*-v)/h) * h;
 new_y_r = yright + dy; %new_x_right
 new_y_l = yleft + dy; %new_x_left
 slope = my/mx; %switching to opposite
@@ -285,33 +290,43 @@ if alpha/mx < 0 && (h - alpha/my)*(1/slopeold) > h
 end
 end
 
-if mx == 0 && my == 0
-    if C(i,j) == 0
-    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+if C(i,j) == 0
+    xverticies = [0,0,0]; 
     yverticies = [0,0,0];
-    end
+end
     
-    if C(i,j) ==1
+if C(i,j) == 1
     xverticies = [x,x+h,x+h,x];
-    yverticies = [y,y,y+h,y+h];
-    end
-end
-if alpha == 0
-    xverticies = [0,0,0];
-    yverticies = [0,0,0];
+    yverticies = [new_y,y+h+dy,y+h+dy,new_y];
 end
 
 
-
-if C(i,j) ~= 0
-area = polyarea(xverticies,yverticies)/h^2; %fraction!!
+area = polyarea(xverticies,yverticies)/h^2;
 Cy = zeros(size(C));
-num_shift = floor((dt*v)/h); %this means h is in meters
+num_shift = floor((dt*v)/h);
+
+if j + num_shift-1 >= 1
 Cy(i,j+num_shift) = area;
 Cy(i,j+num_shift-1) = C(i,j) - area;
 else
-    num_shift = 0;
-    Cy = zeros(size(C));
+Cy(i,1) = area;
 end
+
+% if C(i,j) ~= 0
+% area = polyarea(xverticies,yverticies)/h^2; %fraction!!
+% Cy = zeros(size(C));
+% num_shift = floor((dt*v)/h); %this means h is in meters
+% Cy(i,j+num_shift) = area;
+% Cy(i,j+num_shift-1) = C(i,j) - area;
+% else
+%     num_shift = 0;
+%     Cy = zeros(size(C));
+% end
+
+if area < 0
+    g=4;
+end
+
+
 end
 

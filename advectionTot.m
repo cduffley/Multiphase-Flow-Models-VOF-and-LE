@@ -12,7 +12,7 @@ for i=2:length(x)-1
         if mx(i,j) == 0 && my(i,j) ==0 && Cr(i,j) == 0
          continue
         end
-        if i == 15 && j == 20
+        if i == 19 && j == 29
             d = 0;
         end
         if u(i,j) > 0
@@ -29,6 +29,9 @@ for i=2:length(x)-1
         end
 %     Cnew(i+shift_x,j) = Cnew(i+shift_x,j) + CnewX(i+shift_x,j);
 %     Cnew(i+shift_x-1,j) = Cnew(i+shift_x-1,j) + CnewX(i+shift_x-1,j);
+      if min(min(CnewX)) < 0
+         g = 4;
+      end
       Cnew = Cnew + CnewX;
       % this works becuase CnewX is all zeros except the two split values
       % and Cnew is only an accumulation of multiple CnewXs. aka, Cnew does
@@ -49,15 +52,15 @@ for i=2:length(x)-1
         if mx(i,j) == 0 && my(i,j) ==0 && Cr(i,j) == 0
          continue
         end
-        if u(i,j) > 0
+        if v(i,j) > 0
             [CnewY,shift_y] = advectionYpos(x(i),y(j),h,i,j,...
                 mx(i,j),my(i,j),xleft(i,j),xright(i,j),...
                 yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);
-        elseif u(i,j) < 0
+        elseif v(i,j) < 0
             [CnewY,shift_y] = advectionYneg(x(i),y(j),h,i,j,...
                 mx(i,j),my(i,j),xleft(i,j),xright(i,j),...
                 yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);;
-        elseif u(i,j)==0
+        elseif v(i,j)==0
             CnewY = zeros(size(Cr));
             shift_y = 0;
         end
