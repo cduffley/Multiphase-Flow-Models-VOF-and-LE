@@ -10,7 +10,7 @@ dx = dt*u;
 % x + dt*u  <- floor to nearest x grid (new x right)
 %the value will be called new_x
 
-new_x = x + floor((dt*u)/h) * h; %% only for u is positive
+new_x = x + ceil((dt*u)/h) * h; %% only for u is positive
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
 slope = -1/(my/mx);
@@ -263,16 +263,34 @@ if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
 end
 end
 
-if C(i,j) ==0
-area = polyarea(xverticies,yverticies)/h^2; %fraction!!
-Cx = zeros(size(C));
-num_shift = floor((dt*u)/h); %this means h is in meters
-Cx(i+num_shift,j) = area;
-Cx(i+num_shift-1,j) = C(i,j) - area;
-else
-    num_shift = 0;
-    Cx = zeros(size(C));
+if mx == 0 && my == 0
+    if C(i,j) == 0
+    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+    yverticies = [0,0,0];
+    end
+end 
+    if C(i,j) ==1
+    xverticies = [x,x+h,x+h,x];
+    yverticies = [y,y,y+h,y+h];
+    end
+
+if alpha == 0
+    xverticies = [0,0,0];
+    yverticies = [0,0,0];
 end
+
+num_shift = floor((dt*u)/h);
+area = polyarea(xverticies,yverticies)/h^2;%fraction!!
+Cx = zeros(size(C));
+if i+num_shift-1 >=1 
+num_shift = floor((dt*u)/h); %this means h is in meters
+Cx(i+num_shift-1,j) = area;
+Cx(i+num_shift,j) = C(i,j) - area;
+else
+Cx(i+num_shift,j) = area;
+Cx(i+num_shift,j) = C(i,j) - area;
+end
+
 
 
 end

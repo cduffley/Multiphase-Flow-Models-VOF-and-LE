@@ -12,6 +12,9 @@ for i=2:length(x)-1
         if mx(i,j) == 0 && my(i,j) ==0 && Cr(i,j) == 0
          continue
         end
+        if i == 15 && j == 20
+            d = 0;
+        end
         if u(i,j) > 0
             [CnewX,shift_x] = advectionXpos(x(i),y(j),h,i,j,...
                 mx(i,j),my(i,j),xleft(i,j),xright(i,j),...

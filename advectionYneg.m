@@ -283,8 +283,26 @@ if alpha/mx < 0 && (h - alpha/my)*(1/slopeold) > h
        yverticies = [y+dy, y+dy, new_y_r, new_y_l]; 
     end
 end
-
 end
+
+if mx == 0 && my == 0
+    if C(i,j) == 0
+    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+    yverticies = [0,0,0];
+    end
+    
+    if C(i,j) ==1
+    xverticies = [x,x+h,x+h,x];
+    yverticies = [y,y,y+h,y+h];
+    end
+end
+if alpha == 0
+    xverticies = [0,0,0];
+    yverticies = [0,0,0];
+end
+
+
+
 if C(i,j) ~= 0
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cy = zeros(size(C));

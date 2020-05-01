@@ -9,7 +9,7 @@ slope = -1/(my/mx);
 % function that determines what cell the new geometry is on
 % y + dt*v  <- floor to nearest y grid
 % the value will be called new_y
-new_y = y + floor((dt*v)/h) * h;
+new_y = y + ceil((dt*v)/h) * h;
 new_y_r = yright + dy; %new_y_right
 new_y_l = yleft + dy; %new_y_left
 
@@ -262,6 +262,24 @@ if mx/alpha >= h && my/alpha <= h
 end
 
 end
+if mx == 0 && my == 0
+    if C(i,j) == 0
+    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+    yverticies = [0,0,0];
+    end
+    
+    if C(i,j) ==1
+    xverticies = [x,x+h,x+h,x];
+    yverticies = [y,y,y+h,y+h];
+    end
+end
+
+if alpha == 0
+    xverticies = [0,0,0];
+    yverticies = [0,0,0];
+end
+
+
 if C(i,j) ~=0
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cy = zeros(size(C));

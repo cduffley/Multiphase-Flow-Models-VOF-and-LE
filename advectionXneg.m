@@ -24,7 +24,7 @@ xleft = x+h/2 - xleft + x+h/2;
 xright = x+h/2 - xright + x+h/2;
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
-new_x = x + floor((dt*-u)/h) * h;
+new_x = x + floor((dt*-u)/h) * h; %% i think this is wronhg
 slope = my/mx; %switching to opposite
 slopeold = -1/(my/mx); %for condition statements
 
@@ -278,6 +278,7 @@ if mx < 0 && my < 0
        yverticies = [(new_x_l-new_x)*-slope + yright,yright,y+h,y+h]; 
     end
  end   
+
  
  if alpha/mx < 0 && (h - alpha/my)*(1/slopeold) < h
     %(2,3) now (1,2)
@@ -292,8 +293,25 @@ if mx < 0 && my < 0
     end
  end
 end
-if i ==2 && j ==7
-    safd = 1;
+% if i ==2 && j ==7
+%     safd = 1;
+% end
+
+if mx == 0 && my == 0
+    if C(i,j) == 0
+    xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+    yverticies = [0,0,0];
+    end
+    
+    if C(i,j) ==1
+    xverticies = [x,x+h,x+h,x];
+    yverticies = [y,y,y+h,y+h];
+    end
+end
+
+if alpha == 0
+    xverticies = [0,0,0];
+    yverticies = [0,0,0];
 end
 
 num_shift = floor((dt*u)/h);

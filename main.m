@@ -8,7 +8,7 @@ close all
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =33;
+Nx =10;
 Ny = Nx;
 x_pos = 0.5;
 y_pos = 0.75;
