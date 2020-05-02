@@ -22,12 +22,22 @@ xlefthold = xleft;
 xleft = xright;
 xright = xlefthold;
 
-new_y = y + ceil((dt*-v)/h) * h;
+
 new_y_r = yright + dy; %new_x_right
 new_y_l = yleft + dy; %new_x_left
 slope = my/mx; %switching to opposite
 slopeold = -1/(my/mx); %for condition statements
 slope = -slopeold; %im an idiot
+
+if (mx <= 0 && my>=0)  %2
+    new_y =  h*floor((new_y_r)/h);
+    
+elseif (mx>0 && my>=0) %1
+    new_y =  h*floor((new_y_l)/h);
+    
+elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3
+    new_y =  h*floor((y+h+dy)/h); 
+end
 
 %-------------------------------------------------------------%
 %-------------------------------------------------------------%
@@ -304,7 +314,7 @@ end
 
 area = polyarea(xverticies,yverticies)/h^2;
 Cy = zeros(size(C));
-num_shift = floor((dt*v)/h);
+num_shift = -(new_y - y)/h;
 
 if j + num_shift-1 >= 1
 Cy(i,j+num_shift) = area;

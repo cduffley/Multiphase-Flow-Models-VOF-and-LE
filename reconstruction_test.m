@@ -23,20 +23,36 @@ for i = 1:length(x)
             % which yields area of 0
             alpha_actual(i,j) = 0;
             area_actual(i,j) = 0;
+            xright(i,j) = xval;
+            xleft(i,j) = xval;
+            yright(i,j) = yval;
+            yleft(i,j) = yval;
             continue
         elseif  mxval == 0 && myval == 0 && C(i,j) == 1
             % Check if mx and my are both 0 for C of 1 (filled), 
             % which yields area of 1
             alpha_actual(i,j) = 1;
             area_actual(i,j) = 1*h^2;
+            xright(i,j) = xval;
+            xleft(i,j) = xval;
+            yright(i,j) = yval;
+            yleft(i,j) = yval;
             continue
         elseif C(i,j) == 0
             alpha_actual(i,j) = 0;
              area_actual(i,j) = 0;
+            xright(i,j) = xval;
+            xleft(i,j) = xval;
+            yright(i,j) = yval;
+            yleft(i,j) = yval;
             continue
         elseif C(i,j) == 1
             alpha_actual(i,j) = 0;
              area_actual(i,j) = 1*h^2;
+            xright(i,j) = xval;
+            xleft(i,j) = xval;
+            yright(i,j) = yval;
+            yleft(i,j) = yval;
             continue
         else
         % Perform for loop with many alpha values and choosing the value

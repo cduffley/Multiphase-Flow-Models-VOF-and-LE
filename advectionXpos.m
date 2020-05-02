@@ -4,16 +4,30 @@ function [Cx,num_shift] =advectionXpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
+if 1 == 12 && j ==22
+    g = 0;
+end
+
 % 
 dx = dt*u;
 % function that determines what cell the new geometry is on
 % x + dt*u  <- floor to nearest x grid (new x right)
 %the value will be called new_x
 
-new_x = x + ceil((dt*u)/h) * h; %% only for u is positive
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
 slope = -1/(my/mx);
+
+if (mx >= 0 && my<=0) || (mx>0 && my>=0) %4 and 1
+    new_x =  h*floor((new_x_r)/h);
+end
+
+if (mx <= 0 && my>0) || (mx<0 && my<=0) %2 and 3
+    new_x =  h*floor((x+h+dx)/h);
+    
+end
+
+
 
 %% ====================================================================%
 %% ====================================================================%
@@ -274,11 +288,10 @@ if C(i,j) == 1
     yverticies = [y,y,y+h,y+h];
 end
 
-num_shift = floor((dt*u)/h);
-area = polyarea(xverticies,yverticies)/h^2;%fraction!!
+num_shift = (new_x - x)/h;
+area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cx = zeros(size(C));
-if i+num_shift-1 >=1 
-num_shift = floor((dt*u)/h); %this means h is in meters
+if i+num_shift-1 >=1  %this means h is in meters
 Cx(i+num_shift-1,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
 else

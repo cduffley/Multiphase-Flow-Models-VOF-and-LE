@@ -30,10 +30,18 @@ yleft = yright;
 yright = ylefthold;
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
-new_x = x + ceil((dt*-u)/h) * h; %% i think this is wronhg
 % slope = my/mx; %switching to opposite
 slopeold = -1/(my/mx);%for condition statements
 slope = -slopeold; %im an idiot
+
+if (mx >= 0 && my<=0) || (mx>0 && my>=0) %4 and 1
+    new_x =  h*floor((new_x_r)/h);
+end
+
+if (mx <= 0 && my>0) || (mx<0 && my<=0) %2 and 3
+    new_x =  h*floor((x+h+dx)/h);
+    
+end
 
 
 % ====================================================================%
@@ -67,7 +75,7 @@ end
 if mx/alpha <= h && my/alpha <= h
     if new_x_l < new_x && new_x_r > new_x
         xverticies = [new_x, new_x_r, new_x_r, new_x];
-        yverticies = [y, y, yright, yright - (new_x_r - (new_x+h))*slope];
+        yverticies = [y, y, yright, yright - (new_x_r - (new_x))*slope];
     end
     
     if new_x_l >= new_x
@@ -319,14 +327,13 @@ if length(yverticies) == 5
 g = 0;
 end
 
-num_shift = floor((dt*u)/h);
+num_shift = -(new_x - x)/h;
 % if yverticies(1) == [0.593750000000000]
 %     g=0;
 % end
 area = polyarea(xverticies,yverticies)/h^2;%fraction!!
 Cx = zeros(size(C));
-if i+num_shift-1 >=1 
-num_shift = floor((dt*u)/h); %this means h is in meters
+if i+num_shift-1 >=1  
 Cx(i+num_shift-1,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
 else
