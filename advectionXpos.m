@@ -14,6 +14,7 @@ new_x = x + ceil((dt*u)/h) * h; %% only for u is positive
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
 slope = -1/(my/mx);
+
 %% ====================================================================%
 %% ====================================================================%
 %% ====================================================================%
@@ -76,7 +77,7 @@ if mx/alpha >= h && my/alpha <= h
     
     if new_x_l < new_x
        xverticies = [new_x,new_x_r,new_x_r,new_x];
-       yverticies = [y,y,yright,yright+(new_x-new_x_l)*-slope]; 
+       yverticies = [y,y,yright,yright+(new_x_r-new_x)*-slope]; 
     end
 end
 end
@@ -247,8 +248,8 @@ end
 if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
     
     if new_x_l >= new_x && x+dx < new_x 
-        xverticies = [new_x, new_x_l, new_x_r,new_x];
-        yverticies = [yleft,yleft,yright,y+h,y+h];
+        xverticies = [new_x, new_x_l, new_x_r,new_x]; %%
+        yverticies = [yleft,yleft,yright,y+h];
     end
     
     if new_x_l >= new_x && x+dx > new_x 

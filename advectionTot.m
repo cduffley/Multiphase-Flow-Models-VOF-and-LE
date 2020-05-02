@@ -25,6 +25,7 @@ for i=2:length(x)-1
                 yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);
         elseif u(i,j)==0
             CnewX = zeros(size(Cr));
+            CnewX(i,j) = Cr(i,j);
             shift_x = 0;
         end
 %     Cnew(i+shift_x,j) = Cnew(i+shift_x,j) + CnewX(i+shift_x,j);
@@ -63,6 +64,7 @@ for i=2:length(x)-1
         elseif v(i,j)==0
             CnewY = zeros(size(Cr));
             shift_y = 0;
+            CnewY(i,j) =Cr(i,j);
         end
 %     Cnew(i,j+shift_y) = Cnew(i,j+shift_y) + CnewX(i,j+shift_y);
 %     Cnew(i,j+shift_y-1) = Cnew(i,j+shift_y-1) + CnewX(i,j+shift_y-1);

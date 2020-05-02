@@ -27,6 +27,7 @@ new_y_r = yright + dy; %new_x_right
 new_y_l = yleft + dy; %new_x_left
 slope = my/mx; %switching to opposite
 slopeold = -1/(my/mx); %for condition statements
+slope = -slopeold; %im an idiot
 
 %-------------------------------------------------------------%
 %-------------------------------------------------------------%

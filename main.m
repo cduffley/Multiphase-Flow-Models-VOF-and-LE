@@ -37,15 +37,17 @@ ycir = 0.15 * sin(cir_dis) + 0.75;
 % [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,T,1000);
+t = linspace(0,T,100);
 t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(3)-t(2);
 
 
 
-for i =1:100
+for i =1:2
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
+u = -1.*X;
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
+v = 0.*X;
 [Cr,xleft,xright,yleft,yright,mx,my] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 end

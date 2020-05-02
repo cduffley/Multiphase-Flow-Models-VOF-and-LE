@@ -8,7 +8,7 @@ function [Cx,num_shift] =advectionXneg(x,y,h,i,j,mx,my,...
 
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
-if i == 15 && j ==20
+if i == 17 && j ==20
     g = 4;
 end
 
@@ -31,8 +31,9 @@ yright = ylefthold;
 new_x_r = xright + dx; %new_x_right
 new_x_l = xleft + dx; %new_x_left
 new_x = x + ceil((dt*-u)/h) * h; %% i think this is wronhg
-slope = my/mx; %switching to opposite
-slopeold = -1/(my/mx); %for condition statements
+% slope = my/mx; %switching to opposite
+slopeold = -1/(my/mx);%for condition statements
+slope = -slopeold; %im an idiot
 
 
 % ====================================================================%
@@ -151,7 +152,7 @@ if alpha/mx < h && alpha/my > h
     
     if new_x_l >= new_x && x+dx < new_x 
         xverticies = [new_x, new_x_l, new_x_r,new_x];
-        yverticies = [yleft,yleft,yright,y+h,y+h];
+        yverticies = [yleft,yleft,yright,y+h];
     end
     
     if new_x_l >= new_x && x+dx > new_x 
@@ -230,7 +231,7 @@ if alpha/mx < 0 && slopeold*h + alpha/my < h
     
     if new_x_l < new_x
        xverticies = [new_x,new_x_r,new_x_r,new_x];
-       yverticies = [y,y,yright,yright+(new_x-new_x_l)*-slope]; 
+       yverticies = [y,y,yright,yright+(new_x_r-new_x)*-slope]; 
     end
 end
 end
@@ -314,7 +315,9 @@ if C(i,j) == 1
     yverticies = [y,y,y+h,y+h];
 end
 
-
+if length(yverticies) == 5
+g = 0;
+end
 
 num_shift = floor((dt*u)/h);
 % if yverticies(1) == [0.593750000000000]
