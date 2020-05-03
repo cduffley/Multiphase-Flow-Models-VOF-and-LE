@@ -20,7 +20,7 @@ for i = 1:length(x)
         mxval = mx(i,j);    myval = my(i,j);
 
         %testing specific values
-        if i == 16 && j == 24
+        if i == 19 && j == 20
             adfs = 1;
         end
         
@@ -112,7 +112,7 @@ for i = 1:length(x)
         yright(i,j) = yr;
         yleft(i,j) = yl;
         area_actual(i,j) = area;
-        if abs(area - C(i,j)*h^2) > h^2 * 1e-3
+        if (abs(area - C(i,j)*h^2))/(C(i,j)*h^2) > 0.05 %5 percent error
         area_actual(i,j) = C(i,j) *h^2;
         alpha_actual(i,j) = 0;
         end
