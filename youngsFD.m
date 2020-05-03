@@ -7,97 +7,96 @@ magnitude = zeros(1,length(y));
 for i = 1:length(x)
     for j = 1:length(y)
         if i==1 && j==1
-            % Top left corner of boundaries
-            mx1 = -1/(2*h) .*( 0 + C(i,j+1) - 0 - C(i,j) );
-            my1 = -1/(2*h) .*( 0 - C(i,j+1) + 0 - C(i,j) );
-            mx2 = -1/(2*h) .*( 0 + C(i,j) - 0 - 0 );
-            my2 = -1/(2*h) .*( 0 - C(i,j) + 0 - 0 );
-            mx3 = -1/(2*h) .*( C(i,j+1) + C(i+1,j+1) - C(i,j) - C(i+1,j) );
-            my3 = -1/(2*h) .*( C(i,j+1) - C(i+1,j+1) + C(i,j) - C(i+1,j) );
-            mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - 0 - 0 );
-            my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + 0 - 0 );
+            % Top left corner of matrix (lower-left corner of geometry)
+             mx1 = -1/(2*h) .*( C(i+1,j+1) + C(i+1,j) - C(i,j+1) - C(i,j) );
+             my1 = -1/(2*h) .*( C(i+1,j+1) - C(i+1,j) + C(i,j+1) - C(i,j) );
+             mx2 = -1/(2*h) .*( C(i+1,j) + 0 - C(i,j) - 0 );
+             my2 = -1/(2*h) .*( C(i+1,j) - 0 + C(i,j) - 0 );
+             mx3 = -1/(2*h) .*( C(i,j) + 0 - 0 - 0 );
+             my3 = -1/(2*h) .*( C(i,j) - 0 + 0 - 0 );
+             mx4 = -1/(2*h) .*( C(i,j+1) + C(i,j) - 0 - 0 );
+             my4 = -1/(2*h) .*( C(i,j+1) - C(i,j) + 0 - 0 );
         elseif i==1 && j==length(y)
-            % Top right corner of boundaries
-            mx1 = -1/(2*h) .*( 0 + 0 - 0 - C(i,j) );
-            my1 = -1/(2*h) .*( 0 - 0 + 0 - C(i,j) );
-            mx2 = -1/(2*h) .*( 0 + C(i,j) - 0 - C(i,j-1) );
-            my2 = -1/(2*h) .*( 0 - C(i,j) + 0 - C(i,j-1) );
-            mx3 = -1/(2*h) .*( 0 + 0 - C(i,j) - C(i+1,j) );
-            my3 = -1/(2*h) .*( 0 - 0 + C(i,j) - C(i+1,j) );
-            mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - C(i,j-1) - C(i+1,j-1) );
-            my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + C(i,j-1) - C(i+1,j-1) );
+            % Top right corner of matrix (upper-left corner of geometry)
+             mx1 = -1/(2*h) .*( 0 + C(i+1,j) - 0 - C(i,j) );
+             my1 = -1/(2*h) .*( 0 - C(i+1,j) + 0 - C(i,j) );
+             mx2 = -1/(2*h) .*( C(i+1,j) + C(i+1,j-1) - C(i,j) - C(i,j-1) );
+             my2 = -1/(2*h) .*( C(i+1,j) - C(i+1,j-1) + C(i,j) - C(i,j-1) );
+             mx3 = -1/(2*h) .*( C(i,j) + C(i,j-1) - 0 - 0 );
+             my3 = -1/(2*h) .*( C(i,j) - C(i,j-1) + 0 - 0 );
+             mx4 = -1/(2*h) .*( 0 + C(i,j) - 0 - 0 );
+             my4 = -1/(2*h) .*( 0 - C(i,j) + 0 - 0 );
         elseif i==length(x) && j==1
-            % Bottom left corner of boundaries
-            mx1 = -1/(2*h) .*( C(i-1,j+1) + C(i,j+1) - C(i-1,j) - C(i,j) );
-            my1 = -1/(2*h) .*( C(i-1,j+1) - C(i,j+1) + C(i-1,j) - C(i,j) );
-            mx2 = -1/(2*h) .*( C(i-1,j) + C(i,j) - 0 - 0 );
-            my2 = -1/(2*h) .*( C(i-1,j) - C(i,j) + 0 - 0 );
-            mx3 = -1/(2*h) .*( C(i,j+1) + 0 - C(i,j) - 0 );
-            my3 = -1/(2*h) .*( C(i,j+1) - 0 + C(i,j) - 0 );
-            mx4 = -1/(2*h) .*( C(i,j) + 0 - 0 - 0 );
-            my4 = -1/(2*h) .*( C(i,j) - 0 + 0 - 0 );
+            % Bottom left corner of martix (lower-right corner of geometry)
+             mx1 = -1/(2*h) .*( 0 + 0 - C(i,j+1) - C(i,j) );
+             my1 = -1/(2*h) .*( 0 - 0 + C(i,j+1) - C(i,j) );
+             mx2 = -1/(2*h) .*( 0 + 0 - C(i,j) - 0 );
+             my2 = -1/(2*h) .*( 0 - 0 + C(i,j) - 0 );
+             mx3 = -1/(2*h) .*( C(i,j) + 0 - C(i-1,j) - 0 );
+             my3 = -1/(2*h) .*( C(i,j) - 0 + C(i-1,j) - 0 );
+             mx4 = -1/(2*h) .*( C(i,j+1) + C(i,j) - C(i-1,j+1) - C(i-1,j) );
+             my4 = -1/(2*h) .*( C(i,j+1) - C(i,j) + C(i-1,j+1) - C(i-1,j) );
         elseif i==length(x) && j==length(y)
-            % Bottom right corner of boundaries
-            mx1 = -1/(2*h) .*( 0 + 0 - C(i-1,j) - C(i,j) );
-            my1 = -1/(2*h) .*( 0 - 0 + C(i-1,j) - C(i,j) );
-            mx2 = -1/(2*h) .*( C(i-1,j) + C(i,j) - C(i-1,j-1) - C(i,j-1) );
-            my2 = -1/(2*h) .*( C(i-1,j) - C(i,j) + C(i-1,j-1) - C(i,j-1) );
-            mx3 = -1/(2*h) .*( 0 + 0 - C(i,j) - 0 );
-            my3 = -1/(2*h) .*( 0 - 0 + C(i,j) - 0 );
-            mx4 = -1/(2*h) .*( C(i,j) + 0 - C(i,j-1) - 0 );
-            my4 = -1/(2*h) .*( C(i,j) - 0 + C(i,j-1) - 0 );
+            % Bottom right corner of matrix (upper-right corner of geometry)
+             mx1 = -1/(2*h) .*( 0 + 0 - 0 - C(i,j) );
+             my1 = -1/(2*h) .*( 0 - 0 + 0 - C(i,j) );
+             mx2 = -1/(2*h) .*( 0 + 0 - C(i,j) - C(i,j-1) );
+             my2 = -1/(2*h) .*( 0 - 0 + C(i,j) - C(i,j-1) );
+             mx3 = -1/(2*h) .*( C(i,j) + C(i,j-1) - C(i-1,j) - C(i-1,j-1) );
+             my3 = -1/(2*h) .*( C(i,j) - C(i,j-1) + C(i-1,j) - C(i-1,j-1) );
+             mx4 = -1/(2*h) .*( 0 + C(i,j) - 0 - C(i-1,j) );
+             my4 = -1/(2*h) .*( 0 - C(i,j) + 0 - C(i-1,j) );
             
         elseif i==1
-            % Top side of boundaries
-            mx1 = -1/(2*h) .*( 0 + C(i,j+1) - 0 - C(i,j) );
-            my1 = -1/(2*h) .*( 0 - C(i,j+1) + 0 - C(i,j) );
-            mx2 = -1/(2*h) .*( 0 + C(i,j) - 0 - C(i,j-1) );
-            my2 = -1/(2*h) .*( 0 - C(i,j) + 0 - C(i,j-1) );
-            mx3 = -1/(2*h) .*( C(i,j+1) + C(i+1,j+1) - C(i,j) - C(i+1,j) );
-            my3 = -1/(2*h) .*( C(i,j+1) - C(i+1,j+1) + C(i,j) - C(i+1,j) );
-            mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - C(i,j-1) - C(i+1,j-1) );
-            my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + C(i,j-1) - C(i+1,j-1) );
+            % Top side of matrix (leftmost boundary of geometry)
+             mx1 = -1/(2*h) .*( C(i+1,j+1) + C(i+1,j) - C(i,j+1) - C(i,j) );
+             my1 = -1/(2*h) .*( C(i+1,j+1) - C(i+1,j) + C(i,j+1) - C(i,j) );
+             mx2 = -1/(2*h) .*( C(i+1,j) + C(i+1,j-1) - C(i,j) - C(i,j-1) );
+             my2 = -1/(2*h) .*( C(i+1,j) - C(i+1,j-1) + C(i,j) - C(i,j-1) );
+             mx3 = -1/(2*h) .*( C(i,j) + C(i,j-1) - 0 - 0 );
+             my3 = -1/(2*h) .*( C(i,j) - C(i,j-1) + 0 - 0 );
+             mx4 = -1/(2*h) .*( C(i,j+1) + C(i,j) - 0 - 0 );
+             my4 = -1/(2*h) .*( C(i,j+1) - C(i,j) + 0 - 0 );
         elseif i==length(x)
-            % Bottom side of boundaries
-            mx1 = -1/(2*h) .*( C(i-1,j+1) + C(i,j+1) - C(i-1,j) - C(i,j) );
-            my1 = -1/(2*h) .*( C(i-1,j+1) - C(i,j+1) + C(i-1,j) - C(i,j) );
-            mx2 = -1/(2*h) .*( C(i-1,j) + C(i,j) - C(i-1,j-1) - C(i,j-1) );
-            my2 = -1/(2*h) .*( C(i-1,j) - C(i,j) + C(i-1,j-1) - C(i,j-1) );
-            mx3 = -1/(2*h) .*( C(i,j+1) + 0 - C(i,j) - 0 );
-            my3 = -1/(2*h) .*( C(i,j+1) - 0 + C(i,j) - 0 );
-            mx4 = -1/(2*h) .*( C(i,j) + 0 - C(i,j-1) - 0 );
-            my4 = -1/(2*h) .*( C(i,j) - 0 + C(i,j-1) - 0 );
-
+            % Bottom side of matrix (rightmost boundary of geometry)
+             mx1 = -1/(2*h) .*( 0 + 0 - C(i,j+1) - C(i,j) );
+             my1 = -1/(2*h) .*( 0 - 0 + C(i,j+1) - C(i,j) );
+             mx2 = -1/(2*h) .*( 0 + 0 - C(i,j) - C(i,j-1) );
+             my2 = -1/(2*h) .*( 0 - 0 + C(i,j) - C(i,j-1) );
+             mx3 = -1/(2*h) .*( C(i,j) + C(i,j-1) - C(i-1,j) - C(i-1,j-1) );
+             my3 = -1/(2*h) .*( C(i,j) - C(i,j-1) + C(i-1,j) - C(i-1,j-1) );
+             mx4 = -1/(2*h) .*( C(i,j+1) + C(i,j) - C(i-1,j+1) - C(i-1,j) );
+             my4 = -1/(2*h) .*( C(i,j+1) - C(i,j) + C(i-1,j+1) - C(i-1,j) );
         elseif j==1
-            % Left side of boundaries
-            mx1 = -1/(2*h) .*( C(i-1,j+1) + C(i,j+1) - C(i-1,j) - C(i,j) );
-            my1 = -1/(2*h) .*( C(i-1,j+1) - C(i,j+1) + C(i-1,j) - C(i,j) );
-            mx2 = -1/(2*h) .*( C(i-1,j) + C(i,j) - 0 - 0 );
-            my2 = -1/(2*h) .*( C(i-1,j) - C(i,j) + 0 - 0 );
-            mx3 = -1/(2*h) .*( C(i,j+1) + C(i+1,j+1) - C(i,j) - C(i+1,j) );
-            my3 = -1/(2*h) .*( C(i,j+1) - C(i+1,j+1) + C(i,j) - C(i+1,j) );
-            mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - 0 - 0 );
-            my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + 0 - 0 );
+            % Left side of matrix (bottommost boundary of geometry)
+             mx1 = -1/(2*h) .*( C(i+1,j+1) + C(i+1,j) - C(i,j+1) - C(i,j) );
+             my1 = -1/(2*h) .*( C(i+1,j+1) - C(i+1,j) + C(i,j+1) - C(i,j) );
+             mx2 = -1/(2*h) .*( C(i+1,j) + 0 - C(i,j) - 0 );
+             my2 = -1/(2*h) .*( C(i+1,j) - 0 + C(i,j) - 0 );
+             mx3 = -1/(2*h) .*( C(i,j) + 0 - C(i-1,j) - 0 );
+             my3 = -1/(2*h) .*( C(i,j) - 0 + C(i-1,j) - 0 );
+             mx4 = -1/(2*h) .*( C(i,j+1) + C(i,j) - C(i-1,j+1) - C(i-1,j) );
+             my4 = -1/(2*h) .*( C(i,j+1) - C(i,j) + C(i-1,j+1) - C(i-1,j) );
         elseif j==length(y)
-            % Right side of boundaries
-            mx1 = -1/(2*h) .*( 0 + 0 - C(i-1,j) - C(i,j) );
-            my1 = -1/(2*h) .*( 0 - 0 + C(i-1,j) - C(i,j) );
-            mx2 = -1/(2*h) .*( C(i-1,j) + C(i,j) - C(i-1,j-1) - C(i,j-1) );
-            my2 = -1/(2*h) .*( C(i-1,j) - C(i,j) + C(i-1,j-1) - C(i,j-1) );
-            mx3 = -1/(2*h) .*( 0 + 0 - C(i,j) - C(i+1,j) );
-            my3 = -1/(2*h) .*( 0 - 0 + C(i,j) - C(i+1,j) );
-            mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - C(i,j-1) - C(i+1,j-1) );
-            my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + C(i,j-1) - C(i+1,j-1) );
+            % Right side of matrix (topmost boundary of geometry)
+             mx1 = -1/(2*h) .*( 0 + C(i+1,j) - 0 - C(i,j) );
+             my1 = -1/(2*h) .*( 0 - C(i+1,j) + 0 - C(i,j) );
+             mx2 = -1/(2*h) .*( C(i+1,j) + C(i+1,j-1) - C(i,j) - C(i,j-1) );
+             my2 = -1/(2*h) .*( C(i+1,j) - C(i+1,j-1) + C(i,j) - C(i,j-1) );
+             mx3 = -1/(2*h) .*( C(i,j) + C(i,j-1) - C(i-1,j) - C(i-1,j-1) );
+             my3 = -1/(2*h) .*( C(i,j) - C(i,j-1) + C(i-1,j) - C(i-1,j-1) );
+             mx4 = -1/(2*h) .*( 0 + C(i,j) - 0 - C(i-1,j) );
+             my4 = -1/(2*h) .*( 0 - C(i,j) + 0 - C(i-1,j) );
         else
             % Points in between the outermost boundaries
-            mx1 = -1/(2*h) .*( C(i-1,j+1) + C(i,j+1) - C(i-1,j) - C(i,j) );
-            my1 = -1/(2*h) .*( C(i-1,j+1) - C(i,j+1) + C(i-1,j) - C(i,j) );
-            mx2 = -1/(2*h) .*( C(i-1,j) + C(i,j) - C(i-1,j-1) - C(i,j-1) );
-            my2 = -1/(2*h) .*( C(i-1,j) - C(i,j) + C(i-1,j-1) - C(i,j-1) );
-            mx3 = -1/(2*h) .*( C(i,j+1) + C(i+1,j+1) - C(i,j) - C(i+1,j) );
-            my3 = -1/(2*h) .*( C(i,j+1) - C(i+1,j+1) + C(i,j) - C(i+1,j) );
-            mx4 = -1/(2*h) .*( C(i,j) + C(i+1,j) - C(i,j-1) - C(i+1,j-1) );
-            my4 = -1/(2*h) .*( C(i,j) - C(i+1,j) + C(i,j-1) - C(i+1,j-1) );
+             mx1 = -1/(2*h) .*( C(i+1,j+1) + C(i+1,j) - C(i,j+1) - C(i,j) );
+             my1 = -1/(2*h) .*( C(i+1,j+1) - C(i+1,j) + C(i,j+1) - C(i,j) );
+             mx2 = -1/(2*h) .*( C(i+1,j) + C(i+1,j-1) - C(i,j) - C(i,j-1) );
+             my2 = -1/(2*h) .*( C(i+1,j) - C(i+1,j-1) + C(i,j) - C(i,j-1) );
+             mx3 = -1/(2*h) .*( C(i,j) + C(i,j-1) - C(i-1,j) - C(i-1,j-1) );
+             my3 = -1/(2*h) .*( C(i,j) - C(i,j-1) + C(i-1,j) - C(i-1,j-1) );
+             mx4 = -1/(2*h) .*( C(i,j+1) + C(i,j) - C(i-1,j+1) - C(i-1,j) );
+             my4 = -1/(2*h) .*( C(i,j+1) - C(i,j) + C(i-1,j+1) - C(i-1,j) );
         end
         
         % Summing of mx and my components for normal vector
