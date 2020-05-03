@@ -1,4 +1,4 @@
-function [Cr,xleft,xright,yleft,yright,mx,my] = advectionTot(x,y,h,mx,my,...
+function [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr)
 %Cnew is initialized as zeros, then added to 
 %initial mx,my,xr,xl,yr,yl
@@ -34,6 +34,9 @@ for i=2:length(x)-1
          g = 4;
       end
       Cnew = Cnew + CnewX;
+      if j==24
+          g = 3;
+      end
       % this works becuase CnewX is all zeros except the two split values
       % and Cnew is only an accumulation of multiple CnewXs. aka, Cnew does
       % not contain old Colorfunction values
@@ -43,7 +46,7 @@ end
     
 % some reconstruction funtion  
 [mx,my] = youngsFD(h,x,y,Cnew);
-[Cr,xleft,xright,yleft,yright] = reconstruction_test(x,y,h,mx,my,Cnew);
+[Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,Cnew);
 Cnew = zeros(size(Cr));
 
 for i=2:length(x)-1
@@ -66,15 +69,19 @@ for i=2:length(x)-1
             shift_y = 0;
             CnewY(i,j) =Cr(i,j);
         end
+        if i == 16 && j == 24
+            d = 0;
+        end
 %     Cnew(i,j+shift_y) = Cnew(i,j+shift_y) + CnewX(i,j+shift_y);
 %     Cnew(i,j+shift_y-1) = Cnew(i,j+shift_y-1) + CnewX(i,j+shift_y-1);
       Cnew = Cnew + CnewY;
+      
     end
 end
 
 % some reconstruction funtion again
 [mx,my] = youngsFD(h,x,y,Cnew);
-[Cr,xleft,xright,yleft,yright] = reconstruction_test(x,y,h,mx,my,Cnew);
+[Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,Cnew);
 
 %final C is set as Cr
 

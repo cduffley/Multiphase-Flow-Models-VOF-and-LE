@@ -31,7 +31,7 @@ for i = 1:length(x)
         elseif  mxval == 0 && myval == 0 && C(i,j) == 1
             % Check if mx and my are both 0 for C of 1 (filled), 
             % which yields area of 1
-            alpha_actual(i,j) = 1;
+            alpha_actual(i,j) = 0; %changed from 1 to 0
             area_actual(i,j) = 1*h^2;
             xright(i,j) = xval;
             xleft(i,j) = xval;
@@ -87,7 +87,7 @@ for i = 1:length(x)
         end
         
         %testing specific values
-        if i == 12 && j == 24;
+        if i == 16 && j == 24;
             adfs = 1;
         end
         

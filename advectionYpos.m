@@ -22,7 +22,9 @@ elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3
     new_y =  h*floor((y+h+dy)/h); 
 end
 
-
+if C(i,j) == 1
+    new_y =  h*floor((y+h+dy)/h);   
+end
 
 
 %-------------------------------------------------------------%
@@ -219,7 +221,7 @@ end
 
 % mx > 0 && my > 0
 if mx > 0 && my > 0 
-if mx/alpha > h && my/alpha > h
+if alpha/mx > h && alpha/my > h
 % (+,+) v is positive (2,3)
     if new_y_r < new_y && new_y_l > new_y
        xverticies = [x, xleft + (new_y - new_y_l)/slope, xleft, x];
@@ -232,7 +234,7 @@ if mx/alpha > h && my/alpha > h
     end
 end
 
-if mx/alpha <= h && my/alpha >= h
+if alpha/mx <= h && alpha/my >= h
 % (+,+) v is positive (2,4)
     if new_y_r <= new_y && new_y_l > new_y
        xverticies = [x, xleft + (new_y - new_y_l)/slope, xleft, x];
@@ -240,7 +242,7 @@ if mx/alpha <= h && my/alpha >= h
     end
 end
 
-if mx/alpha <= h && my/alpha <= h
+if alpha/mx <= h && alpha/my <= h
 % (+,+) v is positive (1,4)
 
     if new_y_r < new_y && new_y_l > new_y
@@ -255,7 +257,7 @@ if mx/alpha <= h && my/alpha <= h
 end
     
 
-if mx/alpha >= h && my/alpha <= h
+if alpha/mx >= h && alpha/my <= h
 % (+,+) v is positive (1,3)
     if new_y_r < new_y && new_y_l > new_y
        xverticies = [xleft, xleft + (new_y - new_y_l)/slope, xleft];
@@ -281,6 +283,7 @@ if C(i,j) == 0
 end
     
 if C(i,j) == 1
+    new_y =  h*floor((y+h+dy)/h); 
     xverticies = [x,x+h,x+h,x];
     yverticies = [new_y,y+h+dy,y+h+dy,new_y];
 end

@@ -39,8 +39,7 @@ if (mx >= 0 && my<=0) || (mx>0 && my>=0) %4 and 1
 end
 
 if (mx <= 0 && my>0) || (mx<0 && my<=0) %2 and 3
-    new_x =  h*floor((x+h+dx)/h);
-    
+    new_x =  h*floor((x+h+dx)/h); 
 end
 
 
@@ -53,7 +52,7 @@ end
 % (+,+), (2,3)
 % copied from (-,+) u is positive (1,2)
 if mx > 0 && my > 0
-if mx/alpha > h && my/alpha > h
+if alpha/mx > h && alpha/my > h
     if new_x_l < new_x && new_x_r < new_x
        xverticies = [new_x, x+h+dx, x+h+dx, new_x];
        yverticies = [y, y, yright, yright]; 
@@ -65,14 +64,14 @@ if mx/alpha > h && my/alpha > h
     end
 end
 % (-,+) u is positive (1,3)
-if mx/alpha >= h && my/alpha <= h 
+if alpha/mx >= h && alpha/my <= h 
     if new_x_l <= new_x && new_x_r > new_x
        xverticies = [new_x, new_x_r, new_x_r, new_x];
        yverticies = [y, y, yright, yright - (new_x_r - new_x)*slope]; 
     end
 end   
 % (-,+) u is positive (3,4)
-if mx/alpha <= h && my/alpha <= h
+if alpha/mx <= h && alpha/my <= h
     if new_x_l < new_x && new_x_r > new_x
         xverticies = [new_x, new_x_r, new_x_r, new_x];
         yverticies = [y, y, yright, yright - (new_x_r - (new_x))*slope];
@@ -84,7 +83,7 @@ if mx/alpha <= h && my/alpha <= h
     end
 end
 
-if mx/alpha <= h && my/alpha >= h
+if alpha/mx <= h && alpha/my >= h
 % (-,+) u is positive (4,2)
     if new_x_l < new_x && new_x_r < new_x
         xverticies = [new_x, x+h+dx, x+h+dx, new_x];
@@ -272,7 +271,7 @@ if mx < 0 && my < 0
     
     if new_x_l < new_x && new_x_r  > new_x
        xverticies = [new_x, new_x_r, x+h+dx, x+h+dx,new_x];
-       yverticies = [(new_x_l-new_x)*-slope + y,y,y,y+h,y+h]; 
+       yverticies = [(new_x_r-new_x)*-slope + y,y,y,y+h,y+h]; 
     end
     
     if new_x_l < new_x && new_x_r < new_x
@@ -319,6 +318,7 @@ if C(i,j) == 0
 end
     
 if C(i,j) == 1
+    new_x =  h*floor((x+h+dx)/h); 
     xverticies = [new_x,x+h+dx,x+h+dx,new_x];
     yverticies = [y,y,y+h,y+h];
 end

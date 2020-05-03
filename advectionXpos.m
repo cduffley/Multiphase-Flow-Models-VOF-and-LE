@@ -4,7 +4,8 @@ function [Cx,num_shift] =advectionXpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if 1 == 12 && j ==22
+% if i == 11 && j ==27
+if i == 12
     g = 0;
 end
 
@@ -23,9 +24,12 @@ if (mx >= 0 && my<=0) || (mx>0 && my>=0) %4 and 1
 end
 
 if (mx <= 0 && my>0) || (mx<0 && my<=0) %2 and 3
-    new_x =  h*floor((x+h+dx)/h);
-    
+    new_x =  h*floor((x+h+dx)/h);   
 end
+
+% if C(i,j) == 1
+%     new_x =  h*floor((x+h+dx)/h);   
+% end
 
 
 
@@ -36,7 +40,7 @@ end
 %(+,+) u is positive (2,3)
 if mx > 0 && my > 0
 
-if mx/alpha > h && my/alpha > h
+if alpha/mx > h && alpha/my > h
     if new_x_l >= new_x 
         xverticies = [new_x, new_x_r, new_x_r, new_x_l,new_x];
         yverticies = [y,y,yright,y+h,y+h];
@@ -49,7 +53,7 @@ if mx/alpha > h && my/alpha > h
 end
 
 % (2,4)
-if mx/alpha <= h && my/alpha >= h
+if alpha/mx <= h && alpha/my >= h
     
     if new_x_l >= new_x && x+dx <= new_x
         xverticies = [new_x, new_x_r,new_x_l,new_x];
@@ -69,7 +73,7 @@ if mx/alpha <= h && my/alpha >= h
 end
 
 % (1,4)
-if mx/alpha <= h && my/alpha <= h
+if alpha/mx <= h && alpha/my <= h
     
     if new_x_l >= new_x 
         xverticies = [new_x_l,new_x_r,new_x_l];
@@ -83,7 +87,7 @@ if mx/alpha <= h && my/alpha <= h
 end
 
 % (1,3)
-if mx/alpha >= h && my/alpha <= h
+if alpha/mx >= h && alpha/my <= h
     if new_x_l >= new_x %same thing
         xverticies = [xleft,xright,xright,xleft];
         yverticies = [y,y,yright,yleft];
@@ -175,7 +179,7 @@ if mx < 0 && my < 0
     
     if new_x_l < new_x && new_x_r  > new_x
        xverticies = [new_x, new_x_r, x+h+dx, x+h+dx,new_x];
-       yverticies = [(new_x_l-new_x)*-slope + y,y,y,y+h,y+h]; 
+       yverticies = [(new_x_r-new_x)*-slope + y,y,y,y+h,y+h]; 
     end
     
     if new_x_l < new_x && new_x_r < new_x
@@ -284,6 +288,7 @@ if C(i,j) == 0
 end
     
 if C(i,j) == 1
+    new_x =  h*floor((x+h+dx)/h);   
     xverticies = [new_x,x+h+dx,x+h+dx,new_x];
     yverticies = [y,y,y+h,y+h];
 end
@@ -292,13 +297,17 @@ num_shift = (new_x - x)/h;
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cx = zeros(size(C));
 if i+num_shift-1 >=1  %this means h is in meters
-Cx(i+num_shift-1,j) = area;
-Cx(i+num_shift,j) = C(i,j) - area;
+Cx(i+num_shift,j) = area;
+Cx(i+num_shift-1,j) = C(i,j) - area;
 else
 Cx(i+num_shift,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
 end
-if min(min(Cx)) < 0
+if max(max(Cx)) < 0 
+     g = 4;
+end
+
+if i+num_shift-1 == 10 && j==27
      g = 4;
 end
 

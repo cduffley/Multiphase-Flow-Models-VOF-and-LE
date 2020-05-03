@@ -20,9 +20,9 @@ h = y(3) - y(2);
 T = 2;
 
 % circle stuff
-cir_dis = 0:pi/100:2*pi; %decrease step size for more exact circle plot
-xcir = 0.15 * cos(cir_dis) + 0.5;
-ycir = 0.15 * sin(cir_dis) + 0.75;
+% cir_dis = 0:pi/100:2*pi; %decrease step size for more exact circle plot
+% xcir = 0.15 * cos(cir_dis) + 0.5;
+% ycir = 0.15 * sin(cir_dis) + 0.75;
 % plot(xcir,ycir)
 % hold on
 % for i = 1:Nx
@@ -48,8 +48,9 @@ u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
 u = 1.*X;
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 v = 0.*X;
-[Cr,xleft,xright,yleft,yright,mx,my] = advectionTot(x,y,h,mx,my,...
+[Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
+
 end
 
 % b = Y - (X+alpha./mx)*slope; %wont work for mx=0
