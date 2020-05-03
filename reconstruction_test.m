@@ -18,6 +18,12 @@ for i = 1:length(x)
         % Listing necessary parameters for area finding method
         xval = x(i);    yval = y(j);
         mxval = mx(i,j);    myval = my(i,j);
+
+        %testing specific values
+        if i == 16 && j == 24
+            adfs = 1;
+        end
+        
         if  mxval == 0 && myval == 0 && C(i,j) == 0
             % Check if mx and my are both 0 for C of 0 (not filled), 
             % which yields area of 0
@@ -86,11 +92,6 @@ for i = 1:length(x)
            highlim = h*mxval;
         end
         
-        %testing specific values
-        if i == 16 && j == 24;
-            adfs = 1;
-        end
-        
         alpha_calc = linspace(lowlim, highlim, 1000);
         % While loop to perform iteration calculation
         for k = 1:length(alpha_calc)
@@ -111,7 +112,10 @@ for i = 1:length(x)
         yright(i,j) = yr;
         yleft(i,j) = yl;
         area_actual(i,j) = area;
-        
+        if abs(area - C(i,j)*h^2) > h^2 * 1e-3
+        area_actual(i,j) = C(i,j) *h^2;
+        alpha_actual(i,j) = 0;
+        end
         end % End of overall if statement
 
     end

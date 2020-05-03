@@ -43,7 +43,7 @@ dt = t(3)-t(2);
 
 
 
-for i =1:1
+for i =1:2
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
 u = 1.*X;
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
