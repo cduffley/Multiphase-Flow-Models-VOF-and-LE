@@ -8,7 +8,7 @@ function [Cx,num_shift] =advectionXneg(x,y,h,i,j,mx,my,...
 
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
-if i == 14 && j ==21
+if i == 19 && j ==21
     g = 4;
 end
 
@@ -248,7 +248,7 @@ end
 % ====================================================================%
 % ====================================================================%
  % (+,-) u is positive
-if mx < 0 && my < 0
+if mx > 0 && my < 0
  if alpha/mx > 0 && (h - alpha/mx)*(slopeold) < h
     %(1,4) now (4,3)
     if new_x_l <= new_x && new_x_r > new_x

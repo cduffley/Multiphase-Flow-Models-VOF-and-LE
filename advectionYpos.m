@@ -4,6 +4,12 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
+if i ==14 && j == 22
+    g = 0;
+end
+
+
+
 dy = dt*v;
 slope = -1/(my/mx);
 % function that determines what cell the new geometry is on
