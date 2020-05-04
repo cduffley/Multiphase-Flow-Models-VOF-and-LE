@@ -4,7 +4,7 @@ function [Cx,num_shift] =advectionXpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if i == 21 && j ==26
+if i == 13 && j ==21
     g = 0;
 end
 
@@ -196,7 +196,7 @@ if mx < 0 && my < 0
     
     if new_x_l < new_x
        xverticies = [new_x, new_x_r, new_x_r, new_x];
-       yverticies = [(new_x_l-new_x)*-slope + yright,yright,y+h,y+h]; 
+       yverticies = [(new_x_r-new_x)*-slope + yright,yright,y+h,y+h]; 
     end
  end   
  
@@ -209,7 +209,7 @@ if mx < 0 && my < 0
     
     if new_x_l < new_x
        xverticies = [new_x, new_x_r, new_x_r, new_x];
-       yverticies = [(new_x_l-new_x)*-slope + yright,yright,y+h,y+h]; 
+       yverticies = [(new_x_r-new_x)*-slope + yright,yright,y+h,y+h]; 
     end
  end
 end
@@ -302,7 +302,7 @@ else
 Cx(i+num_shift,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;
 end
-if max(max(Cx)) < 0 
+if min(min(Cx)) < 0 
      g = 4;
 end
 

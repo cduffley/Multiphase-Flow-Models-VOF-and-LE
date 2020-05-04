@@ -25,7 +25,7 @@ if alpha/mx > h && alpha/my > h
 %counter clockwise
 %origin, right corner, right triangle, left triangle, left corner
     xindicies = [x,x+h, x+h,x+(alpha/my - h)/-slope, x]; %abs here
-    yindicies = [y,y,y+(alpha/mx - x) * -slope,y+h,y+h]; %abs here
+    yindicies = [y,y,y+(alpha/mx - h) * -slope,y+h,y+h]; %abs here
 
 area = polyarea(xindicies,yindicies);
 xright = x+h;
