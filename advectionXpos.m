@@ -4,8 +4,7 @@ function [Cx,num_shift] =advectionXpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-% if i == 11 && j ==27
-if i == 12
+if i == 21 && j ==26
     g = 0;
 end
 

@@ -20,7 +20,7 @@ for i = 1:length(x)
         mxval = mx(i,j);    myval = my(i,j);
 
         %testing specific values
-        if i == 19 && j == 20
+        if i == 21 && j == 26
             adfs = 1;
         end
         
