@@ -4,7 +4,7 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if i ==14 && j == 22
+if i ==14 && j == 20
     g = 0;
 end
 
@@ -28,9 +28,9 @@ elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3
     new_y =  h*floor((y+h+dy)/h); 
 end
 
-if C(i,j) == 1
-    new_y =  h*floor((y+h+dy)/h);   
-end
+% if C(i,j) == 1
+%     new_y =  h*floor((y+h+dy)/h);   
+% end
 
 
 %-------------------------------------------------------------%
@@ -104,13 +104,18 @@ if mx > 0 && my < 0
 if alpha/mx < 0 && (h - alpha/my)*(1/slope) < h
 % (+,-) v is positive (1,2)
     if new_y_l <= new_y && new_y_r > new_y
-       xverticies = [xright - (new_y_r - new_y)/slope, x+h, x+h, xright];
+%        xverticies = [xright - (new_y_r - new_y)/slope, x+h, x+h, xright];
+%        yverticies = [new_y, new_y, new_y_r, new_y_r];  
+            %old one, not sure what im missing
+       xverticies = [x,xright - (new_y_r - new_y)/slope, xright,x];
        yverticies = [new_y, new_y, new_y_r, new_y_r]; 
     end
     
     if new_y_l > new_y && new_y_r > new_y
-        xverticies = [x, x+h, x+h, xright, x];
-        yverticies = [new_y, new_y, y+h+dy, new_y_r, new_y_l];
+%         xverticies = [x, x+h, x+h, xright, x];
+%         yverticies = [new_y, new_y, y+h+dy, new_y_r, new_y_l];
+        xverticies = [x, xright, x];
+        yverticies = [new_y_l,new_y_r,new_y_l];
     end
 end
 if alpha/mx < 0 && (h - alpha/my)*(1/slope) > h
@@ -270,12 +275,12 @@ if alpha/mx >= h && alpha/my <= h
        yverticies = [new_y, new_y, new_y_l]; 
     end
     
-    if new_y_r >= new_y && new_y_l > new_y
+    if new_y_r >= new_y && y+dy < new_y
        xverticies = [xleft, xright, xright, xleft];
        yverticies = [new_y, new_y, new_y_r, new_y_l]; 
     end
     
-    if new_y_r > new_y && y+h+dy > new_y
+    if new_y_r > new_y && y+dy > new_y
        xverticies = [xleft, xright, xright, xleft];
        yverticies = [y+dy, y+dy, new_y_r, new_y_l]; 
     end
@@ -291,7 +296,7 @@ end
 if C(i,j) == 1
     new_y =  h*floor((y+h+dy)/h); 
     xverticies = [x,x+h,x+h,x];
-    yverticies = [new_y,y+h+dy,y+h+dy,new_y];
+    yverticies = [new_y,new_y,y+h+dy,y+h+dy];
 end
 
 
