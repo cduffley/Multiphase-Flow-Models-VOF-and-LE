@@ -61,11 +61,10 @@ for i = 1:length(x)
             yleft(i,j) = yval;
             continue
         else
-        % Perform for loop with many alpha values and choosing the value
-        % for alpha that produces the least error
+        % Perform for loop with different alpha values and choosing the value
+        % for an initial alpha guess that produces the least error
         slope = -1/(myval/mxval);
         % Producing alpha vector that is within constraints of geometric cell
-        %added >=
         if mxval >= 0 && myval >= 0
             % mx and my are positive
             lowlim = 0; 
@@ -92,46 +91,66 @@ for i = 1:length(x)
            highlim = h*mxval;
         end
         
-        alpha_calc = linspace(lowlim, highlim, 50);
-        % While loop to perform iteration calculation
+        alpha_calc = linspace(lowlim, highlim, 10);
+        % For loop to perform multiple alpha calculations
         for k = 1:length(alpha_calc)
             % Calculation of area using areafinder function
-            Area(k) = ...
+            area_calc(k) = ...
                 areafinder(xval,yval,mxval,myval,h,alpha_calc(k));
             % Evaluate error in area by comparing result to color function C
-            error(k) =  Area(k) - C(i,j)*h^2;  
+            error(k) =  area_calc(k) - C(i,j)*h^2;  
         end
             [M,I] = min(abs(error)); 
-            alpha(1) = alpha_calc(I);
             
-        tol = 1e-5; 
-        err = 1e10;   Count = 1;   MaxCount = 1000; 
-        
-            while abs(err(Count)) > tol  &&  Count <= MaxCount
+            % Setting initial alpha and parameters for while loop
+            alpha_w(1) = alpha_calc(I);
+            tol = 1e-8;     err = 1e10;   
+            Count = 1;      MaxCount = 1000; 
+            
+            % Using while loop as iterative solver to calculate alpha
+        while abs(err(Count)) > tol  &&  Count <= MaxCount
             % Calculation of area using areafinder function
-            Area(Count) = areafinder(xval,yval,mxval,myval,h,alpha(Count));
+            area_calc(Count) = ...
+                areafinder(xval,yval,mxval,myval,h,alpha_w(Count));
             
             % Evaluate error in area by comparing result to color function C
-            e1 =  Area(Count) - C(i,j)*h^2;  
+            e1 =  area_calc(Count) - C(i,j)*h^2;  
             err(Count) = e1;
             % Use perturbation for alpha if error is too large
             if abs(e1) > tol
-                alphapert = 1.0001*alpha(Count);
+                alphapert = 1.0001*alpha_w(Count);
                 Areapert = areafinder(xval,yval,mxval,myval,h,alphapert);
                 e2 =  Areapert - C(i,j)*h^2;
                 % Calculate a new alpha guess based on error analysis
-                alphanew = alpha(Count)-e1*(0.0001*alpha(Count))/(e2-e1);
+                alphanew = alpha_w(Count)-e1*(0.0001*alpha_w(Count))/(e2-e1);
                 Count = Count+1;   
-                alpha(Count) = alphanew;
+                alpha_w(Count) = alphanew;
                 err(Count) = err(Count-1);
             end   % End of iteration loop for perturbation
-            if Count == MaxCount
+            if Count == MaxCount % Check if convergence fails
+                % Inform user if convergence fails and recalculate alpha to
+                % achieve an alpha with the lowest error
                 fprintf(1,'Iteration Failed -- Hit maximum iteration limit %1.0f , %1.0f\n',i,j);
-            end   % End of overall iteration process
+                
+                alpha_w = linspace(lowlim, highlim, 1000);
+                % For loop to perform multiple alpha calculations
+                for k = 1:length(alpha_calc)
+                    % Calculation of area using areafinder function
+                    area_calc(k) = ...
+                        areafinder(xval,yval,mxval,myval,h,alpha_w(k));
+                    % Evaluate error in area by comparing result to color function C
+                    error(k) =  area_calc(k) - C(i,j)*h^2; 
+                end
+                [M,I] = min(abs(error));
+                alpha_w(end) = alpha_calc(I);
+            end   % End of iteration process
         end % End of while loop
-        alpha_actual(i,j) = alpha(end);
-        area_actual(i,j) = Area(end);
-        % want to pull out xright,xleft,yright,yleft for (i,j) as well
+        
+        % Define the final alpha and area values for usage
+        alpha_actual(i,j) = alpha_w(end);
+        area_actual(i,j) = area_calc(end);
+        
+        % Retrieve area, xright,xleft,yright,yleft for (i,j) as well
         [area,xl,xr,yl,yr] = ...
             areafinder(xval,yval,mxval,myval,h,alpha_actual(i,j));
         xright(i,j) = xr;
@@ -139,15 +158,16 @@ for i = 1:length(x)
         yright(i,j) = yr;
         yleft(i,j) = yl;
         area_actual(i,j) = area;
+        
         if abs(area - C(i,j)*h^2) > h^2 * 1e-3
         area_actual(i,j) = C(i,j) *h^2;
         alpha_actual(i,j) = 0;
         end
+        
         end % End of overall if statement
 
     end
-end
+end % End of both for loops
 Cr = area_actual/h^2; 
-
 
 end
