@@ -130,7 +130,7 @@ if alpha/mx <= h && alpha/my <= h
 %         xverticies = [x, x+h, x+h, xright, x];
 %         yverticies = [new_y, new_y, y+h+dy, new_y_r, new_y_l];
         xverticies = [x, xright, x];
-        yverticies = [new_y_l,new_y_r,new_y_l];
+        yverticies = [new_y_l,new_y_r,new_y_r];
     end
 end
 if alpha/mx >= h && alpha/my <= h

@@ -4,7 +4,7 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if i ==14 && j == 20
+if i ==15 && j == 20
     g = 0;
 end
 
@@ -80,12 +80,12 @@ if mx<0 && my<0
        yverticies = [new_y, new_y, y+h+dy, y+h+dy]; 
     end
     
-    if new_y_r > new_y && new_y_l > new_y
-       xverticies = [xleft, xleft + (new_y - new_y_l)/slope, xright, xright, xleft];
+    if new_y_r < new_y && new_y_l > new_y
+       xverticies = [xleft, xleft + (new_y_l - new_y)/slope, xright, xright, xleft];
        yverticies = [new_y_l, new_y, new_y, y+h+dy, y+h+dy]; 
     end
     
-    if new_y_r >= new_y && y+h+dy > new_y
+    if new_y_r >= new_y && new_y_l > new_y %changed y+h+dy to new_y_l
        xverticies = [xleft, xright, xright, xleft];
        yverticies = [new_y_l, new_y_r, y+h+dy, y+h+dy]; 
     end
@@ -115,7 +115,7 @@ if alpha/mx < 0 && (h - alpha/my)*(1/slope) < h
 %         xverticies = [x, x+h, x+h, xright, x];
 %         yverticies = [new_y, new_y, y+h+dy, new_y_r, new_y_l];
         xverticies = [x, xright, x];
-        yverticies = [new_y_l,new_y_r,new_y_l];
+        yverticies = [new_y_l,new_y_r,new_y_r];
     end
 end
 if alpha/mx < 0 && (h - alpha/my)*(1/slope) > h
