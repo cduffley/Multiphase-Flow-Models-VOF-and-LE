@@ -112,7 +112,7 @@ for i = 1:length(x)
         yright(i,j) = yr;
         yleft(i,j) = yl;
         area_actual(i,j) = area;
-        if (abs(area - C(i,j)*h^2))/(C(i,j)*h^2) > 0.08 %5 percent error
+        if (abs(area - C(i,j)*h^2))/(C(i,j)*h^2) > 0.11 %5 percent error
         area_actual(i,j) = C(i,j) *h^2;
         alpha_actual(i,j) = 0; %might mess with us, since alpha can =1,... 
         %...originally meant for values of 1, not ones really close to 0

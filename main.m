@@ -37,8 +37,8 @@ T = 2;
 % [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,1,80);
-% t = t(2:end); %getting rid of inital value (no advection at the time)
+t = linspace(0,2.1,80);
+t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(2)-t(1);
 
 
