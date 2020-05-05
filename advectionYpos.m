@@ -24,7 +24,7 @@ if (mx <= 0 && my>=0)  %2
 elseif (mx>0 && my>=0) %1
     new_y =  h*floor((new_y_l)/h);
     
-elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3
+elseif (mx >= 0 && my<0) || (mx<=0 && my<=0) %4 and 3
     new_y =  h*floor((y+h+dy)/h); 
 end
 

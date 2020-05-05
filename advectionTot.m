@@ -63,7 +63,7 @@ for i=2:length(x)-1
         elseif v(i,j) < 0
             [CnewY,shift_y] = advectionYneg(x(i),y(j),h,i,j,...
                 mx(i,j),my(i,j),xleft(i,j),xright(i,j),...
-                yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);;
+                yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);
         elseif v(i,j)==0
             CnewY = zeros(size(Cr));
             shift_y = 0;

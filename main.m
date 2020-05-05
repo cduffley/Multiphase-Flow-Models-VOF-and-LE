@@ -16,7 +16,7 @@ r = 0.15;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
-[X,Y] = meshgrid(x,y);
+[Y,X] = meshgrid(x,y);
 T = 2;
 
 % circle stuff
@@ -37,17 +37,16 @@ T = 2;
 % [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,T,100);
-t = t(2:end); %getting rid of inital value (no advection at the time)
-dt = t(3)-t(2);
+t = linspace(0,0.5,10);
+% t = t(2:end); %getting rid of inital value (no advection at the time)
+dt = t(2)-t(1);
 
 
-
-for i =1:1
+for i =1:length(t)
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
-u = -1*ones(size(X));
+% u = -1*ones(size(X));
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-v = 0*ones(size(X));
+% v = -1*ones(size(X));
 [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 
@@ -87,7 +86,11 @@ cir_yloc_y = [cir_yloc_y,cir_yloc_y];
 T = 2;
 t = T/2; %this is for book example, deliverable 2 has t = T/pi
 PHI = 1/pi .* cos(pi*t/T).*sin(pi.*X).^2 .* sin(pi.*Y).^2;
-
+t=0;
 u = -2.*cos(pi.*t./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
 v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
+
+figure
+quiver(X,Y,u,v)
+
 

@@ -38,7 +38,7 @@ if (mx <= 0 && my<=0) || (mx<0 && my>=0) %4 and 1 to %3 and 2
     new_x =  h*floor((new_x_r)/h);
 end
 
-if (mx >= 0 && my<0) || (mx>0 && my>=0) %2 and 3 to %4 and 1
+if (mx >= 0 && my<0) || (mx>=0 && my>=0) %2 and 3 to %4 and 1
     new_x =  h*floor((x+h+dx)/h); 
 end
 
@@ -328,7 +328,7 @@ if length(yverticies) == 5
 g = 0;
 end
 
-num_shift = -(new_x - x)/h;
+num_shift = round(-(new_x - x)/h);
 % if yverticies(1) == [0.593750000000000]
 %     g=0;
 % end
