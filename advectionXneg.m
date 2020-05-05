@@ -338,8 +338,8 @@ if C(i,j) >= 1.01
     area = area*C(i,j);
 end
 if i+num_shift-1 >=1  
-Cx(i+num_shift-1,j) = area;
-Cx(i+num_shift,j) = C(i,j) - area;
+Cx(i+num_shift,j) = area;
+Cx(i+num_shift+1,j) = C(i,j) - area;
 else
 Cx(i+num_shift,j) = area;
 Cx(i+num_shift,j) = C(i,j) - area;

@@ -37,22 +37,55 @@ T = 2;
 % [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,1,10);
+t = linspace(0,2,80);
 % t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(2)-t(1);
 
 
 for i =1:length(t)
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
-% u = -1*ones(size(X));
+% u = -0.1*ones(size(X));
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-% v = -1*ones(size(X));
+% v = 0.0*ones(size(X));
 [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 
 end
 
 % b = Y - (X+alpha./mx)*slope; %wont work for mx=0
+
+figure 
+hold on
+for i=1:length(Cr)
+    for j = 1:length(Cr)
+        if i==21 && j ==28
+            g = 4;
+        end
+        if Cr(i,j) >= 1e-12 && (my(i,j) > 1e-15 || my(i,j) < -1e-15)
+            slope(i,j) = -1/(my(i,j) / mx(i,j));
+            b(i,j,:) = yleft(i,j) - slope(i,j)*(xleft(i,j));
+            xline(i,j,:) = linspace(xleft(i,j), xright(i,j),10);
+            yline(i,j,:) = slope(i,j)*xline(i,j,:) + b(i,j,:);
+            xp = zeros(1,10);
+            yp = zeros(1,10);
+            xp(:) = xline(i,j,:);
+            yp(:) = yline(i,j,:);
+            plot(xp,yp,'k','LineWidth',1.5)
+        end
+        
+    end
+end
+% circle stuff
+cir_dis = 0:pi/100:2*pi; %decrease step size for more exact circle plot
+xcir = 0.15 * cos(cir_dis) + 0.5;
+ycir = 0.15 * sin(cir_dis) + 0.75;
+plot(xcir,ycir)
+hold on
+for i = 1:Nx
+    plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
+    plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
+end
+
 
 
 
