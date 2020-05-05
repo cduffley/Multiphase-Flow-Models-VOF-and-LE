@@ -318,7 +318,7 @@ if C(i,j) == 0
     yverticies = [0,0,0];
 end
     
-if C(i,j) == 1
+if C(i,j) >= 1
     new_y =  h*floor((y+h+dy)/h); 
     xverticies = [x,x+h,x+h,x];
     yverticies = [new_y,new_y,y+h+dy,y+h+dy];
@@ -328,6 +328,9 @@ end
 area = polyarea(xverticies,yverticies)/h^2;
 Cy = zeros(size(C));
 num_shift = -(new_y - y)/h;
+if C(i,j) >= 1.01
+    area = area*C(i,j);
+end
 
 if j + num_shift-1 >= 1
 Cy(i,j+num_shift) = area;

@@ -286,7 +286,7 @@ if C(i,j) == 0
     yverticies = [0,0,0];
 end
     
-if C(i,j) == 1
+if C(i,j) >= 1
     new_x =  h*floor((x+h+dx)/h);   
     xverticies = [new_x,x+h+dx,x+h+dx,new_x];
     yverticies = [y,y,y+h,y+h];
@@ -295,6 +295,9 @@ end
 num_shift = (new_x - x)/h;
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cx = zeros(size(C));
+if C(i,j) >= 1.01
+    area = area*C(i,j);
+end
 if i+num_shift-1 >=1  %this means h is in meters
 Cx(i+num_shift,j) = area;
 Cx(i+num_shift-1,j) = C(i,j) - area;

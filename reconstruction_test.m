@@ -20,7 +20,7 @@ for i = 1:length(x)
         mxval = mx(i,j);    myval = my(i,j);
 
         %testing specific values
-        if i == 12 && j == 22
+        if C(i,j) > 1.2
             adfs = 1;
         end
         
@@ -52,9 +52,9 @@ for i = 1:length(x)
             yright(i,j) = yval;
             yleft(i,j) = yval;
             continue
-        elseif C(i,j) == 1
+        elseif C(i,j) >= 1
             alpha_actual(i,j) = 0;
-             area_actual(i,j) = 1*h^2;
+             area_actual(i,j) = C(i,j)*h^2;
             xright(i,j) = xval;
             xleft(i,j) = xval;
             yright(i,j) = yval;
