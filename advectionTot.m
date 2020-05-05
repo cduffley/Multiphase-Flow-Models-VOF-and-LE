@@ -34,6 +34,20 @@ for i=2:length(x)-1
          g = 4;
       end
       Cnew = Cnew + CnewX;
+        
+        if i + shift_x-1 >= 1 && Cnew(i+shift_x-1,j) > 1.01 && u(i,j) > 0
+            % if org is > 1, difference is added to spill over cell
+            Cnew(i+shift_x,j) =Cnew(i+shift_x,j)+ Cnew(i+shift_x-1,j)-1;
+            Cnew(i+shift_x-1,j) = 1;
+%             if Cnew(i+num_shift,j) > 1.01 %second correction
+%                 
+%             end
+        end
+        if Cnew(i+shift_x,j) > 1.01 && u(i,j) < 0
+            Cnew(i+shift_x,j) =Cnew(i+shift_x,j)+ Cnew(i+shift_x+1,j)-1;
+            Cnew(i+shift_x+1,j) = 1;
+        end
+      
       if j==24
           g = 3;
       end
@@ -75,6 +89,18 @@ for i=2:length(x)-1
 %     Cnew(i,j+shift_y) = Cnew(i,j+shift_y) + CnewX(i,j+shift_y);
 %     Cnew(i,j+shift_y-1) = Cnew(i,j+shift_y-1) + CnewX(i,j+shift_y-1);
       Cnew = Cnew + CnewY;
+        if j + shift_y-1 >= 1 && Cnew(i,j+shift_y-1) > 1.01 && v(i,j) > 0
+            % if org is > 1, difference is added to spill over cell
+            Cnew(i,j+shift_y) =Cnew(i,j+shift_y)+ Cnew(i,j+shift_y-1)-1;
+            Cnew(i,j+shift_y-1) = 1;
+%             if Cnew(i+num_shift,j) > 1.01 %second correction
+%                 
+%             end
+        end
+        if Cnew(i,j+shift_y) > 1.01 && v(i,j) < 0
+            Cnew(i,j+shift_y) =Cnew(i,j+shift_y)+ Cnew(i,j+shift_y+1)-1;
+            Cnew(i,j+shift_y+1) = 1;
+        end
        if max(max(Cnew)) > 1.01
             d = 0;
        end
