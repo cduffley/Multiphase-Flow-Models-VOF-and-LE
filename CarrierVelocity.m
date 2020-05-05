@@ -9,10 +9,10 @@ function [u,v] = CarrierVelocity(x,y)
 % 
 % %For Quiver Plot
 % uPlot = 2*(sin(pi*X).^2).*(sin(pi*Y).*cos(pi*Y));
-% vPlot = 2*(sin(pi*X).*cos(pi*X)).*(sin(pi*Y).^2);
+% vPlot = -2*(sin(pi*X).*cos(pi*X)).*(sin(pi*Y).^2);
 
 %streamfcn = (1/pi)*(sin(pi*x)^2).*(sin(pi*y)^2);
 u = 2*(sin(pi*x).^2).*(sin(pi*y).*cos(pi*y));
-v = 2*(sin(pi*x).*cos(pi*x)).*(sin(pi*y).^2);
+v = -2*(sin(pi*x).*cos(pi*x)).*(sin(pi*y).^2);
 
 %quiver(X,Y,uPlot,vPlot)
