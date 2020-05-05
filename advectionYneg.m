@@ -136,18 +136,22 @@ end
 if alpha/mx >= h && alpha/my <= h
 % (+,-) v is positive (1,3) To 1(1,3)
     if new_y_l < new_y && new_y_r > new_y
-       xverticies = [xright - (new_y_r - new_y)/slope, xright, xright];
-       yverticies = [new_y, new_y, new_y_r]; 
+%        xverticies = [xright - (new_y_r - new_y)/slope, xright, xright];
+%        yverticies = [new_y, new_y, new_y_r]; 
+       xverticies = [xleft,xright - (new_y_r - new_y)/slope,xright,xright,xleft];
+       yverticies = [new_y,new_y,new_y_r,y+h+dy,y+h+dy];
+       
     end
     
     if new_y_l > new_y && new_y_r > new_y
         xverticies = [x, xright, xright, x];
-        yverticies = [new_y, new_y, new_y_r, new_y_l];
+%       yverticies = [new_y, new_y, new_y_r, new_y_l];
+        yverticies = [new_y_l, new_y_r, y+h+dy, y+h+dy];
     end
     
-    if new_y_l >= new_y && y+dy > new_y
+    if new_y_l < new_y && new_y_r <= new_y
         xverticies = [x, xright, xright, x];
-        yverticies = [y+h+dy, y+h+dy, new_y_r, new_y_l];
+        yverticies = [new_y,new_y,y+h+dy, y+h+dy];
     end
 end
 
@@ -206,14 +210,14 @@ if alpha/mx > h && alpha/my < h
        yverticies = [new_y, new_y, new_y_r]; 
     end
     
-    if new_y_l > new_y && new_y_r > new_y
+    if new_y_l > new_y &&  y+dy<= new_y
         xverticies = [x, xright, xright, x];
         yverticies = [new_y, new_y, new_y_r, new_y_l];
     end
     
     if new_y_l >= new_y && y+dy > new_y
         xverticies = [x, xright, xright, x];
-        yverticies = [y+h+dy, y+h+dy, new_y_r, new_y_l];
+        yverticies = [y+dy, y+dy, new_y_r, new_y_l];
     end
 end
 
@@ -341,8 +345,8 @@ end
 %     Cy = zeros(size(C));
 % end
 
-if area < 0
-    g=4;
+if min(min(Cy)) < 0
+    g = 0;
 end
 
 

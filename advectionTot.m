@@ -69,13 +69,15 @@ for i=2:length(x)-1
             shift_y = 0;
             CnewY(i,j) =Cr(i,j);
         end
-        if i == 16 && j == 24
+        if i == 15 && j == 27
             d = 0;
         end
 %     Cnew(i,j+shift_y) = Cnew(i,j+shift_y) + CnewX(i,j+shift_y);
 %     Cnew(i,j+shift_y-1) = Cnew(i,j+shift_y-1) + CnewX(i,j+shift_y-1);
       Cnew = Cnew + CnewY;
-      
+       if max(max(Cnew)) > 1.01
+            d = 0;
+       end
     end
 end
 

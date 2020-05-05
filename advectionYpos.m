@@ -4,7 +4,7 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if i ==15 && j == 20
+if i ==15 && j == 30
     g = 0;
 end
 
@@ -18,10 +18,10 @@ slope = -1/(my/mx);
 new_y_r = yright + dy; %new_y_right
 new_y_l = yleft + dy; %new_y_left
 
-if (mx <= 0 && my>=0)  %2
+if (mx >= 0 && my>=0)  %1
     new_y =  h*floor((new_y_r)/h);
     
-elseif (mx>0 && my>=0) %1
+elseif (mx<0 && my>=0) %2
     new_y =  h*floor((new_y_l)/h);
     
 elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3
@@ -81,7 +81,7 @@ if mx<0 && my<0
     end
     
     if new_y_r < new_y && new_y_l > new_y
-       xverticies = [xleft, xleft + (new_y_l - new_y)/slope, xright, xright, xleft];
+       xverticies = [xleft, xleft + (new_y - new_y_l)/slope, xright, xright, xleft];
        yverticies = [new_y_l, new_y, new_y, y+h+dy, y+h+dy]; 
     end
     
@@ -121,18 +121,22 @@ end
 if alpha/mx < 0 && (h - alpha/my)*(1/slope) > h
 % (+,-) v is positive (1,3)
     if new_y_l < new_y && new_y_r > new_y
-       xverticies = [xright - (new_y_r - new_y)/slope, xright, xright];
-       yverticies = [new_y, new_y, new_y_r]; 
+%        xverticies = [xright - (new_y_r - new_y)/slope, xright, xright];
+%        yverticies = [new_y, new_y, new_y_r]; 
+       xverticies = [xleft,xright - (new_y_r - new_y)/slope,xright,xright,xleft];
+       yverticies = [new_y,new_y,new_y_r,y+h+dy,y+h+dy];
+       
     end
     
     if new_y_l > new_y && new_y_r > new_y
         xverticies = [x, xright, xright, x];
-        yverticies = [new_y, new_y, new_y_r, new_y_l];
+%       yverticies = [new_y, new_y, new_y_r, new_y_l];
+        yverticies = [new_y_l, new_y_r, y+h+dy, y+h+dy];
     end
     
-    if new_y_l >= new_y && y+dy > new_y
+    if new_y_l < new_y && new_y_r <= new_y
         xverticies = [x, xright, xright, x];
-        yverticies = [y+h+dy, y+h+dy, new_y_r, new_y_l];
+        yverticies = [new_y,new_y,y+h+dy, y+h+dy];
     end
 end
 
@@ -189,14 +193,14 @@ if alpha/mx < 0 && slope*h + alpha/my < h
        yverticies = [new_y, new_y, new_y_r]; 
     end
     
-    if new_y_l > new_y && new_y_r > new_y
+    if new_y_l > new_y && y+dy<= new_y         %new_y_r > new_y  
         xverticies = [x, xright, xright, x];
         yverticies = [new_y, new_y, new_y_r, new_y_l];
     end
     
     if new_y_l >= new_y && y+dy > new_y
         xverticies = [x, xright, xright, x];
-        yverticies = [y+h+dy, y+h+dy, new_y_r, new_y_l];
+        yverticies = [y+dy, y+dy, new_y_r, new_y_l];
     end
 end
 
@@ -311,8 +315,8 @@ else
 Cy(i,j+num_shift) = area;
 end
 
-if area < 0
-    g=4;
+if max(max(Cy)) > 1
+    g = 0;
 end
 
 

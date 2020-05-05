@@ -47,7 +47,7 @@ for i =1:1
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
 u = 0*ones(size(X));
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-v = 1*ones(size(X));
+v = -1*ones(size(X));
 [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 
