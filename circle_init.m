@@ -89,8 +89,9 @@ C = CFDtri2(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y,C);
 
-%%
-
+%% Setting the rest of the values 0 or 1 to complete the color function
+% Essentially scans for values greater than 1, and then places a zero or 1
+% for the color function outside or inside the circle
 jhit = 0;
 jend = 0;
 for i=1:length(x)
@@ -108,24 +109,10 @@ ended = false;
            jend = j;
             ended = true;
         end
-        
     end
     if hit && ended 
     C(i,jhit:jend) = 1;
     end
- 
 end
-
-
-
-
-
-
-
-
-
-
-
-
 
 end

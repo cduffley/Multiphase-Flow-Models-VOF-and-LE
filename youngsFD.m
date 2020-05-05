@@ -1,5 +1,10 @@
 function [mx,my] = youngsFD(h,x,y,C)
 
+% This performs Youngs Finite Difference, shown in pg. 99 of Tryggvason et.
+% al, Direct Numerical Simulations of Gas-Liquid Multiphase Flows
+
+% It outputs the mx and my values for a given color function C.
+
 mxsum = zeros(1,length(x));
 mysum = zeros(1,length(y));
 magnitude = zeros(1,length(y));

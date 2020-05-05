@@ -28,7 +28,9 @@ function C = CFDtri1(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
 % |oooooooooooooooo|oooooooooooo\\oo|oooooooooooooooo|
 % once it does this, it determins the area of the small triangle to the
 % left of the middle point (between A and B) and also the polygon to to the
-% right of the middle point 
+% right of the middle point (between B and C). Of course, this is just an
+% example of the bottom left of the circle, which is repeated for the four
+% quadrants of the circle
 
 
 [m,leftcir_min] = min(cir_yloc_x1); %xvales on left

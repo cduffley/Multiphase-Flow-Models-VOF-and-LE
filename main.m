@@ -8,7 +8,7 @@ close all
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). It also fails for uneven meshes.
-Nx =333; Ny = Nx;
+Nx =33; Ny = Nx;
 x_pos = 0.5; y_pos = 0.75; r = 0.15;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
@@ -22,7 +22,7 @@ T = 2;
 [mx,my] = youngsFD(h,x,y,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,1,40);
+t = linspace(0,1,6);
 t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(2)-t(1);
 
