@@ -10,7 +10,7 @@ yverticies = [0,0,0];
 % new_y = y + floor((dt*v)/h) * h;
 % new_y_r = yright + dy; %new_y_right
 % new_y_l = yleft + dy; %new_y_left
-if i == 15 && j == 29 %18
+if i == 12 && j == 21 %18
     g = 0 ;
 end
 
@@ -313,12 +313,12 @@ if alpha/mx < 0 && (h - alpha/my)*(1/slopeold) > h
 end
 end
 
-if C(i,j) == 0
+if C(i,j) <= 0.0002 && C(i,j) >= -0.0002
     xverticies = [0,0,0]; 
     yverticies = [0,0,0];
 end
     
-if C(i,j) >= 1
+if C(i,j) >= 0.99990
     new_y =  h*floor((y+h+dy)/h); 
     xverticies = [x,x+h,x+h,x];
     yverticies = [new_y,new_y,y+h+dy,y+h+dy];

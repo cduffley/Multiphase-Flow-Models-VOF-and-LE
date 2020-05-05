@@ -281,12 +281,12 @@ if alpha/mx > 0 && (h - alpha/mx)*(slope) > h
 end
 end
 
-if C(i,j) == 0
+if C(i,j) <= 0.0002 && C(i,j) >= -0.0002
     xverticies = [0,0,0]; 
     yverticies = [0,0,0];
 end
     
-if C(i,j) >= 1
+if C(i,j) >= 0.99990
     new_x =  h*floor((x+h+dx)/h);   
     xverticies = [new_x,x+h+dx,x+h+dx,new_x];
     yverticies = [y,y,y+h,y+h];

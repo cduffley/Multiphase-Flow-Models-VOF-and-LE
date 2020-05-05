@@ -37,16 +37,16 @@ T = 2;
 % [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,2,80);
+t = linspace(0,1,40);
 t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(2)-t(1);
 
 
 for i =1:length(t)
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
-% u = -0.1*ones(size(X));
+% u = 0.1*ones(size(X));
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-% v = 0.0*ones(size(X));
+% v = 0.1*ones(size(X));
 [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 
@@ -70,7 +70,7 @@ for i=1:length(Cr)
             yp = zeros(1,10);
             xp(:) = xline(i,j,:);
             yp(:) = yline(i,j,:);
-            plot(xp,yp,'k','LineWidth',1.5)
+            plot(xp,yp,'k','LineWidth',1.1)
         end
         
     end
@@ -85,7 +85,7 @@ for i = 1:Nx
     plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
     plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
 end
-
+title('Diagonal right shift')
 
 
 

@@ -4,7 +4,7 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if i ==13 && j == 5
+if i ==16 && j == 21
     g = 0;
 end
 
@@ -292,12 +292,12 @@ end
 
 end
 
-if C(i,j) == 0
+if C(i,j) <= 0.0002 && C(i,j) >= -0.0002
     xverticies = [0,0,0]; 
     yverticies = [0,0,0];
 end
     
-if C(i,j) >= 1
+if C(i,j) >= 0.99990
     new_y =  h*floor((y+h+dy)/h); 
     xverticies = [x,x+h,x+h,x];
     yverticies = [new_y,new_y,y+h+dy,y+h+dy];
