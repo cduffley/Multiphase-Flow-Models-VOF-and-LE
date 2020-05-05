@@ -292,7 +292,7 @@ if C(i,j) >= 0.99990
     yverticies = [y,y,y+h,y+h];
 end
 
-num_shift = (new_x - x)/h;
+num_shift = round((new_x - x)/h);
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cx = zeros(size(C));
 if C(i,j) >= 1.01

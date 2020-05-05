@@ -324,10 +324,6 @@ if C(i,j) >= 0.99990
 end
 
 
-if length(yverticies) == 5
-g = 0;
-end
-
 num_shift = round(-(new_x - x)/h);
 % if yverticies(1) == [0.593750000000000]
 %     g=0;

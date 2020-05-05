@@ -327,7 +327,7 @@ end
 
 area = polyarea(xverticies,yverticies)/h^2;
 Cy = zeros(size(C));
-num_shift = -(new_y - y)/h;
+num_shift = round(-(new_y - y)/h);
 if C(i,j) >= 1.01
     area = area*C(i,j);
 end

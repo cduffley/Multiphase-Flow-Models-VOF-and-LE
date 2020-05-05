@@ -306,7 +306,7 @@ end
 
 area = polyarea(xverticies,yverticies)/h^2; %fraction!!
 Cy = zeros(size(C));
-num_shift = (new_y - y)/h;%this means h is in meters
+num_shift = round((new_y - y)/h);%this means h is in meters
 if C(i,j) >= 1.01
     area = area*C(i,j);
 end

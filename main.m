@@ -8,7 +8,7 @@ close all
 
 % currently the algorthim fails if the circle falls exactly on the 
 % line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =33;
+Nx =333;
 Ny = Nx;
 x_pos = 0.5;
 y_pos = 0.75;
@@ -42,11 +42,11 @@ t = t(2:end); %getting rid of inital value (no advection at the time)
 dt = t(2)-t(1);
 
 
-for i =1:length(t)
+for i =1:1%length(t)
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
-% u = 0.1*ones(size(X));
+u = 0.1*ones(size(X));
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-% v = 0.1*ones(size(X));
+v = 0.1*ones(size(X));
 [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 
