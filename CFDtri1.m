@@ -2,26 +2,58 @@ function C = CFDtri1(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     cir_xloc_y,cir_xloc_y1, cir_xloc_y2, cir_yloc_x1,cir_yloc_x2,...
     ynodefromx1, ynodefromx2, xnodefromy1, xnodefromy2, xnode, ynode,...
     h,r,x,y,C)
+% For analyzing the function line-by-line, refer to CFDtri2, since it does
+% a very similar process but the variable names are more intuitive. Since
+% it was written later, it is also more robust and can likely perform for
+% uneven meshes. This function *should* do fine with uneven meshes, but it
+% has not been tested for many different scenarios.
+
+% The two triangle functions determine the areas of triangle and polygonal
+% shape created by the intersection of two sides of the grid. The pattern
+% that this fucntion checks is the alternating x-grid and y-grid
+% intersections. This function checks for the pattern:
+% "y-grid intersection, x-grid intersection, y-grid intersection"
+% |ooooooooo\\ooooo|oooooooooooooooo|oooooooooooooooo|
+% |oooooooooo\\oooo|oooooooooooooooo|oooooooooooooooo|
+% |-----------X----|----------------|----------------| <-- this point A
+% |oooooooooooo\\oo|oooooooooooooooo|oooooooooooooooo|
+% |oooooooooooooo\\|oooooooooooooooo|oooooooooooooooo|
+% |ooooooooooooooo\X\ooooooooooooooo|oooooooooooooooo|<-- this point B
+% |oooooooooooooooo|o\\ooooooooooooo|oooooooooooooooo|
+% |oooooooooooooooo|ooo\\ooooooooooo|oooooooooooooooo|
+% |----------------|-----X----------|----------------|<-- this point C
+% |oooooooooooooooo|ooooo\\ooooooooo|oooooooooooooooo|
+% |oooooooooooooooo|oooooooo\\\ooooo|oooooooooooooooo|
+% |oooooooooooooooo|oooooooooo\\oooo|oooooooooooooooo|
+% |oooooooooooooooo|oooooooooooo\\oo|oooooooooooooooo|
+% once it does this, it determins the area of the small triangle to the
+% left of the middle point (between A and B) and also the polygon to to the
+% right of the middle point 
+
+
 [m,leftcir_min] = min(cir_yloc_x1); %xvales on left
 [m,rightcir_max] = max(cir_yloc_x2); %xvalues on right
 
 %%bottom left
 isdoubletri = false;
-% for i_xy=1:leftcir_min %from 1 to half the bottom (left half)
+
 for i_xy=1:leftcir_min %through the left x values, first half is the bottom
     
-    for i_xx=1:length(cir_xloc_y1) %1 to the whole bottom half (also the whole lenght of x mesh values (no repeats)
-        trap = false;
+    for i_xx=1:length(cir_xloc_y1) %runs through the bottom y values
+        trap = false;              % determining if calculated y values 
+                                   % (from x-grid) surround it
         if cir_yloc_x1(i_xy) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x1(i_xy) <= cir_xloc_x(i_xx+1) && trap ==false
    
            if i_xy ~=leftcir_min && (cir_yloc_x1(i_xy+1) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x1(i_xy+1) <= cir_xloc_x(i_xx+1))
+                %making sure it is not a trapezoid
              trap = true;
            end
            
            if i_xy ~= 1 && (cir_yloc_x1(i_xy-1) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x1(i_xy-1) <= cir_xloc_x(i_xx+1))
+              %making sure it is not a trapezoid
             trap = true;
            end
            
@@ -61,11 +93,11 @@ for i_xy=1:leftcir_min %through the left x values, first half is the bottom
     end   
 end
 
-%% top left, change node values, y1 to y2 to get tops
+%% top left
+% repeat process
 isdoubletri = false;
-%for i_xy=rightcir_min:length(cir_yloc_x1) %right half top circle
-for i_xy=leftcir_min:length(cir_yloc_x1) %values on left, second half is top
-    for i_xx=1:length(cir_xloc_y2) % all mesh values given 
+for i_xy=leftcir_min:length(cir_yloc_x1) 
+    for i_xx=1:length(cir_xloc_y2) 
     trap = false;
          
            if cir_yloc_x1(i_xy) >= cir_xloc_x(i_xx) && ...
@@ -120,11 +152,11 @@ for i_xy=leftcir_min:length(cir_yloc_x1) %values on left, second half is top
 end
 
 %% 3rd one, bottom right
-% x will be at second half of 1, y will be on 2 
+% repeat process 
 isdoubletri = false;
-for i_xy=1:rightcir_max %values on right, first half is bottom
+for i_xy=1:rightcir_max
     
-    for   i_xx=1:length(cir_xloc_y2)-1 %skips last point, i believe others that start on left skip point inherently
+    for   i_xx=1:length(cir_xloc_y2)-1 
     trap = false;
         
        if cir_yloc_x2(i_xy) >= cir_xloc_x(i_xx) && ...
@@ -175,9 +207,9 @@ for i_xy=1:rightcir_max %values on right, first half is bottom
 end
 
 %% 4th one, top right
+% repeat process
 isdoubletri = false;
 
-% for i_xy=rightcir_max:length(cir_yloc_x2)
 for i_xy=rightcir_max:length(cir_yloc_x2)
     
      for i_xx=rightcir_max:length(cir_xloc_x)-1
@@ -185,7 +217,7 @@ for i_xy=rightcir_max:length(cir_yloc_x2)
        trap = false;
         if cir_yloc_x2(i_xy) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x2(i_xy) <= cir_xloc_x(i_xx+1) && trap ==false
-            %changed cir_xloc_y2 to cir_yloc_x2
+        
             if i_xy ~=length(cir_yloc_x2) && (cir_yloc_x2(i_xy+1) >= cir_xloc_x(i_xx) && ...
                 cir_yloc_x2(i_xy+1) <= cir_xloc_x(i_xx+1))
              trap = true;

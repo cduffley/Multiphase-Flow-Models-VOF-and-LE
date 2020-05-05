@@ -7,34 +7,19 @@ close all
 
 
 % currently the algorthim fails if the circle falls exactly on the 
-% line or corner (try Nx=Ny=11). also for uneven meshes.
-Nx =333;
-Ny = Nx;
-x_pos = 0.5;
-y_pos = 0.75;
-r = 0.15;
+% line or corner (try Nx=Ny=11). It also fails for uneven meshes.
+Nx =333; Ny = Nx;
+x_pos = 0.5; y_pos = 0.75; r = 0.15;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
 [Y,X] = meshgrid(x,y);
 T = 2;
 
-% circle stuff
-% cir_dis = 0:pi/100:2*pi; %decrease step size for more exact circle plot
-% xcir = 0.15 * cos(cir_dis) + 0.5;
-% ycir = 0.15 * sin(cir_dis) + 0.75;
-% plot(xcir,ycir)
-% hold on
-% for i = 1:Nx
-%     plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
-%     plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
-% end
-
 %initalizing circle, initial mx,my and reconstruction
 [C,cir_xloc_x,cir_yloc_y,cir_xloc_y,cir_yloc_x] = ...
         circle_init(x,y,h,x_pos,y_pos,r);
 [mx,my] = youngsFD(h,x,y,C);
-% [Cr,xleft,xright,yleft,yright,alpha] = reconstruct(x,y,h,mx,my,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
 t = linspace(0,1,40);

@@ -4,15 +4,17 @@ function C = CFDtri2(cir_xloc_x,cir_yloc_y,cir_yloc_x, ...
     h,r,x,y,C)
 
 
-[m,leftcir_min] = min(cir_xloc_y1); %takes the min of the bottom (y1(x)), tells us how many xvalues used on left
+[m,leftcir_min] = min(cir_xloc_y1); %takes the min of the bottom (y1(x)), 
+                                    %tells us how many xvalues used on left
 [m,rightcir_max] = max(cir_xloc_y2); %how many x values used on right
-[m,botcir_min] = min(cir_yloc_x1); %takes the min of the left side (x1(y)) tells us how many yvalues used on bottom
+[m,botcir_min] = min(cir_yloc_x1); %takes the min of the left side (x1(y)) 
+                                   %tells us how many yvalues used on bottom
 [m,topcir_max] = max(cir_yloc_x2); %how many y values used on the top
 
 botleft_ycir_x = cir_yloc_x1(1:botcir_min); % 1 for left
 botleft_xcir_x = cir_xloc_x(1:leftcir_min); 
 botleft_ycir_y = cir_yloc_y(1:botcir_min);
-botleft_xcir_y = cir_xloc_y1(1:leftcir_min);
+botleft_xcir_y = cir_xloc_y1(1:leftcir_min); % 1 for bot
 botleft_xnodefromy = xnodefromy1(1:botcir_min); %1 for left
 botleft_ynodefromx = ynodefromx1(1:leftcir_min); %1 for bot
 
