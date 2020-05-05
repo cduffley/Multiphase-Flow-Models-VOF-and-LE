@@ -4,7 +4,7 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
 yverticies = [0,0,0];
 
-if i ==15 && j == 30
+if i ==13 && j == 5
     g = 0;
 end
 
@@ -18,10 +18,10 @@ slope = -1/(my/mx);
 new_y_r = yright + dy; %new_y_right
 new_y_l = yleft + dy; %new_y_left
 
-if (mx >= 0 && my>=0)  %1
+if (mx <= 0 && my>=0)  %2
     new_y =  h*floor((new_y_r)/h);
     
-elseif (mx<0 && my>=0) %2
+elseif (mx>0 && my>=0) %1
     new_y =  h*floor((new_y_l)/h);
     
 elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3

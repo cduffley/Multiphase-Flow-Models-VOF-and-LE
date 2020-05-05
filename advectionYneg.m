@@ -10,32 +10,34 @@ yverticies = [0,0,0];
 % new_y = y + floor((dt*v)/h) * h;
 % new_y_r = yright + dy; %new_y_right
 % new_y_l = yleft + dy; %new_y_left
+if i == 15 && j == 29 %18
+    g = 0 ;
+end
 
 dy = dt*-v;
 % function that determines what cell the new geometry is on
 % x + dt*u  <- floor to nearest x grid (new x right)
 %the value will be called new_x
-ylefthold= yleft;
-yleft = y+h/2 - yright + y+h/2; %switch l and r %hold
-yright = y+h/2 - ylefthold + y+h/2;
-xlefthold = xleft;
-xleft = xright;
-xright = xlefthold;
+% ylefthold= yleft;
+yleft = y+h/2 - yleft + y+h/2; %switch l and r %hold
+yright = y+h/2 - yright + y+h/2;
+% xlefthold = xleft;
+% xleft = xright;
+% xright = xlefthold;
 
 
 new_y_r = yright + dy; %new_x_right
 new_y_l = yleft + dy; %new_x_left
-slope = my/mx; %switching to opposite
 slopeold = -1/(my/mx); %for condition statements
 slope = -slopeold; %im an idiot
 
-if (mx <= 0 && my>=0)  %2
+if (mx <= 0 && my<=0)  %3 vals, 2 model
     new_y =  h*floor((new_y_r)/h);
     
-elseif (mx>0 && my>=0) %1
+elseif (mx>0 && my<=0) %1
     new_y =  h*floor((new_y_l)/h);
     
-elseif (mx >= 0 && my<0) || (mx<0 && my<=0) %4 and 3
+elseif (mx <= 0 && my>0) || (mx>0 && my>=0) %4 and 3
     new_y =  h*floor((y+h+dy)/h); 
 end
 
@@ -93,12 +95,12 @@ if mx<0 && my>0
        yverticies = [new_y, new_y, y+h+dy, y+h+dy]; 
     end
     
-    if new_y_r > new_y && new_y_l > new_y
+    if new_y_r < new_y && new_y_l > new_y
        xverticies = [xleft, xleft + (new_y - new_y_l)/slope, xright, xright, xleft];
        yverticies = [new_y_l, new_y, new_y, y+h+dy, y+h+dy]; 
     end
     
-    if new_y_r >= new_y && y+h+dy > new_y
+    if new_y_r >= new_y && new_y_l > new_y %changed y+h+dy to new_y_l
        xverticies = [xleft, xright, xright, xleft];
        yverticies = [new_y_l, new_y_r, y+h+dy, y+h+dy]; 
     end
@@ -329,7 +331,7 @@ num_shift = -(new_y - y)/h;
 
 if j + num_shift-1 >= 1
 Cy(i,j+num_shift) = area;
-Cy(i,j+num_shift-1) = C(i,j) - area;
+Cy(i,j+num_shift+1) = C(i,j) - area;
 else
 Cy(i,1) = area;
 end
