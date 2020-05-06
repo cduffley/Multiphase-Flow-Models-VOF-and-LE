@@ -10,9 +10,8 @@ function [Cy,num_shift] =advectionYpos(x,y,h,i,j,mx,my,...
 % next cell.
 
 
-
 % initializing verticies
-xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+xverticies = [0,0,0]; 
 yverticies = [0,0,0];
 
 
@@ -85,7 +84,7 @@ if mx<0 && my<0
       yverticies = [new_y_l, new_y, new_y, y+h+dy, y+h+dy]; 
     end
     
-    if new_y_r >= new_y && new_y_l > new_y %changed y+h+dy to new_y_l
+    if new_y_r >= new_y && new_y_l > new_y 
        xverticies = [xleft, xright, xright, xleft];
        yverticies = [new_y_l, new_y_r, y+h+dy, y+h+dy]; 
     end
@@ -115,7 +114,7 @@ end
 if alpha/mx < 0 && (h - alpha/my)*(1/slope) > h
 % (+,-) v is positive (1,3)
     if new_y_l < new_y && new_y_r > new_y
-      xverticies =[xleft,xright-(new_y_r-new_y)/slope,xright,xright,xleft];
+      xverticies =[xleft,xright - (new_y_r - new_y)/slope,xright,xright,xleft];
       yverticies =[new_y,new_y,new_y_r,y+h+dy,y+h+dy];
        
     end
@@ -140,7 +139,7 @@ if alpha/mx > 0 && (h - alpha/mx)*(slope) < h
     end
     
     if new_y_l <= new_y && new_y_r > new_y
-       xverticies = [x, xright -(new_y_r - new_y)/slope, xright, xright,x];
+       xverticies = [x, xright - (new_y_r - new_y)/slope, xright, xright,x];
        yverticies = [new_y, new_y, new_y_r, y+h+dy, y+h+dy]; 
     end
 end
@@ -194,7 +193,7 @@ if alpha/mx < 0 && slope*h + alpha/my < h
     end
 end
 
-if alpha/mx > 0 && slope*(h-alpha/mx) < h
+if alpha/mx > 0 && slope*(h - alpha/mx) < h
 % (-,+) v is positive (3,4)
 
     if new_y_l < new_y && new_y_r > new_y
@@ -208,7 +207,7 @@ if alpha/mx > 0 && slope*(h-alpha/mx) < h
     end
 end
 
-if alpha/mx > 0 && slope*(h-alpha/mx) > h
+if alpha/mx > 0 && slope*(h - alpha/mx) > h
 % (-,+) v is positive (4,2)
 
     if new_y_l <= new_y && new_y_r > new_y
@@ -303,7 +302,6 @@ end
 % ====================================================================%
 
 %calculating area and placing it into the proper cell
-
 area = polyarea(xverticies,yverticies)/h^2; 
 Cy = zeros(size(C));
 num_shift = round((new_y - y)/h);

@@ -6,8 +6,8 @@ close all
 % -------------------------------------------------------------------------
 
 
-% currently the algorthim fails if the circle falls exactly on the 
-% line or corner (try Nx=Ny=11). It also fails for uneven meshes.
+% The algorthim fails if the circle falls exactly on the 
+% line or corner (Nx=Ny=11). It also may fail for uneven meshes.
 Nx =33; Ny = Nx;
 x_pos = 0.5; y_pos = 0.75; r = 0.15;
 x = linspace(0,1,Nx);
@@ -22,16 +22,16 @@ T = 2;
 [mx,my] = youngsFD(h,x,y,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,1,6);
-t = t(2:end); %getting rid of inital value (no advection at the time)
+t = linspace(0,2,60); % If Cnew and CnewX or Y causes error, 
+                      % the step size is too small
+t = t(2:end); %getting rid of inital value (no advection at the time 0)
 dt = t(2)-t(1);
 
-
-for i =1:1%length(t)
+for i =1:length(t)
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
-u = 0.1*ones(size(X));
+
 v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-v = 0.1*ones(size(X));
+
 [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,Cr);
 

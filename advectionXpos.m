@@ -47,7 +47,7 @@ if alpha/mx > h && alpha/my > h
     
     if new_x_l < new_x
        xverticies = [new_x,new_x_r,new_x_r,new_x];
-       yverticies = [y,y,yright,(new_x_r-new_x)*-slope + yright]; 
+       yverticies = [y,y,yright,(new_x_r - new_x)*-slope + yright]; 
     end
 end
 
