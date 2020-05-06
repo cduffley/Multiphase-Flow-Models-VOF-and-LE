@@ -15,7 +15,19 @@ Development of VOF was based on the PLIC method for interface reconstruction usi
 The standard drag model mentioned by Subramaniam was used for the Lagrangian particles. This method was tested using through a Lagrangian particle tracking test utilizing a steady version of the same stream function defined in a unit-square box. 
 
 # Getting Started
-Users should already have MATLAB installed onto their computer. This code base should be installed from GitHub and be brought into the user's preferred folder to be accessed by MATLAB. 
+Users should already have MATLAB installed onto their computer. This code base should be installed from GitHub and be brought into the user's preferred folder to be accessed by MATLAB.
+## Suggested parameters for running Volume of Fluid method interface tracking 
+The iterative alpha solver wtitten had problems due to the alpha limits, and was replaced with a slower method. That, and other slow portions of the code (written to be 'safe') slow the run time down significantly
+
+The input asks for 7 parameters, the suggested values are discussed below for more optimal running:
+
+1\) The grid selections this code has been tested for is 33 and 333, and currently is not designed for uneven grids (although, with a minor adjustments could become viable for it). If you are running 333, be prepared for the code to take at least 25 min depending on the time parameters chosen. The 33 should only take a few min
+
+2,3,4) The suggested circle parameters are from the problem statement. The box is 1x1, so the circle should fit inside this. Also, circles that will eventually interact with the wall will not provide proper results, since we do not account for interactions with the wall
+
+5,6) Based on the final time, the number of time steps should be chosen to not create large velocities that 'push' the circle out of the box in one step. If you see an error at Cnew = Cnew + CnewX, this means the number of time steps is too small. For N = 33^2, The minimum suggested time step for the time going to t=1 is around 20, and double the number to around 40 for t=2. Higher number of time steps is suggested for N=33^2, since it can be afforded. For N = 333^2, 10 and 20 are suggested number of time steps for t=1 and t=2, respectively. There are values lower in which it will run with okay results. These suggested parameters should keep alow enough CFL number. There are maximum CFL values in the workspace of the mainIT function. 
+
+7\) Grid lines are nice for N=33^2, but horrible for larger ones (333)
 
 # Interface Tracking Notation
 The interface tracking functions use the notations below to label the geometry and line types:
