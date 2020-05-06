@@ -26,10 +26,6 @@ function [xPos, yPos, uVel, vVel] = ParticleVelocity(n,t,dt,xPos,yPos,initVelx,i
     %Calculate particle Reynolds number (Subramaniam Eqn 52)
     Re_px = (2*rho_f.*abs(uVelC - uVel)*D_p)./mu_f;
     Re_py = (2*rho_f.*abs(vVelC - vVel)*D_p)./mu_f;
-    %disp(Re_px)
-    %disp('********************')
-    %disp(Re_py)
-    %disp('********************')
     Re_p = sqrt(Re_px.^2 + Re_py.^2);
     
     %Calculate Drag Coefficient based on particle Reynolds number (Subramaniam Eqn 51)
@@ -44,33 +40,10 @@ function [xPos, yPos, uVel, vVel] = ParticleVelocity(n,t,dt,xPos,yPos,initVelx,i
         fprintf('*******************************\n')
     end
     
-    %Find instantaneous particle response frequency (Subramaniam Eqn 53)
-    %omegaStarX = (3/8)*(rho_f/rho_d)*(relVelx/R_p)*C_D;
-    %omegaStarY = (3/8)*(rho_f/rho_d)*(relVely/R_p)*C_D;
     %Calculate Acceleration (dv/dt) (Subramaniam Eqn 50)
-    %gVec = zeros(n);  %Gravity in the z direction
-    %disp('CD')
-    %disp(C_D)
-    %disp('CD')
-    dudt = @(uVelC,uVel) ((3/8).*(rho_f./rho_p).*((uVelC - uVel)./(D_p./2))).*C_D.*(uVelC - uVel);%+gVec;
-    dvdt = @(vVelC,vVel) ((3/8).*(rho_f./rho_p).*((vVelC - vVel)./(D_p./2))).*C_D.*(vVelC - vVel);%+gVec;
-%     fprintf('du/dt:  %6.3f\n', dudt(uVelC,uVel))
-%     fprintf('dv/dt:  %6.3f\n', dvdt(vVelC,vVel))
+    dudt = @(uVelC,uVel) ((3/8).*(rho_f./rho_p).*((uVelC - uVel)./(D_p./2))).*C_D.*(uVelC - uVel);
+    dvdt = @(vVelC,vVel) ((3/8).*(rho_f./rho_p).*((vVelC - vVel)./(D_p./2))).*C_D.*(vVelC - vVel);
     
-    %disp('************************************************')
-    %disp(xPos)
-    %disp(yPos)
-    %disp(uVel)
-    %disp(vVel)
-%     disp(uVelC)
-%     disp(vVelC)
-%     disp('      -------------------------------')
      xPos = xPos + dudt(uVelC,uVel).*dt.*dt;
      yPos = yPos + dvdt(vVelC,vVel).*dt.*dt;
-%     disp(xPos)
-%     disp(yPos)
-%     %disp(uVel)
-%     %disp(vVel)
-%     disp(uVelC)
-%     disp(vVelC)
 end
