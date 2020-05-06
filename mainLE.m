@@ -2,31 +2,49 @@ clear all;
 clc;
 
 %Run Parameter Prompt
-prompt = {'Run Time','Time Step  [pi/(time step)]', '# of Parcels', 'Reynolds #', 'Stokes #'};
+prompt = {'Run Time (0-10)','Time Steps  [dt=time/(time steps)]','Time Period',...
+    '# of Parcels','Reynolds #', 'Stokes #','Grid Size'};
 dlgtitle = 'Input';
 dims = [1 40];
-definput = {'1','99','144', '100', '0.2'};
+definput = {'10','1000','1','144', '100', '0.2','100'};
 params = inputdlg(prompt,dlgtitle,dims,definput);
 
 %Convert Cell Array Values to Scalar Values
 %Extract Run Time
-t = str2double(params{1});
-t = t*pi;
+t = str2double(params{1}); 
 %Extract Time Step
-dt = str2double(params{2});
-dt = pi/dt;
+t_steps = str2double(params{2});     dt = t/t_steps;
+%Extract Time Period
+T = str2double(params{3}); 
 %Extract Number of Parcels
-n = str2double(params{3});
+n = str2double(params{4});
 %Extract Reynolds Number
-Re = str2double(params{4});
+Re = str2double(params{5});
 %Extract Stokes Number
-St = str2double(params{5});
+St = str2double(params{6});
+%Extract Mesh Grid Size
+Nx = str2double(params{7});
+Ny = Nx; 
 
+%%%%%%%%%%%Run Time
+%%%%%%%%%%%t = input('Input simulation time:  ');     %seconds
+%Time Step
+%%%%%%%%%%%dt = 1;     %seconds
 currentTime = 0;
 
-%Grid size (Only effects Uniform Distribution at the moment)
-Nx = 33;
-Ny = 33;
+%Input number of parcels
+%%%%%%n = input('Choose number of parcels: ');
+
+%If no input specified, defaults to 12^2 parcels
+%%%%%%%%%if isempty(n)
+%%%%%%%%%%    n = 12^2;
+%%%%%%%%%%end
+%One particle roughly in middle
+%mode = 1;
+%Uniform Distribution of particles
+%mode = 2;
+%Random Distribution of particles
+%mode = 3;
 
 %Choose run mode
 list = {'Single Parcel', 'Uniform', 'Random'};
@@ -54,7 +72,7 @@ uVel = initVelx;
 vVel = initVely;
 while currentTime <= t && maxit <= 5000
     maxit = maxit + 1;
-    [xPos,yPos, uVel, vVel] = ParticleVelocity(n,t,dt,xPos,yPos,uVel,vVel, Re, St);
+    [xPos,yPos, uVel, vVel] = ParticleVelocity(n,t,dt,xPos,yPos,uVel,vVel,Re,St,Nx,Ny);
     fprintf('Iteration: %d\n', maxit)
     currentTime = currentTime + dt;
 end

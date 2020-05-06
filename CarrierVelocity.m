@@ -1,4 +1,4 @@
-function [u,v] = CarrierVelocity(x,y)
+function [u,v] = CarrierVelocity(x,y,Nx,Ny)
 %Function for determining the carrier fluid velocity at parcel locations.
 
 % NX = 100;
@@ -15,4 +15,5 @@ function [u,v] = CarrierVelocity(x,y)
 u = 2*(sin(pi*x).^2).*(sin(pi*y).*cos(pi*y));
 v = -2*(sin(pi*x).*cos(pi*x)).*(sin(pi*y).^2);
 
-%quiver(X,Y,uPlot,vPlot)
+% quiver(X,Y,uPlot,vPlot)
+end
