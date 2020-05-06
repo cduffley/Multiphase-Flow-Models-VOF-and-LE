@@ -31,7 +31,8 @@
 % the time going to t=1 is around 10, and double the number to 20 for t=2.
 % Higher number of time steps is suggested for N=33^2, since it can be
 % afforded. Although 10 and 20 are suggested, there are values lower in
-% which it will run with okay results
+% which it will run with okay results. These parameters should keep a
+% low enough CFL number. 
 %
 % Grid lines are nice for N=33^2, but horrible for larger ones (333)
 %
