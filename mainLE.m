@@ -2,10 +2,10 @@ clear all;
 clc;
 
 %Run Parameter Prompt
-prompt = {'Run Time (0-1)','Time Step  [pi/(time step)]', '# of Parcels', 'Reynolds #', 'Stokes #'};
+prompt = {'Run Time','Time Step  [pi/(time step)]', '# of Parcels', 'Reynolds #', 'Stokes #'};
 dlgtitle = 'Input';
 dims = [1 40];
-definput = {'1','100','144', '100', '0.2'};
+definput = {'1','99','144', '100', '0.2'};
 params = inputdlg(prompt,dlgtitle,dims,definput);
 
 %Convert Cell Array Values to Scalar Values
@@ -22,28 +22,11 @@ Re = str2double(params{4});
 %Extract Stokes Number
 St = str2double(params{5});
 
-%%%%%%%%%%%Run Time
-%%%%%%%%%%%t = input('Input simulation time:  ');     %seconds
-%Time Step
-%%%%%%%%%%%dt = 1;     %seconds
 currentTime = 0;
 
 %Grid size (Only effects Uniform Distribution at the moment)
 Nx = 33;
 Ny = 33;
-%Input number of parcels
-%%%%%%n = input('Choose number of parcels: ');
-
-%If no input specified, defaults to 12^2 parcels
-%%%%%%%%%if isempty(n)
-%%%%%%%%%%    n = 12^2;
-%%%%%%%%%%end
-%One particle roughly in middle
-%mode = 1;
-%Uniform Distribution of particles
-%mode = 2;
-%Random Distribution of particles
-%mode = 3;
 
 %Choose run mode
 list = {'Single Parcel', 'Uniform', 'Random'};
