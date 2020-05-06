@@ -30,12 +30,14 @@ t_step = str2double(params{6});
 %Extract Plot Grid Lines
 grid = str2double(params{7});
 
-% The algorthim fails if the circle falls exactly on the 
-% line or corner (Nx=Ny=11). It also may fail for uneven meshes.
-% Nx =33; 
+%********* Selected variables
+% Nx =33;  %grid
+% x_pos = 0.5; y_pos = 0.75; r = 0.15; %cirle parameters
+% tf = 2;  %final time
+% t_step = 30; % number of time steps
+% grid = true; % grid lines on/off on figure
+
 Ny = Nx;
-% x_pos = 0.5; y_pos = 0.75; r = 0.15;
-% grid = true;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
@@ -48,8 +50,6 @@ T = 2;
 [mx,my] = youngsFD(h,x,y,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-% tf = 2.01;
-% t_step = 30;
 t = linspace(0,tf,t_step); % If Cnew and CnewX or Y causes error, 
                       % the step size is too small
 t = t(2:end); %getting rid of inital value (no advection at the time 0)
