@@ -1,11 +1,24 @@
-function [Cr,xleft,xright,yleft,yright,alpha_actual] = reconstruction_test(x,y,h,mx,my,C)
-%Cr - C reconstructed (actual Colorfuntion area based on new lines,
-% should this be the case, or should we use original Colorfuction when 
-% advecting in the next step? If we use original, it could lead to some
-% errors, possibly negative areas. If we use new, the actual mass
-% essentially disappears. Assume difference is negligable and use new,
-% since there will hopefully be less errors
-%% Iterative solver for area finding method for whole mesh when ready for use
+function [Cr,xleft,xright,yleft,yright,alpha_actual] = ...
+            reconstruction_test(x,y,h,mx,my,C)
+
+% This function determines the alpha value based on a given color function
+% and the normal vector m(mx,my). It performs an 'iterative' method based
+% on section 5.2.3 (pg 104-105) of Tryggvason et.
+% al, Direct Numerical Simulations of Gas-Liquid Multiphase Flows
+
+% Based on the geometry, the possible alpha values have limits, where alpha
+% values outside the limits would provide intersecting lines outside of the
+% geometry of the cell. Because these limits are crutial to the areafinder
+% function, we were unable to develop a proper iterative function based on
+% slope-of-error analysis that would work for all points. Instead, we
+% calculate the area using many alpha values and choose the alpha with the
+% lowest area. 
+% An example of an alpha limit is:
+% For a m(+,-) (#4), alpha/mx cannot be both negative if alpha/my is
+% greater than h, since the line does not intersect the cell. 
+
+
+%% Solver for area finding method
 alpha_actual = zeros(length(x),length(y));
 area_actual = zeros(length(x),length(y));
 xright = zeros(length(x),length(y));
@@ -23,7 +36,7 @@ for i = 1:length(x)
         if C(i,j) > 1.2
             adfs = 1;
         end
-        
+        % For Colorfuction values of 1 or 0, we do not need to get alpha
         if  mxval == 0 && myval == 0 && C(i,j) == 0
             % Check if mx and my are both 0 for C of 0 (not filled), 
             % which yields area of 0
@@ -52,7 +65,7 @@ for i = 1:length(x)
             yright(i,j) = yval;
             yleft(i,j) = yval;
             continue
-        elseif C(i,j) >= 0.99990
+        elseif C(i,j) >= 0.99990 %We were seeing values with machine error
             alpha_actual(i,j) = 0;
              area_actual(i,j) = C(i,j)*h^2;
             xright(i,j) = xval;
@@ -67,19 +80,19 @@ for i = 1:length(x)
         % Producing alpha vector that is within constraints of geometric cell
         %added >=
         if mxval >= 0 && myval >= 0
-            % mx and my are positive
+            % mx and my are positive (+,+) (1)
             lowlim = 0; 
             highlim = (-h/slope+h)*mxval; 
         end
         
         if mxval <= 0 && myval <= 0
-            % mx and my are negative
+            % mx and my are negative (-,-) (3)
             lowlim = (-h/slope+h)*mxval; 
             highlim = 0; 
         end
         
         if mxval <= 0 && myval >= 0
-            % mx is negative and my is positive
+            % mx is negative and my is positive (-,+) (2)
             % hmx < alpha < hmy
             lowlim = h*mxval;
             highlim = h*myval;
@@ -87,7 +100,7 @@ for i = 1:length(x)
         
         if mxval >= 0 && myval <= 0
             % hmy < alpha < hmx
-            % mx is positive and my is negative
+            % mx is positive and my is negative (+,-) 4
            lowlim = h*myval;
            highlim = h*mxval;
         end
@@ -112,16 +125,16 @@ for i = 1:length(x)
         yright(i,j) = yr;
         yleft(i,j) = yl;
         area_actual(i,j) = area;
+        % If the areafinder produces a large error with the orginal
+        % colorfunction value, we keep the colorfunction area. This occurs
+        % for very small values, so it is safe to include this.
         if (abs(area - C(i,j)*h^2))/(C(i,j)*h^2) > 0.05 %5 percent error
         area_actual(i,j) = C(i,j) *h^2;
-        alpha_actual(i,j) = 0; %might mess with us, since alpha can =1,... 
-        %...originally meant for values of 1, not ones really close to 0
+        alpha_actual(i,j) = 0; 
         end
         end % End of overall if statement
 
     end
 end
 Cr = area_actual/h^2; 
-
-
 end

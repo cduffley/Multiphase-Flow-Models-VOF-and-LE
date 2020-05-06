@@ -1,37 +1,45 @@
 function [Cy,num_shift] =advectionYneg(x,y,h,i,j,mx,my,...
     xleft,xright,yleft,yright,alpha,u,v,dt,C)
 
-xverticies = [0,0,0]; % inserted bc some alpha isnt coming out okay
+% For reference, see advectionYpos
+
+% This function advects the area in the negative Y direction. It runs for
+% the four m-vector types and their respective 4 different line possibities
+% Once it check for the m-vector type, it determines what the new advection
+% geometry is.
+
+% To do this, we refect the given geometry over the x-axis. Then, we
+% perform the advection like we did in advectionYpos.m. The corresponding
+% geometries are:
+% #2: area calculation copied from #3, and implemented #2 conditions
+% #1: area calculation copied from #4, and implemented #1 conditions
+% #3: area calculation copied from #2, and implemented #3 conditions
+% #4: area calculation copied from #1, and implemented #4 conditions
+% here, the implemted conditions are the ones based on mx, my and alpha
+% (since we do not change those), and the geometetric conditions (ie. the
+% ones based on yright,new_y ect) stay the same as the one that is copied.
+
+
+xverticies = [0,0,0]; 
 yverticies = [0,0,0];
 
-% function that determines what cell the new geometry is on
-% y + dt*v  <- floor to nearest y grid
-% the value will be called new_y
-% new_y = y + floor((dt*v)/h) * h;
-% new_y_r = yright + dy; %new_y_right
-% new_y_l = yleft + dy; %new_y_left
-if i == 12 && j == 21 %18
-    g = 0 ;
-end
 
-dy = dt*-v;
-% function that determines what cell the new geometry is on
-% x + dt*u  <- floor to nearest x grid (new x right)
-%the value will be called new_x
-% ylefthold= yleft;
-yleft = y+h/2 - yleft + y+h/2; %switch l and r %hold
+dy = dt*-v; % distance traveled by area (reflected)
+
+%unlike the Xpos/Xneg reflection, we do not switch yleft and yright, just
+%reflect:
+yleft = y+h/2 - yleft + y+h/2; 
 yright = y+h/2 - yright + y+h/2;
-% xlefthold = xleft;
-% xleft = xright;
-% xright = xlefthold;
-
 
 new_y_r = yright + dy; %new_x_right
 new_y_l = yleft + dy; %new_x_left
 slopeold = -1/(my/mx); %for condition statements
-slope = -slopeold; %im an idiot
+slope = -slopeold; %for geometric calculation
 
-if (mx <= 0 && my<=0)  %3 vals, 2 model
+% Determines what cell the new geometry is on
+% the new_x value is the xgrid point that the area advects past
+
+if (mx <= 0 && my<=0)  %2
     new_y =  h*floor((new_y_r)/h);
     
 elseif (mx>0 && my<=0) %1
@@ -47,7 +55,7 @@ end
 %-------------------------------------------------------------%
 %-------------------------------------------------------------%
 
-%2 from 3 
+%% 2 from 3 
 % (-,-) v is positive (2,3) old
 % m(-,+) Down -> m(-,-) Up
 % (2,3) to 2(4,3) conditions
@@ -112,7 +120,7 @@ end
 %-------------------------------------------------------------%
 %-------------------------------------------------------------%
 
-%1 from 4
+%% 1 from 4
 % m(+,+) Down -> m(+,-) Up
 % copying conditions from(+,+)
 % copying 1s conditions, calculating from 4 pos
@@ -121,25 +129,18 @@ if mx > 0 && my > 0
 if alpha/mx <= h && alpha/my <= h
 % (+,-) v is positive (1,2) to 1(1,4)
     if new_y_l <= new_y && new_y_r > new_y
-%        xverticies = [xright - (new_y_r - new_y)/slope, x+h, x+h, xright];
-%        yverticies = [new_y, new_y, new_y_r, new_y_r]; 
-                   %old one, not sure what im missing
        xverticies = [x,xright - (new_y_r - new_y)/slope, xright,x];
        yverticies = [new_y, new_y, new_y_r, new_y_r]; 
     end
     
     if new_y_l > new_y && new_y_r > new_y
-%         xverticies = [x, x+h, x+h, xright, x];
-%         yverticies = [new_y, new_y, y+h+dy, new_y_r, new_y_l];
         xverticies = [x, xright, x];
         yverticies = [new_y_l,new_y_r,new_y_r];
     end
 end
 if alpha/mx >= h && alpha/my <= h
 % (+,-) v is positive (1,3) To 1(1,3)
-    if new_y_l < new_y && new_y_r > new_y
-%        xverticies = [xright - (new_y_r - new_y)/slope, xright, xright];
-%        yverticies = [new_y, new_y, new_y_r]; 
+    if new_y_l < new_y && new_y_r > new_y 
        xverticies = [xleft,xright - (new_y_r - new_y)/slope,xright,xright,xleft];
        yverticies = [new_y,new_y,new_y_r,y+h+dy,y+h+dy];
        
@@ -147,7 +148,6 @@ if alpha/mx >= h && alpha/my <= h
     
     if new_y_l > new_y && new_y_r > new_y
         xverticies = [x, xright, xright, x];
-%       yverticies = [new_y, new_y, new_y_r, new_y_l];
         yverticies = [new_y_l, new_y_r, y+h+dy, y+h+dy];
     end
     
@@ -188,8 +188,7 @@ end
 %-------------------------------------------------------------%
 %-------------------------------------------------------------%
 
-%3 from 2
-% mx < 0 && my > 0
+%% 3 from 2
 if mx < 0 && my < 0
 % (-,+) v is positive (1,2) to 3(1,4)
 % m(-,-) Down -> m(-,+) Up
@@ -313,6 +312,12 @@ if alpha/mx < 0 && (h - alpha/my)*(1/slopeold) > h
 end
 end
 
+% ====================================================================%
+% ====================================================================%
+% ====================================================================%
+% Square areas, C is equal to 1 or 0. Includes bounds given the apparent
+% errors
+
 if C(i,j) <= 0.0002 && C(i,j) >= -0.0002
     xverticies = [0,0,0]; 
     yverticies = [0,0,0];
@@ -324,6 +329,11 @@ if C(i,j) >= 0.99990
     yverticies = [new_y,new_y,y+h+dy,y+h+dy];
 end
 
+% ====================================================================%
+% ====================================================================%
+% ====================================================================%
+
+%calculating area and placing it into the proper cell
 
 area = polyarea(xverticies,yverticies)/h^2;
 Cy = zeros(size(C));
@@ -337,21 +347,6 @@ Cy(i,j+num_shift) = area;
 Cy(i,j+num_shift+1) = C(i,j) - area;
 else
 Cy(i,1) = area;
-end
-
-% if C(i,j) ~= 0
-% area = polyarea(xverticies,yverticies)/h^2; %fraction!!
-% Cy = zeros(size(C));
-% num_shift = floor((dt*v)/h); %this means h is in meters
-% Cy(i,j+num_shift) = area;
-% Cy(i,j+num_shift-1) = C(i,j) - area;
-% else
-%     num_shift = 0;
-%     Cy = zeros(size(C));
-% end
-
-if min(min(Cy)) < 0
-    g = 0;
 end
 
 

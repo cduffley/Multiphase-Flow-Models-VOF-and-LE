@@ -1,8 +1,21 @@
-function [Cr,xleft,xright,yleft,yright,mx,my,alpha] = advectionTot(x,y,h,mx,my,...
-    xleft,xright,yleft,yright,alpha,u,v,dt,Cr)
-%Cnew is initialized as zeros, then added to 
-%initial mx,my,xr,xl,yr,yl
-%C is inital CF
+function [Cr,xleft,xright,yleft,yright,mx,my,alpha] =...
+    advectionTot(x,y,h,mx,my,xleft,xright,yleft,yright,alpha,u,v,dt,Cr)
+
+% This function runs the The out-of-cell explicit linear mapping advection,
+% shown by section 5.4.1.2 pg(109-112) of Tryggvason et.
+% al, Direct Numerical Simulations of Gas-Liquid Multiphase Flows
+
+% The general outline is:
+% Takes in inital colorfunction and m
+% Performs advection in the x direction
+% Reconstucts
+% Performs advection in the y direction
+
+% Since our velocities are already definied at the ends of the cells, we do
+% not need to iterpolate to get u_{i+1/2} like the book does. There was an
+% attempt to 'spill over' values into the next cell if the C was greater
+% than 1, however, this seemingly made things worse. 
+
 Cnew = zeros(size(Cr));
 
 for i=2:length(x)-1
@@ -12,55 +25,30 @@ for i=2:length(x)-1
         if mx(i,j) == 0 && my(i,j) ==0 && Cr(i,j) == 0
          continue
         end
-        if i == 19 && j == 29
-            d = 0;
-        end
         if u(i,j) > 0
-            [CnewX,shift_x] = advectionXpos(x(i),y(j),h,i,j,...
+            [CnewX,~] = advectionXpos(x(i),y(j),h,i,j,...
                 mx(i,j),my(i,j),xleft(i,j),xright(i,j),...
                 yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);
         elseif u(i,j) < 0
-            [CnewX,shift_x] = advectionXneg(x(i),y(j),h,i,j,...
+            [CnewX,~] = advectionXneg(x(i),y(j),h,i,j,...
                 mx(i,j),my(i,j),xleft(i,j),xright(i,j),...
                 yleft(i,j),yright(i,j),alpha(i,j),u(i,j),v(i,j),dt,Cr);
         elseif u(i,j)==0
             CnewX = zeros(size(Cr));
             CnewX(i,j) = Cr(i,j);
-            shift_x = 0;
         end
-%     Cnew(i+shift_x,j) = Cnew(i+shift_x,j) + CnewX(i+shift_x,j);
-%     Cnew(i+shift_x-1,j) = Cnew(i+shift_x-1,j) + CnewX(i+shift_x-1,j);
-      if min(min(CnewX)) < 0
-         g = 4;
-      end
-      Cnew = Cnew + CnewX;
         
-%         if i + shift_x-1 >= 1 && Cnew(i+shift_x-1,j) > 1.01 && u(i,j) > 0
-%             % if org is > 1, difference is added to spill over cell
-%             Cnew(i+shift_x,j) =Cnew(i+shift_x,j)+ Cnew(i+shift_x-1,j)-1;
-%             Cnew(i+shift_x-1,j) = 1;
-% %             if Cnew(i+num_shift,j) > 1.01 %second correction
-% %                 
-% %             end
-%         end
-%         if Cnew(i+shift_x,j) > 1.01 && u(i,j) < 0
-%             Cnew(i+shift_x,j) =Cnew(i+shift_x,j)+ Cnew(i+shift_x+1,j)-1;
-%             Cnew(i+shift_x+1,j) = 1;
-%         end
-      
-      if j==24
-          g = 3;
-      end
-      % this works becuase CnewX is all zeros except the two split values
-      % and Cnew is only an accumulation of multiple CnewXs. aka, Cnew does
-      % not contain old Colorfunction values
+      Cnew = Cnew + CnewX; %accumulating new color fucntion
+    
     end
 end
 
     
-% some reconstruction funtion  
+% reconstruction 
 [mx,my] = youngsFD(h,x,y,Cnew);
-[Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,Cnew);
+[Cr,xleft,xright,yleft,yright,alpha] =...
+        reconstruction_test(x,y,h,mx,my,Cnew);
+    
 Cnew = zeros(size(Cr));
 
 for i=2:length(x)-1
@@ -86,28 +74,13 @@ for i=2:length(x)-1
         if i == 15 && j == 27
             d = 0;
         end
-%     Cnew(i,j+shift_y) = Cnew(i,j+shift_y) + CnewX(i,j+shift_y);
-%     Cnew(i,j+shift_y-1) = Cnew(i,j+shift_y-1) + CnewX(i,j+shift_y-1);
+        
       Cnew = Cnew + CnewY;
-%         if j + shift_y-1 >= 1 && Cnew(i,j+shift_y-1) > 1.01 && v(i,j) > 0
-%             % if org is > 1, difference is added to spill over cell
-%             Cnew(i,j+shift_y) =Cnew(i,j+shift_y)+ Cnew(i,j+shift_y-1)-1;
-%             Cnew(i,j+shift_y-1) = 1;
-% %             if Cnew(i+num_shift,j) > 1.01 %second correction
-% %                 
-% %             end
-%         end
-%         if Cnew(i,j+shift_y) > 1.01 && v(i,j) < 0
-%             Cnew(i,j+shift_y) =Cnew(i,j+shift_y)+ Cnew(i,j+shift_y+1)-1;
-%             Cnew(i,j+shift_y+1) = 1;
-%         end
-       if max(max(Cnew)) > 1.01
-            d = 0;
-       end
+
     end
 end
 
-% some reconstruction funtion again
+% reconstruction funtion again
 [mx,my] = youngsFD(h,x,y,Cnew);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,Cnew);
 
