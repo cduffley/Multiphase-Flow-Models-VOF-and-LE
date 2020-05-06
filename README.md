@@ -16,6 +16,31 @@ The standard drag model mentioned by Subramaniam was used for the Lagrangian par
 
 # Getting Started
 Users should already have MATLAB installed onto their computer. This code base should be installed from GitHub and be brought into the user's preferred folder to be accessed by MATLAB. 
+
+# Interface Tracking Notation
+The interface tracking functions use the notations below to label the geometry and line types:
+The geometries are definied based on the origin, which is the bottom left corner of the cell. Alpha/mx and alpha/my are definied as distances away from the origin in the x and y direction, respectively. 
+The signs of the normal vector (mx,my) define the interface.
+#1 is m(+,+), which has a negative slope and an inside area (towards the origin)
+#2 is m(-,+), which has a positive slope and an outide area (away from the origin)
+#3 is m(-,-), which has a negative slope and an outide area (away from the origin)
+#4 is m(+,-), which has a positive slope and an inside area (towards the origin)
+The Extras folder has rough drawings of these types of areas.
+
+The line intersections are defined such that:
+
+                      Side 2
+         ----------------------------------
+        |                                  |
+        |                                  |
+Side 1  |                                  | Side 3
+        |                                  |
+        |                                  |
+        |                                  |
+        -----------------------------------
+                      Side 4
+Where a line through sides 1 and 3 is labed as (1,3)
+
 # Main Contents
 1. **main.m - Main MATLAB file for choosing which multiphase model to run.**
 2. **mainIT.m - Main MATLAB file for running the volume of fluid interface capturing scheme.**
