@@ -4,15 +4,38 @@ close all
 % -------------------------------------------------------------------------
 % Interface tracking test
 % -------------------------------------------------------------------------
+% This file runs the VOF interface tracking. See main file for suggested
+% run parameters
 
-% N, cicle x, y, r,
-% final time, # num of steps (suggested)
-% grid lines?
+%Run Parameter Prompt
+prompt = {'(Grid Size)^2', 'Circle X-Coordinate', 'Circle Y-Coordinate', 'Circle Radius', 'Final Time', 'Number of Time Steps', 'Plot Grid Lines (true = 1, false = 0)'};
+dlgtitle = 'Input';
+dims = [1 40];
+definput = {'33','0.5','0.75','0.15', '1', '20', '1'};
+params = inputdlg(prompt,dlgtitle,dims,definput);
+
+%Convert Cell Array Values to Scalar Values
+%Extract Grid Size Squared
+Nx = str2double(params{1});
+%Extract Circle X-Coord
+x_pos = str2double(params{2});
+%Extract Circle Y-Coord
+y_pos = str2double(params{3});
+%Extract Circle Radius
+r = str2double(params{4});
+%Extract Final Time
+tf = str2double(params{5});
+%Extract Number of Time Steps
+t_step = str2double(params{6});
+%Extract Plot Grid Lines
+grid = str2double(params{7});
 
 % The algorthim fails if the circle falls exactly on the 
 % line or corner (Nx=Ny=11). It also may fail for uneven meshes.
-Nx =33; Ny = Nx;
-x_pos = 0.5; y_pos = 0.75; r = 0.15;
+% Nx =33; 
+Ny = Nx;
+% x_pos = 0.5; y_pos = 0.75; r = 0.15;
+% grid = true;
 x = linspace(0,1,Nx);
 y = linspace(0,1,Ny);
 h = y(3) - y(2);
@@ -25,7 +48,9 @@ T = 2;
 [mx,my] = youngsFD(h,x,y,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,1,10); % If Cnew and CnewX or Y causes error, 
+% tf = 2.01;
+% t_step = 30;
+t = linspace(0,tf,t_step); % If Cnew and CnewX or Y causes error, 
                       % the step size is too small
 t = t(2:end); %getting rid of inital value (no advection at the time 0)
 dt = t(2)-t(1); %delta t
@@ -70,12 +95,14 @@ ycir = 0.15 * sin(cir_dis) + 0.75;
 plot(xcir,ycir)
 
 %plotting grid lines
+if grid == true
 hold on
 for i = 1:Nx
     plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
     plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
 end
 title('VOF Interface Tracking')
+end
 
 
 
