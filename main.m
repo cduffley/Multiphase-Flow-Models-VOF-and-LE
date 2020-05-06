@@ -33,7 +33,8 @@
 % afforded. Although 10 and 20 are suggested, there are values lower in
 % which it will run with okay results. These parameters should keep a
 % low enough CFL number. There are maximum CFL values in the workspace of
-% the mainIT function. 
+% the mainIT function. The book discusses the r/h value being greater than
+% 4 as well.
 %
 % 7) Grid lines are nice for N=33^2, but horrible for larger ones (333)
 %
