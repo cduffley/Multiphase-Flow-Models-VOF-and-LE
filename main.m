@@ -5,6 +5,9 @@ close all
 % Interface tracking test
 % -------------------------------------------------------------------------
 
+% N, cicle x, y, r,
+% final time, # num of steps (suggested)
+% grid lines?
 
 % The algorthim fails if the circle falls exactly on the 
 % line or corner (Nx=Ny=11). It also may fail for uneven meshes.
@@ -22,10 +25,10 @@ T = 2;
 [mx,my] = youngsFD(h,x,y,C);
 [Cr,xleft,xright,yleft,yright,alpha] = reconstruction_test(x,y,h,mx,my,C);
 
-t = linspace(0,2,60); % If Cnew and CnewX or Y causes error, 
+t = linspace(0,1,10); % If Cnew and CnewX or Y causes error, 
                       % the step size is too small
 t = t(2:end); %getting rid of inital value (no advection at the time 0)
-dt = t(2)-t(1);
+dt = t(2)-t(1); %delta t
 
 for i =1:length(t)
 u = -2.*cos(pi.*t(i)./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
@@ -37,7 +40,7 @@ v = 2.*cos(pi.*t(i)./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
 
 end
 
-% b = Y - (X+alpha./mx)*slope; %wont work for mx=0
+%creating figure for new interface 
 
 figure 
 hold on
@@ -60,55 +63,38 @@ for i=1:length(Cr)
         
     end
 end
-% circle stuff
+% circle graph
 cir_dis = 0:pi/100:2*pi; %decrease step size for more exact circle plot
 xcir = 0.15 * cos(cir_dis) + 0.5;
 ycir = 0.15 * sin(cir_dis) + 0.75;
 plot(xcir,ycir)
+
+%plotting grid lines
 hold on
 for i = 1:Nx
     plot(ones(1,length(x))*x(i),y,'k','Linewidth',0.25)
     plot(x,ones(1,length(y))*y(i),'k','Linewidth',0.25)
 end
-title('Diagonal right shift')
+title('VOF Interface Tracking')
 
 
 
-% test C values (page 96)
-
-% C = [0,0.02,.1;...
-%    0.2, 0.8,1;...
-%    0.7, 1,1];
-
-xgrid = linspace(0,3,4);
-ygrid = xgrid;
-% figure
-% hold on
-% for i = 1:length(xgrid)
-%     plot(ones(1,length(xgrid))*xgrid(i),ygrid,'k','Linewidth',0.25)
-%     plot(xgrid,ones(1,length(ygrid))*ygrid(i),'k','Linewidth',0.25)
-% end
-linex = linspace(xgrid(2), xgrid(3),10);
-% liney = slope*linex + b;
-% % plot(linex,liney)
-% cch = ((0.802 - 0.5)/2 * (0.852-0.5))/(0.5^2);
-
-
-% current graph stuff
-cir_xloc_x = [cir_xloc_x,cir_xloc_x];
-cir_yloc_y = [cir_yloc_y,cir_yloc_y];
+%% Plot of inital circle with intersection coloring
+% if you wish to see the patterns we are talking about in circle_init, you
+% should keep grid lines on as well
+% cir_xloc_x = [cir_xloc_x,cir_xloc_x];
+% cir_yloc_y = [cir_yloc_y,cir_yloc_y];
 % plot(cir_xloc_x,cir_xloc_y,'o')
 % plot(cir_yloc_x,cir_yloc_y,'o')
 
 
-T = 2;
-t = T/2; %this is for book example, deliverable 2 has t = T/pi
-PHI = 1/pi .* cos(pi*t/T).*sin(pi.*X).^2 .* sin(pi.*Y).^2;
-t=0;
-u = -2.*cos(pi.*t./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
-v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
-
-figure
-quiver(X,Y,u,v)
+%% quiver plot if you wish to check velocity:
+% t = 2;
+% PHI = 1/pi .* cos(pi*t/T).*sin(pi.*X).^2 .* sin(pi.*Y).^2;
+% t=0;
+% u = -2.*cos(pi.*t./T).*sin(pi.*X).^2 .* sin(pi.*Y).*cos(pi.*Y);
+% v = 2.*cos(pi.*t./T).*sin(pi.*Y).^2 .* sin(pi.*X).*cos(pi.*X);
+% figure
+% quiver(X,Y,u,v)
 
 
