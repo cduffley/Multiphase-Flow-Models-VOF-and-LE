@@ -21,10 +21,11 @@ Users should already have MATLAB installed onto their computer. This code base s
 The interface tracking functions use the notations below to label the geometry and line types:
 The geometries are definied based on the origin, which is the bottom left corner of the cell. Alpha/mx and alpha/my are definied as distances away from the origin in the x and y direction, respectively. 
 The signs of the normal vector (mx,my) define the interface.
-#1 is m(+,+), which has a negative slope and an inside area (towards the origin)
-#2 is m(-,+), which has a positive slope and an outide area (away from the origin)
-#3 is m(-,-), which has a negative slope and an outide area (away from the origin)
-#4 is m(+,-), which has a positive slope and an inside area (towards the origin)
+  #### 1 is m(+,+), which has a negative slope and an inside area (towards the origin)
+  #### 2 is m(-,+), which has a positive slope and an outide area (away from the origin)
+  #### 3 is m(-,-), which has a negative slope and an outide area (away from the origin)
+  #### 4 is m(+,-), which has a positive slope and an inside area (towards the origin)
+
 The Extras folder has rough drawings of these types of areas.
 
 The line intersections are defined such that:
@@ -33,7 +34,7 @@ The line intersections are defined such that:
          ----------------------------------
         |                                  |
         |                                  |
-Side 1  |                                  | Side 3
+        | Side 1                           | Side 3
         |                                  |
         |                                  |
         |                                  |
