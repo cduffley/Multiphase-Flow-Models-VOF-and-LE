@@ -16,8 +16,8 @@
 % 1) The grid selections this code has been tested for is 33 and 333, and
 % currently is not designed for uneven grids (although, with a minor
 % adjustments could become viable of it) If you are running 333, be
-% prepared for the code to take at least 20 min depending on the time
-% parameters chosen. 
+% prepared for the code to take at least 25 min depending on the time
+% parameters chosen. The 33 should only take a few min
 %
 % 2,3,4) The suggested circle parameters are from the problem statement. The
 % box is 1x1, so the circle should fit inside this. Also, circles that will
@@ -28,13 +28,14 @@
 % to not create large velocities that 'push' the circle out of the box in 
 % one step. If you see an error at Cnew = Cnew + CnewX, this means the
 % number of time steps is too small. The minimum suggested time step for
-% the time going to t=1 is around 10, and double the number to 20 for t=2.
+% the time going to t=1 is around 20, and double the number to 40 for t=2.
 % Higher number of time steps is suggested for N=33^2, since it can be
 % afforded. Although 10 and 20 are suggested, there are values lower in
 % which it will run with okay results. These parameters should keep a
-% low enough CFL number. 
+% low enough CFL number. There are maximum CFL values in the workspace of
+% the mainIT function. 
 %
-% Grid lines are nice for N=33^2, but horrible for larger ones (333)
+% 7) Grid lines are nice for N=33^2, but horrible for larger ones (333)
 %
 % We have included some resulting data in the extras folder
 

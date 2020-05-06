@@ -104,7 +104,9 @@ end
 title('VOF Interface Tracking')
 end
 
-
+% values for checking CFL
+CFLu = max(max(abs(u.*dt./h)));
+CFLv = max(max(abs(v.*dt./h)));
 
 %% Plot of inital circle with intersection coloring
 % if you wish to see the patterns we are talking about in circle_init, you
