@@ -33,7 +33,7 @@ The line intersections are defined such that:
          ----------------------------------
         |                                  |
         |                                  |
-Side 1  |                                  | Side 3
+        | Side 1                           | Side 3
         |                                  |
         |                                  |
         |                                  |
