@@ -8,7 +8,9 @@ close all
 % run parameters
 
 %Run Parameter Prompt
-prompt = {'(Grid Size)^2', 'Circle X-Coordinate', 'Circle Y-Coordinate', 'Circle Radius', 'Final Time', 'Number of Time Steps', 'Plot Grid Lines (true = 1, false = 0)'};
+prompt = {'(Grid Size)^2', 'Circle X-Coordinate', 'Circle Y-Coordinate', ...
+    'Circle Radius', 'Final Time', 'Number of Time Steps',...
+    'Plot Grid Lines (true = 1, false = 0)'};
 dlgtitle = 'Input';
 dims = [1 40];
 definput = {'33','0.5','0.75','0.15', '1', '20', '1'};
