@@ -1,3 +1,5 @@
+%Main file for running Lagrangian-Eulerian point particle tracking method.
+
 clear all;
 clc;
 
@@ -65,12 +67,12 @@ initVelx = zeros(1,n);
 initVely = zeros(1,n);
 
 %Calculate Velocity and Position
-%I think this needs calculated at every time step
+
 maxit = 0;
 %initialize parcel velocities
 uVel = initVelx;
 vVel = initVely;
-while currentTime <= t && maxit <= 5000
+while currentTime <= t && maxit <= t_steps
     maxit = maxit + 1;
     [xPos,yPos, uVel, vVel] = ParticleVelocity(n,t,dt,xPos,yPos,uVel,vVel,Re,St,Nx,Ny);
     fprintf('Iteration: %d\n', maxit)
@@ -84,20 +86,20 @@ title('Final Parcel Positions')
 xlim([0 1])
 ylim([0 1])
 
-%Choose 100 random parcels
+%Choose 100 random parcels for plotting
 xIndex = ceil(length(xPos)*rand(1,100));
-yIndex = ceil(length(yPos)*rand(1,100));
+
 xPosInit_100 = zeros(1,length(xIndex));
-yPosInit_100 = zeros(1,length(yIndex));
+yPosInit_100 = zeros(1,length(xIndex));
 xPos_100 = zeros(1,length(xIndex));
-yPos_100 = zeros(1,length(yIndex));
+yPos_100 = zeros(1,length(xIndex));
 
 for z = 1:length(xIndex)
     xPosInit_100(z) = xPosInit(xIndex(z));
-    yPosInit_100(z) = yPosInit(yIndex(z));
+    yPosInit_100(z) = yPosInit(xIndex(z));
     
     xPos_100(z) = xPos(xIndex(z));
-    yPos_100(z) = yPos(yIndex(z));
+    yPos_100(z) = yPos(xIndex(z));
 end
 
 %Plot 100 randomly selected initial parcels

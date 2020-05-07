@@ -5,38 +5,36 @@ function [xPos, yPos, uVel, vVel] = ParticleVelocity(n,t,dt,xPos,yPos,initVelx,i
       232.
     %}
 
-    %Particle Properties
-    %stokes = 0.2;%input('Input Stokes $ (0.2 or 0.8)');
+    %Particle Properties developed from project statement and definitions
     tau_p = stokes;
     D_p = 0.001;   %From project statement
     rho_f = 1;     %From project statement
     
-    
+    %Setting of initial velocity vector
     uVel = initVelx;
     vVel = initVely;
     
-    %Drag Force Calculations
-    %Initialize Carrier Fluid Velocity
-    x = linspace(0,1,100);
-    y = linspace(0,1,100);
+    %Discretization of Carrier Fluid Velocity 
+    x = linspace(0,1,Nx);
+    y = linspace(0,1,Ny);
     [X,Y] = meshgrid(x,y);
     
+    %Initialization of carrier fluid velocity profile for interpolation
     u_vel_profile = 2*(sin(pi*X).^2).*(sin(pi*Y).*cos(pi*Y));
     v_vel_profile = -2*(sin(pi*X).*cos(pi*X)).*(sin(pi*Y).^2);
     
+    %Interpolation of carrier fluid velocities that were solved at mesh
+    %points
     uVelC = interp2(X,Y,u_vel_profile,xPos,yPos);
     vVelC = interp2(X,Y,v_vel_profile,xPos,yPos);
     
-%     uVelC = interp2(X,Y,u_vel_profile,xPos,yPos);
-%     vVelC = interp2(X,Y,v_vel_profile,xPos,yPos);
-    
-    
-    %[uVelC,vVelC] = CarrierVelocity(xPos,yPos,Nx,Ny); 
     
     %Using carrier velocity to calc magnitude for carrier Reynolds number
     VelCMag = (uVelC.^2 + vVelC.^2).^(1/2); 
+    
     %Using carrier Reynolds Number to calculate fluid viscosities
     nu_f = VelCMag.^2/Re; 
+    
     %Determining dynamic viscosity by rho_f=1
     mu_f = nu_f;
     
