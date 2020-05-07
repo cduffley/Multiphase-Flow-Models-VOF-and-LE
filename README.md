@@ -15,7 +15,8 @@ Development of VOF was based on the PLIC method for interface reconstruction usi
 The standard drag model mentioned by Subramaniam was used for the Lagrangian particles. This method was tested using through a Lagrangian particle tracking test utilizing a steady version of the same stream function defined in a unit-square box. 
 
 # Getting Started
-Users should already have MATLAB installed onto their computer. This code base should be installed from GitHub and be brought into the user's preferred folder to be accessed by MATLAB.
+Users should have MATLAB installed onto their computer. This code base should be installed from GitHub and be brought into the user's preferred folder to be accessed by MATLAB. To run, open the main.m file and click "run" at the top of the options. Buttons will appear which allow the user to pick which of the two methods they wish to implement. Upon choosing the method, users will be asked to submit a number of inputs to run, which will contain a number of default values. After confirming these inputs, the code will run. 
+
 ## Suggested parameters for running Volume of Fluid method interface tracking 
 The iterative alpha solver wtitten had problems due to the alpha limits, and was replaced with a slower method. That, and other slow portions of the code (written to be 'safe') slow the run time down significantly
 
@@ -28,6 +29,16 @@ The input asks for 7 parameters, the suggested values are discussed below for mo
 5,6) Based on the final time, the number of time steps should be chosen to not create large velocities that 'push' the circle out of the box in one step. If you see an error at Cnew = Cnew + CnewX, this means the number of time steps is too small. For N = 33^2, the minimum suggested time step for the time going to t=1 is around 20, and double the number to around 40 for t=2. Higher number of time steps is suggested for N=33^2, since it can be afforded. For N = 333^2, 10 and 20 are suggested number of time steps for t=1 and t=2, respectively. There are values lower in which it will run with okay results. These suggested parameters should keep a low enough CFL number. There are maximum CFL values calculated in the workspace of the mainIT function. 
 
 7\) Grid lines on the figure are nice for N=33^2, but horrible for larger ones (333)
+
+## Parameters for running Lagrangian-Eulerian method
+The input asks for 7 parameters. These are: 
+1. Run Time (0-10) - t
+2. Time Steps - [dt=time/(time steps)] 
+3. Time Period - T
+4. # of Parcels - N
+5. Reynolds # - Re
+6. Stokes # - St
+7. Grid Size - Nx=Ny
 
 # Interface Tracking Notation
 The interface tracking functions use the notations below to label the geometry and line types:
