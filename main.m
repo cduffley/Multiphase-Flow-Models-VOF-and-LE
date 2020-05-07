@@ -39,8 +39,6 @@
 % 7) Grid lines are nice for N=33^2, but horrible for larger ones (333)
 
 
-
-
 list = {'Interface Tracking', 'Lagrangian-Eulerian Particle Tracking'};
 [mode,tf] = listdlg('PromptString',{'Select run mode',''}, 'SelectionMode',...
     'single','ListString',list);

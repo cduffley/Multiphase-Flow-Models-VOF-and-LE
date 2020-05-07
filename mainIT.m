@@ -32,7 +32,7 @@ t_step = str2double(params{6});
 %Extract Plot Grid Lines
 grid = str2double(params{7});
 
-%********* Selected variables
+%********* Selected variables *******************
 % Nx =33;  %grid
 % x_pos = 0.5; y_pos = 0.75; r = 0.15; %cirle parameters
 % tf = 2;  %final time
