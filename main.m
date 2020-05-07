@@ -30,15 +30,13 @@
 % number of time steps is too small. The minimum suggested time step for
 % the time going to t=1 is around 20, and double the number to 40 for t=2.
 % Higher number of time steps is suggested for N=33^2, since it can be
-% afforded. Although 10 and 20 are suggested, there are values lower in
+% afforded. For 333, 10 and 20 are suggested. There are values lower in
 % which it will run with okay results. These parameters should keep a
 % low enough CFL number. There are maximum CFL values in the workspace of
 % the mainIT function. The book discusses the r/h value being greater than
 % 4 as well.
 %
 % 7) Grid lines are nice for N=33^2, but horrible for larger ones (333)
-%
-% We have included some resulting data in the extras folder
 
 
 
